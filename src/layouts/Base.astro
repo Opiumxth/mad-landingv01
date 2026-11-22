@@ -57,11 +57,11 @@ const organizacion = {
     <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/barlow-condensed-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin />
 
-    <!-- Variante del hero: por defecto 3 (boceto). ?hero=2 = imagen de fondo. Corre antes de pintar. -->
+    <!-- Variante del hero: por defecto 3. ?hero=4 = mockups más grandes con fondo de líneas; ?hero=2 = imagen de fondo. Corre antes de pintar. -->
     <script is:inline>
       try {
         var h = new URLSearchParams(location.search).get('hero');
-        if (h === '2' || h === '3') document.documentElement.setAttribute('data-hero', h);
+        if (h === '2' || h === '3' || h === '4') document.documentElement.setAttribute('data-hero', h);
       } catch (e) {}
     </script>
 
