@@ -1,0 +1,35 @@
+---
+// Forma plateada orgánica con líneas onduladas (SVG propio, sin imágenes). Decorativa.
+---
+<svg class="forma" viewBox="0 0 640 560" fill="none" aria-hidden="true" focusable="false">
+  <defs>
+    <radialGradient id="pl-a" cx="32%" cy="28%" r="80%">
+      <stop offset="0" stop-color="#ffffff" />
+      <stop offset="0.3" stop-color="#bdbdbd" />
+      <stop offset="0.68" stop-color="#4b4b4b" />
+      <stop offset="1" stop-color="#0d0d0d" />
+    </radialGradient>
+    <radialGradient id="pl-b" cx="35%" cy="30%" r="75%">
+      <stop offset="0" stop-color="#ffffff" />
+      <stop offset="0.35" stop-color="#bdbdbd" />
+      <stop offset="0.75" stop-color="#4b4b4b" />
+      <stop offset="1" stop-color="#0d0d0d" />
+    </radialGradient>
+  </defs>
+  <!-- líneas onduladas: blanco al 22% -->
+  <g stroke="#ffffff" stroke-opacity="0.22" stroke-width="1.5" stroke-linecap="round">
+    <path d="M0 400 C90 360 170 440 270 400 S450 350 640 410" />
+    <path d="M0 432 C90 392 170 472 270 432 S450 382 640 442" />
+    <path d="M0 464 C90 424 170 504 270 464 S450 414 640 474" />
+    <path d="M0 496 C90 456 170 536 270 496 S450 446 640 506" />
+    <path d="M0 528 C90 488 170 568 270 528 S450 478 640 538" />
+  </g>
+  <!-- forma orgánica -->
+  <path fill="url(#pl-a)" d="M430 40 C520 10 620 60 610 160 C602 240 520 250 540 330 C556 400 470 440 400 400 C330 360 380 300 330 250 C280 200 340 70 430 40 Z" />
+  <!-- esfera -->
+  <circle cx="250" cy="380" r="62" fill="url(#pl-b)" />
+</svg>
+
+<style>
+  .forma { position: absolute; right: -6%; bottom: -4%; width: min(78vw, 46rem); height: auto; opacity: 0.9; pointer-events: none; }
+</style>

@@ -1,0 +1,24 @@
+---
+import Icono from './Icono.astro';
+import { enlaceWhatsApp } from '../data/sitio';
+interface Props { mensaje: string }
+const { mensaje } = Astro.props;
+---
+<a class="wa" href={enlaceWhatsApp(mensaje)} aria-label="WhatsApp: escribir a MAD Software Studio" rel="noopener">
+  <Icono nombre="chat" tam={26} />
+  <span class="wa__txt">WhatsApp</span>
+</a>
+
+<style>
+  .wa {
+    position: fixed; right: var(--sp-4); bottom: var(--sp-4); z-index: 50;
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-2);
+    min-width: 3.5rem; height: 3.5rem; padding: 0 var(--sp-4);
+    background: var(--whatsapp); color: var(--negro); border-radius: 999px; text-decoration: none;
+    font-weight: var(--peso-texto-fuerte); box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+    transition: transform var(--t-rapido);
+  }
+  .wa:hover { transform: translateY(-2px); }
+  .wa__txt { display: none; }
+  @media (min-width: 48rem) { .wa__txt { display: inline; } .wa { right: var(--sp-5); bottom: var(--sp-5); } }
+</style>

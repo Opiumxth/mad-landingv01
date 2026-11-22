@@ -1,0 +1,55 @@
+---
+// Solo en /salones. Pago, mantenimiento, cambio de plan, datos y cuentas, exclusividad y lo que no incluye.
+import { condiciones, mostrarExclusividad, mostrarPrecios } from '../data/precios';
+import type { PaginaCopy } from '../data/paginas';
+interface Props { copy: PaginaCopy['condiciones'] }
+const { copy } = Astro.props;
+---
+<section class="seccion tono-claro" id="condiciones">
+  <div class="cont">
+    <header class="seccion__cab">
+      <p class="etiqueta">{copy.etiqueta}</p>
+      <h2>{copy.titulo}</h2>
+    </header>
+    <div class="cond">
+      {mostrarPrecios && (
+        <article class="tarjeta">
+          <h3 class="etiqueta">Forma de pago</h3>
+          <p>{condiciones.pago}</p>
+          <p>{condiciones.pasarAB}</p>
+        </article>
+      )}
+      {mostrarPrecios && (
+        <article class="tarjeta tarjeta--fuerte">
+          <h3 class="etiqueta">Mantenimiento mensual · {condiciones.mantenimiento.monto}</h3>
+          <p>{condiciones.mantenimiento.detalle}</p>
+        </article>
+      )}
+      <article class="tarjeta">
+        <h3 class="etiqueta">Tus datos y tus cuentas</h3>
+        <p>{condiciones.datos}</p>
+      </article>
+      {mostrarExclusividad && (
+        // PENDIENTE DE CONFIRMAR CON LOS SOCIOS antes de mezclar a main (interruptor en src/data/precios.ts)
+        <article class="tarjeta">
+          <h3 class="etiqueta">Exclusividad de vecindad</h3>
+          <p>{condiciones.exclusividad}</p>
+        </article>
+      )}
+      <article class="tarjeta tarjeta--ancha">
+        <h3 class="etiqueta">Qué no incluye</h3>
+        <ul>{condiciones.noIncluye.map((t) => <li>{t}</li>)}</ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cond { display: grid; gap: var(--sp-4); }
+  .tarjeta { display: grid; gap: var(--sp-2); align-content: start; padding: var(--sp-5); border: 1px solid var(--gris-linea); border-radius: var(--radio-lg); }
+  .tarjeta--fuerte { border: 2px solid var(--negro); }
+  .tarjeta .etiqueta { margin: 0 0 var(--sp-1); font-size: var(--fs-etiqueta); }
+  .tarjeta p, .tarjeta li { color: var(--suave); }
+  .tarjeta ul { display: grid; gap: var(--sp-2); list-style: disc; padding-left: var(--sp-5); }
+  @media (min-width: 48rem) { .cond { grid-template-columns: 1fr 1fr; } .tarjeta--ancha { grid-column: 1 / -1; } }
+</style>

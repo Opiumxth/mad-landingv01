@@ -1,0 +1,111 @@
+/* ==========================================================================
+   TOKENS DE DISEÑO — todo lo "cambiable" del sitio vive aquí.
+   Cambia un valor y se actualiza en todas las páginas.
+   Contrastes verificados (WCAG): texto >= 4.5:1, elementos de interfaz >= 3:1.
+   ========================================================================== */
+:root {
+  /* ---- Color de acento: SOLO el botón principal (cobalto) ---- */
+  --acento: #0b4db5; /* blanco sobre acento = 7.7:1 */
+  --acento-texto: #ffffff;
+  --acento-hover: #093f96; /* blanco sobre hover = 9.7:1 */
+  /* En fondos oscuros el cobalto (2.7:1 contra negro) lleva un borde blanco para cumplir 3:1 */
+  --acento-borde-osc: #ffffff;
+
+  /* ---- Base de marca: blanco, negro y grises (los de las propuestas) ---- */
+  --negro: #0a0a0a;
+  --blanco: #ffffff;
+  --negro-2: #141414; /* superficies sobre negro */
+  --gris-suave: #f0f0f0; /* fondo claro alterno, bloque de títulos */
+  --gris-fila: #f7f7f7; /* filas alternas */
+  --gris-linea: #cfcfcf; /* líneas y bordes finos (decorativos) */
+  --gris-deco: #e9e9e9; /* bloques decorativos del hero (boceto) */
+  --gris-borde-osc: #2e2e2e; /* bordes finos sobre negro (decorativos) */
+
+  /* Degradado oscuro de la portada y del cierre (120°) */
+  --degradado-oscuro: linear-gradient(120deg, #050505 0%, #161616 55%, #2a2a2a 100%);
+
+  /* Texto. Sobre blanco: #0a0a0a 19.8:1 · #555 7.5:1 (6.5:1 sobre #f0f0f0).
+     Sobre negro: #fff 19.8:1 · #d6d6d6 13.6:1 (9.9:1 sobre #2a2a2a). */
+  --texto-claro: #0a0a0a;
+  --texto-claro-suave: #555555;
+  --texto-osc: #ffffff;
+  --texto-osc-suave: #d6d6d6;
+
+  /* Borde de campos de formulario (elemento de interfaz, >= 3:1) */
+  --campo-borde-cla: #767676; /* 4.5:1 sobre blanco */
+  --campo-borde-osc: #8a8a8a; /* 5.7:1 sobre negro */
+
+  --error-cla: #c62828; /* 5.6:1 sobre blanco · 5.0:1 sobre #f0f0f0 */
+  --error-osc: #eb5757;
+  --whatsapp: #25d366; /* botón flotante · icono negro 10:1 */
+
+  /* ---- Tipografías ---- */
+  --f-marca: 'Barlow Condensed', 'Arial Narrow', Impact, sans-serif; /* SOLO el nombre MAD SOFTWARE STUDIO */
+  --f-titulo: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --f-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace; /* etiquetas */
+  --f-texto: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --peso-marca: 500;
+  --ls-marca: 0.03em;
+  --marca-mayusculas: uppercase;
+  --peso-h1: 800;
+  --peso-titulo: 700; /* H2, H3 */
+  --ls-titulo: -0.025em;
+  --titulo-mayusculas: none;
+  --peso-mono: 600;
+  --ls-etiqueta: 0.08em;
+  --peso-texto: 400;
+  --peso-texto-fuerte: 600;
+
+  /* ---- Escala de tamaños (fluida: mínimo → máximo según ancho de pantalla) ---- */
+  --fs-etiqueta: 0.8125rem; /* 13px · IBM Plex Mono, mayúsculas */
+  --fs-pequeno: 0.875rem; /* 14px */
+  --fs-base: 1rem; /* 16px */
+  --fs-medio: 1.125rem; /* 18px */
+  --fs-grande: clamp(1.125rem, 1.05rem + 0.35vw, 1.3125rem); /* 18→21px */
+  --fs-h3: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem); /* 20→26px */
+  --fs-h2: clamp(2rem, 1.4rem + 2.6vw, 3.5rem); /* 32→56px */
+  --fs-h1: clamp(2.25rem, 10.2vw, 6rem); /* 36→96px: "Web y reservas / para tu negocio" cabe en 2 líneas */
+  --fs-marca: 1.25rem; /* 20px · nombre en cabecera y pie */
+
+  /* ---- Interlineado (10% más ajustado que la primera versión: texto 1.6→1.45, títulos 1.1→1.0) ---- */
+  --lh-texto: 1.45;
+  --lh-lead: 1.35;
+  --lh-titulo: 1;
+
+  /* ---- Espaciados ---- */
+  --sp-1: 0.25rem; /* 4 */
+  --sp-2: 0.5rem; /* 8 */
+  --sp-3: 0.75rem; /* 12 */
+  --sp-4: 1rem; /* 16 */
+  --sp-5: 1.5rem; /* 24 */
+  --sp-6: 2rem; /* 32 */
+  --sp-7: 3rem; /* 48 */
+  --sp-8: 4.5rem; /* 72 */
+  --seccion-y: clamp(4rem, 2.5rem + 6vw, 8rem); /* aire vertical entre bloques */
+  --gutter: 1rem; /* margen lateral en celular (16px) */
+  --ancho-max: 72rem; /* 1152px */
+  --ancho-texto: 40rem; /* 640px */
+  --alto-cabecera: 4rem; /* 64px */
+
+  /* ---- Radio de esquinas: rectas. Cambia --radio y TODO se redondea (ej. 10px) ---- */
+  --radio: 0px;
+  --radio-sm: var(--radio);
+  --radio-boton: var(--radio);
+  --radio-lg: var(--radio);
+
+  /* ---- Movimiento ---- */
+  --t-rapido: 150ms;
+  --t-medio: 250ms;
+  --easing: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* ---- Alturas mínimas táctiles ---- */
+  --alto-tactil: 3rem; /* 48px */
+  --alto-boton: 3.5rem; /* 56px: botón principal */
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --gutter: 2rem;
+  }
+}

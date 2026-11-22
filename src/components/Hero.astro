@@ -1,0 +1,88 @@
+---
+import { Image } from 'astro:assets';
+import sitio from '../assets/demo-sitio-escritorio.webp';
+import panel from '../assets/demo-panel-escritorio.webp';
+import type { PaginaCopy } from '../data/paginas';
+interface Props { copy: PaginaCopy['hero'] }
+const { copy } = Astro.props;
+---
+<!--
+  Hero 3 (por defecto, el boceto): fondo blanco, título negro muy grande, bloque gris decorativo arriba a la izquierda
+  (::before) y franja gris ancha con capturas reales del demo de MAD que sangra al borde derecho y pisa el botón.
+  Hero 2 (?hero=2): imagen de fondo con capa oscura.
+-->
+<section class="hero" id="inicio">
+  <div class="hero__bg" aria-hidden="true">
+    <Image src={sitio} alt="" width={1440} height={900} widths={[800, 1440]} sizes="100vw" loading="lazy" decoding="async" />
+    <div class="hero__capa"></div>
+    <p class="hero__nota etiqueta">Fondo: captura de una demo de MAD</p>
+  </div>
+
+  <div class="cont hero__texto">
+    <h1>{copy.h1}</h1>
+    <p class="lead hero__sub">{copy.sub}</p>
+    <div class="hero__cta">
+      <a class="btn btn--principal" href="#formulario">{copy.cta}</a>
+      <p class="hero__micro">{copy.micro}</p>
+    </div>
+  </div>
+
+  <div class="hero__franja">
+    <div class="franja">
+      <figure>
+        <Image src={sitio} alt="Demo de MAD: sitio web de un salón (captura de ejemplo)" width={1440} height={900} widths={[480, 720, 1000]} sizes="(min-width: 48rem) 45vw, 92vw" loading="eager" fetchpriority="high" decoding="async" />
+        <figcaption class="etiqueta">Demo de MAD · sitio web</figcaption>
+      </figure>
+      <figure>
+        <Image src={panel} alt="Demo de MAD: panel de gestión de un salón (captura de ejemplo)" width={1440} height={900} widths={[480, 720, 1000]} sizes="(min-width: 48rem) 45vw, 92vw" loading="lazy" decoding="async" />
+        <figcaption class="etiqueta">Demo de MAD · panel</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero { --solape: calc(var(--alto-boton) / 2 + 0.75rem + 1.5rem); position: relative; overflow-x: clip; text-align: center; background: var(--blanco); color: var(--texto-claro); --suave: var(--texto-claro-suave); padding-bottom: var(--seccion-y); }
+  /* Bloque gris decorativo: sale del borde izquierdo y pisa el inicio del título */
+  .hero::before {
+    content: ''; position: absolute; z-index: 0; left: 0; top: 3rem;
+    width: min(30vw, 28rem); height: 5rem; background: var(--gris-deco);
+  }
+  .hero__bg { display: none; position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+  .hero__bg :global(img) { width: 100%; height: 100%; object-fit: cover; filter: blur(6px); transform: scale(1.05); }
+  .hero__capa { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.78); }
+  .hero__nota { position: absolute; left: var(--gutter); bottom: var(--sp-4); margin: 0; color: var(--texto-osc-suave); font-size: 0.75rem; }
+
+  .hero__texto { position: relative; z-index: 2; display: grid; justify-items: center; gap: var(--sp-5); padding-top: clamp(3rem, 9vw, 6.5rem); }
+  .hero__texto h1 { max-width: 16ch; }
+  .hero__sub { color: var(--suave); max-width: 30rem; }
+
+  /* La franja sube --solape (= mitad del botón + hueco + línea del texto = 4rem) para pisar el botón */
+  .hero__cta { display: grid; justify-items: center; margin-top: var(--sp-2); }
+  .hero__micro { margin: 0.75rem 0 0; height: 1.5rem; line-height: 1.5rem; font-size: var(--fs-pequeno); color: var(--suave); white-space: nowrap; }
+
+  .hero__franja {
+    position: relative; z-index: 1; margin-top: calc(var(--solape) * -1); margin-left: var(--gutter);
+    background: var(--gris-deco); padding: calc(var(--solape) + 1.5rem) var(--gutter) var(--sp-5) var(--sp-4);
+    text-align: left;
+  }
+  .franja { display: grid; gap: var(--sp-5); max-width: 78rem; }
+  figure { margin: 0; display: grid; gap: var(--sp-2); }
+  figure :global(img) { width: 100%; height: auto; border: 1px solid var(--gris-linea); background: var(--blanco); }
+  figcaption { color: var(--suave); }
+
+  /* Hero 2 */
+  :global(html[data-hero='2']) .hero { background: var(--negro); color: var(--texto-osc); --suave: var(--texto-osc-suave); min-height: calc(100svh - var(--alto-cabecera)); display: grid; align-items: center; padding-block: var(--sp-8); }
+  :global(html[data-hero='2']) .hero::before { display: none; }
+  :global(html[data-hero='2']) .hero__bg { display: block; }
+  :global(html[data-hero='2']) .hero__franja { display: none; }
+  :global(html[data-hero='2']) .hero .btn--principal { border-color: var(--acento-borde-osc); }
+  :global(html[data-hero='2']) .hero__sub { color: var(--texto-osc-suave); }
+  :global(html[data-hero='2']) .hero :global(:focus-visible) { outline-color: var(--blanco); box-shadow: 0 0 0 6px var(--negro); }
+
+  @media (min-width: 48rem) {
+    .hero::before { top: 4rem; height: 9rem; width: min(30vw, 30rem); }
+    .franja { grid-template-columns: 1fr 1fr; }
+    .hero__franja { margin-left: 12%; padding-right: var(--gutter); }
+  }
+</style>

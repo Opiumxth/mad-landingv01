@@ -1,0 +1,219 @@
+---
+import { RUBROS, NECESIDADES, type PaginaCopy, type Rubro } from '../data/paginas';
+interface Props { copy: PaginaCopy['form']; rubroInicial: Rubro | null }
+const { copy, rubroInicial } = Astro.props;
+// Clave pública de Turnstile. Por defecto, la de PRUEBA (siempre aprueba). Ver .env.example.
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA';
+---
+<section class="seccion tono-suave" id="formulario">
+  <div class="cont form-wrap">
+    <header class="seccion__cab">
+      <p class="etiqueta">{copy.etiqueta}</p>
+      <h2>{copy.titulo}</h2>
+      <p class="lead">{copy.lead}</p>
+    </header>
+
+    <form id="lead-form" class="form" action="/api/lead" method="post" novalidate data-sitekey={siteKey}>
+      <fieldset class="grupo" data-campo="rubro">
+        <legend>1. ¿Cuál es tu rubro?</legend>
+        <div class="opciones">
+          {RUBROS.map((r) => (
+            <label class="opcion">
+              <input type="radio" name="rubro" value={r.valor} checked={r.valor === rubroInicial} required />
+              <span>{r.texto}</span>
+            </label>
+          ))}
+        </div>
+        <p class="error" data-error="rubro" role="alert"></p>
+      </fieldset>
+
+      <fieldset class="grupo" data-campo="necesidad">
+        <legend>2. ¿Qué necesitas?</legend>
+        <div class="opciones">
+          {NECESIDADES.map((n) => (
+            <label class="opcion">
+              <input type="radio" name="necesidad" value={n.valor} required />
+              <span>{n.texto}</span>
+            </label>
+          ))}
+        </div>
+        <p class="error" data-error="necesidad" role="alert"></p>
+      </fieldset>
+
+      <div class="grupo" data-campo="negocio">
+        <label for="negocio">3. Nombre de tu negocio</label>
+        <input id="negocio" name="negocio" type="text" autocomplete="organization" maxlength="120" required aria-describedby="err-negocio" />
+        <p class="error" id="err-negocio" data-error="negocio" role="alert"></p>
+      </div>
+
+      <div class="grupo" data-campo="whatsapp">
+        <label for="whatsapp">4. Tu WhatsApp</label>
+        <input id="whatsapp" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel" placeholder="987 654 321" maxlength="20" required aria-describedby="ayuda-wa err-whatsapp" />
+        <p class="ayuda" id="ayuda-wa">Celular de Perú, 9 dígitos.</p>
+        <p class="error" id="err-whatsapp" data-error="whatsapp" role="alert"></p>
+      </div>
+
+      <!-- Anti-spam: campo señuelo (los bots lo llenan, las personas no lo ven) -->
+      <div class="senuelo" aria-hidden="true">
+        <label>No llenar este campo <input type="text" name="web" tabindex="-1" autocomplete="off" /></label>
+      </div>
+
+      <input type="hidden" name="pagina_origen" value="" />
+
+      <div class="grupo grupo--consent" data-campo="consentimiento">
+        <label class="consent">
+          <input type="checkbox" name="consentimiento" value="1" required aria-describedby="err-consentimiento" />
+          <span>Acepto que MAD Software Studio use mis datos para contactarme por WhatsApp sobre mi demo, según la <a href="/privacidad">política de privacidad</a>.</span>
+        </label>
+        <p class="error" id="err-consentimiento" data-error="consentimiento" role="alert"></p>
+      </div>
+
+      <div id="turnstile" class="turnstile" data-sitekey={siteKey}></div>
+      <p class="error" data-error="turnstile" role="alert"></p>
+
+      <button class="btn btn--principal form__enviar" type="submit">Pide tu demo con tu logo</button>
+      <p class="estado" id="estado" role="status" aria-live="polite"></p>
+      <noscript><p class="ayuda">Para enviar el formulario activa JavaScript, o escríbenos por WhatsApp.</p></noscript>
+    </form>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('lead-form') as HTMLFormElement | null;
+  if (form) {
+    const siteKey = form.dataset.sitekey!;
+    const estado = document.getElementById('estado')!;
+    const boton = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+    const textoBoton = boton.textContent;
+    let widgetId: string | undefined;
+
+    // ---- Turnstile: se carga solo cuando el formulario está cerca de la pantalla ----
+    function cargarTurnstile() {
+      if (document.getElementById('ts-script')) return;
+      const s = document.createElement('script');
+      s.id = 'ts-script';
+      s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+      s.async = true;
+      s.onload = () => {
+        const t = (window as any).turnstile;
+        if (t) widgetId = t.render('#turnstile', { sitekey: siteKey, theme: 'light', language: 'es' });
+      };
+      document.head.appendChild(s);
+    }
+    new IntersectionObserver((es, obs) => {
+      if (es.some((e) => e.isIntersecting)) { cargarTurnstile(); obs.disconnect(); }
+    }, { rootMargin: '600px' }).observe(form);
+
+    // ---- Validación ----
+    const campo = (n: string) => form.querySelector<HTMLElement>(`[data-campo="${n}"]`)!;
+    function ponerError(n: string, msg: string) {
+      const p = form!.querySelector<HTMLElement>(`[data-error="${n}"]`);
+      if (p) p.textContent = msg;
+      campo(n)?.classList.toggle('con-error', !!msg);
+      form!.querySelectorAll<HTMLInputElement>(`[name="${n}"]`).forEach((i) => i.setAttribute('aria-invalid', msg ? 'true' : 'false'));
+    }
+    // Celular de Perú: 9 dígitos que empiezan en 9, con o sin +51
+    function normalizarWhatsApp(v: string): string | null {
+      let d = v.replace(/\D/g, '');
+      if (d.length === 11 && d.startsWith('51')) d = d.slice(2);
+      return /^9\d{8}$/.test(d) ? '+51' + d : null;
+    }
+    function validar(): boolean {
+      const fd = new FormData(form!);
+      const errores: [string, string][] = [];
+      if (!fd.get('rubro')) errores.push(['rubro', 'Elige tu rubro.']);
+      if (!fd.get('necesidad')) errores.push(['necesidad', 'Elige qué necesitas.']);
+      if (!String(fd.get('negocio') ?? '').trim()) errores.push(['negocio', 'Escribe el nombre de tu negocio.']);
+      if (!normalizarWhatsApp(String(fd.get('whatsapp') ?? ''))) errores.push(['whatsapp', 'Escribe un celular de Perú de 9 dígitos, por ejemplo 987 654 321.']);
+      if (!fd.get('consentimiento')) errores.push(['consentimiento', 'Marca la casilla para que podamos contactarte.']);
+      ['rubro', 'necesidad', 'negocio', 'whatsapp', 'consentimiento'].forEach((n) => ponerError(n, errores.find((e) => e[0] === n)?.[1] ?? ''));
+      if (errores.length) {
+        form!.querySelector<HTMLElement>(`[data-campo="${errores[0][0]}"] input`)?.focus();
+        return false;
+      }
+      return true;
+    }
+    form.addEventListener('input', (e) => {
+      const n = (e.target as HTMLInputElement).name;
+      if (n) ponerError(n, '');
+    });
+
+    // ---- Envío ----
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      estado.textContent = '';
+      ponerError('turnstile', '');
+      if (!validar()) return;
+      const fd = new FormData(form);
+      const token = String(fd.get('cf-turnstile-response') ?? '');
+      if (!token) { ponerError('turnstile', 'Espera a que termine la verificación e inténtalo de nuevo.'); return; }
+
+      const datos = {
+        rubro: fd.get('rubro'),
+        necesidad: fd.get('necesidad'),
+        negocio: String(fd.get('negocio')).trim(),
+        whatsapp: normalizarWhatsApp(String(fd.get('whatsapp'))),
+        consentimiento: true,
+        pagina_origen: location.pathname + location.search, // ej. "/salones" o "/?hero=2"
+        web: fd.get('web') ?? '',
+        turnstile: token,
+      };
+      boton.disabled = true;
+      boton.textContent = 'Enviando…';
+      try {
+        const r = await fetch('/api/lead', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(datos) });
+        const j = (await r.json().catch(() => ({}))) as { ok?: boolean; campo?: string; error?: string };
+        if (r.ok && j.ok) { location.href = '/gracias'; return; }
+        if (j.campo) ponerError(j.campo, j.error ?? 'Revisa este dato.');
+        else estado.textContent = j.error ?? 'No pudimos enviar tus datos. Inténtalo otra vez o escríbenos por WhatsApp.';
+      } catch {
+        estado.textContent = 'No hay conexión. Inténtalo otra vez o escríbenos por WhatsApp.';
+      }
+      (window as any).turnstile?.reset(widgetId);
+      boton.disabled = false;
+      boton.textContent = textoBoton;
+    });
+  }
+</script>
+
+<style>
+  .form-wrap { display: grid; gap: var(--sp-6); }
+  .form { display: grid; gap: var(--sp-6); padding: var(--sp-5); background: var(--blanco); border: 1px solid var(--borde); border-radius: var(--radio-lg); }
+  .grupo { display: grid; gap: var(--sp-3); margin: 0; padding: 0; border: 0; min-width: 0; }
+  legend, .grupo > label { font-weight: var(--peso-texto-fuerte); font-size: var(--fs-medio); padding: 0; margin-bottom: var(--sp-3); }
+  .opciones { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+  /* Botones tipo "chip": radios nativos, accesibles con teclado */
+  .opcion { position: relative; }
+  .opcion input { position: absolute; inset: 0; opacity: 0; cursor: pointer; margin: 0; width: 100%; height: 100%; }
+  .opcion span {
+    display: inline-flex; align-items: center; min-height: var(--alto-tactil); padding: var(--sp-2) var(--sp-5);
+    border: 2px solid var(--campo-borde); border-radius: var(--radio-boton); background: var(--blanco);
+    font-weight: var(--peso-texto-fuerte); transition: background-color var(--t-rapido), color var(--t-rapido);
+  }
+  .opcion:hover span { border-color: var(--negro); }
+  .opcion input:checked + span { background: var(--negro); border-color: var(--negro); color: var(--blanco); }
+  .opcion input:focus-visible + span { outline: 3px solid var(--negro); outline-offset: 3px; }
+  input[type='text'], input[type='tel'] {
+    width: 100%; min-height: var(--alto-tactil); padding: var(--sp-3) var(--sp-4); background: var(--blanco); color: var(--texto-claro);
+    border: 2px solid var(--campo-borde); border-radius: var(--radio-boton); font-size: var(--fs-medio);
+  }
+  input[type='text']:focus-visible, input[type='tel']:focus-visible { border-color: var(--negro); }
+  .con-error input[type='text'], .con-error input[type='tel'], .con-error .opcion span { border-color: var(--error); }
+  .ayuda { color: var(--suave); font-size: var(--fs-pequeno); }
+  .error { color: var(--error); font-size: var(--fs-pequeno); font-weight: var(--peso-texto-fuerte); }
+  .error:empty { display: none; }
+  .grupo > label.consent { font-weight: var(--peso-texto); font-size: var(--fs-pequeno); margin: 0; }
+  .consent { display: flex; gap: var(--sp-3); align-items: flex-start; font-size: var(--fs-pequeno); }
+  .consent input { flex: none; width: 1.5rem; height: 1.5rem; margin: 0.1rem 0 0; accent-color: var(--negro); }
+  .consent a { font-weight: var(--peso-texto-fuerte); }
+  .senuelo { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .turnstile { min-height: 65px; }
+  .form__enviar { width: 100%; }
+  .estado { color: var(--error); font-weight: var(--peso-texto-fuerte); }
+  .estado:empty { display: none; }
+  @media (min-width: 62rem) {
+    .form-wrap { grid-template-columns: 1fr 1.3fr; gap: var(--sp-8); align-items: start; }
+    .form { padding: var(--sp-7); }
+    .form__enviar { width: auto; justify-self: start; }
+  }
+</style>

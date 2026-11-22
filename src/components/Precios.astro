@@ -1,0 +1,48 @@
+---
+import { desde, mostrarPrecios, planes } from '../data/precios';
+import type { PaginaCopy } from '../data/paginas';
+interface Props { copy: PaginaCopy['precios']; completo: boolean }
+const { copy, completo } = Astro.props;
+---
+{mostrarPrecios && (
+  <section class="seccion tono-oscuro" id="precios">
+    <div class="cont">
+      <header class="seccion__cab">
+        <p class="etiqueta">{copy.etiqueta}</p>
+        <h2>{copy.titulo}</h2>
+        <p class="lead">{copy.lead}</p>
+      </header>
+      {completo ? (
+        <div class="planes">
+          {planes.map((p) => (
+            <article class="plan">
+              <p class="etiqueta plan__nombre">Plan {p.id} · {p.nombre}</p>
+              <p class="plan__precio" aria-label={`Precio del plan ${p.nombre}`}>{p.precio}</p>
+              <p class="plan__desc">{p.resumen}</p>
+              <ul class="plan__lista">{p.incluye.map((i) => <li>{i}</li>)}</ul>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div class="desde">
+          <p class="desde__monto" aria-label={`Precios desde ${desde}`}>{desde}</p>
+          <a class="btn btn--borde" href="/salones#precios">Ver planes y precios para salones, barberías y spas</a>
+        </div>
+      )}
+    </div>
+  </section>
+)}
+
+<style>
+  .planes { display: grid; gap: var(--sp-5); }
+  .plan { display: grid; gap: var(--sp-3); align-content: start; padding: var(--sp-6); border: 1px solid var(--borde); border-radius: var(--radio-lg); background: var(--superficie); }
+  .plan__nombre { color: var(--suave); margin: 0; }
+  .plan__precio { font-family: var(--f-titulo); font-weight: var(--peso-h1); letter-spacing: -0.035em; font-size: var(--fs-h2); line-height: 1; }
+  .plan__desc { color: var(--suave); }
+  .plan__lista { display: grid; gap: var(--sp-2); padding-block: var(--sp-3); border-top: 1px solid var(--borde); }
+  .plan__lista li { padding-left: var(--sp-4); position: relative; }
+  .plan__lista li::before { content: ''; position: absolute; left: 0; top: 0.65em; width: 6px; height: 6px; background: currentColor; }
+  .desde { display: grid; justify-items: start; gap: var(--sp-5); }
+  .desde__monto { font-weight: var(--peso-h1); letter-spacing: -0.035em; font-size: var(--fs-h1); line-height: 1; }
+  @media (min-width: 48rem) { .planes { grid-template-columns: 1fr 1fr; } }
+</style>
