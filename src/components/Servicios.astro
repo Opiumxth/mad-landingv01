@@ -1,0 +1,32 @@
+---
+// Servicios típicos del rubro (solo páginas de rubro). El contenido sale de src/data/rubros/<rubro>.ts
+import type { PaginaCopy } from '../data/paginas';
+interface Props { copy: NonNullable<PaginaCopy['servicios']> }
+const { copy } = Astro.props;
+---
+<section class="seccion tono-claro" id="servicios">
+  <div class="cont">
+    <header class="seccion__cab">
+      <p class="etiqueta">{copy.etiqueta}</p>
+      <h2>{copy.titulo}</h2>
+      <p class="lead">{copy.lead}</p>
+    </header>
+    <ul class="serv">
+      {copy.items.map((i) => (
+        <li class="serv__item">
+          <h3>{i.nombre}</h3>
+          <p>{i.detalle}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .serv { display: grid; border-top: 2px solid var(--texto-claro); }
+  .serv__item { display: grid; gap: var(--sp-1); align-content: start; padding-block: var(--sp-5); border-bottom: 1px solid var(--borde); }
+  .serv__item h3 { font-size: var(--fs-medio); font-weight: var(--peso-titulo); letter-spacing: 0; }
+  .serv__item p { color: var(--suave); max-width: 32rem; }
+  @media (min-width: 48rem) { .serv { grid-template-columns: 1fr 1fr; column-gap: var(--sp-7); } }
+  @media (min-width: 62rem) { .serv { grid-template-columns: repeat(4, 1fr); } }
+</style>

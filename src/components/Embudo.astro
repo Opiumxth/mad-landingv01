@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import Cabecera from './Cabecera.astro';
 import Hero from './Hero.astro';
 import Videos from './Videos.astro';
+import Servicios from './Servicios.astro';
 import Como from './Como.astro';
 import Precios from './Precios.astro';
 import Condiciones from './Condiciones.astro';
@@ -28,9 +29,10 @@ const enlaces = [
   <main id="contenido">
     <Hero copy={copy.hero} />
     <Videos copy={copy.videos} />
+    {copy.servicios && <Servicios copy={copy.servicios} />}
     <Como copy={copy.como} />
-    <Precios copy={copy.precios} completo={copy.esSalones} />
-    {copy.esSalones && <Condiciones copy={copy.condiciones} />}
+    <Precios copy={copy.precios} completo={copy.esRubro} />
+    {copy.esRubro && <Condiciones copy={copy.condiciones} />}
     <Formulario copy={copy.form} rubroInicial={copy.rubroInicial} />
     <Faq copy={copy.faq} />
     <Cierre copy={copy.cierre} />

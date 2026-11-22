@@ -44,9 +44,9 @@ h1, h2, h3 {
   letter-spacing: var(--ls-titulo);
   text-wrap: balance;
 }
-h1 { font-size: var(--fs-h1); font-weight: var(--peso-h1); letter-spacing: -0.035em; }
+h1 { font-size: var(--fs-h1); font-weight: var(--peso-h1); letter-spacing: var(--ls-h1); line-height: var(--lh-h1); }
 h2 { font-size: var(--fs-h2); }
-h3 { font-size: var(--fs-h3); }
+h3 { font-size: var(--fs-h3); line-height: var(--lh-h3); }
 .etiqueta {
   font-family: var(--f-mono);
   font-weight: var(--peso-mono);
@@ -69,6 +69,9 @@ h3 { font-size: var(--fs-h3); }
 .tono-oscuro { background: var(--negro); color: var(--texto-osc); --suave: var(--texto-osc-suave); --borde: var(--gris-borde-osc); --campo-borde: var(--campo-borde-osc); --error: var(--error-osc); --superficie: var(--negro-2); }
 .tono-claro { background: var(--blanco); color: var(--texto-claro); --suave: var(--texto-claro-suave); --borde: var(--gris-linea); --campo-borde: var(--campo-borde-cla); --error: var(--error-cla); --superficie: var(--gris-suave); }
 .tono-suave { background: var(--gris-suave); color: var(--texto-claro); --suave: var(--texto-claro-suave); --borde: var(--gris-linea); --campo-borde: var(--campo-borde-cla); --error: var(--error-cla); --superficie: var(--blanco); }
+
+/* Secciones claras consecutivas: una línea fina en vez de cambiar de color de fondo */
+.tono-claro + .tono-claro { border-top: 1px solid var(--gris-linea); }
 
 /* ---- Botones ---- */
 .btn {

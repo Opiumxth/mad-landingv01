@@ -1,8 +1,9 @@
 import type { APIRoute } from 'astro';
 import { SITIO } from '../data/sitio';
+import { rubros } from '../data/rubros';
 
 // Solo páginas indexables. /gracias queda fuera (noindex).
-const rutas = ['/', '/salones', '/privacidad'];
+const rutas = ['/', ...rubros.map((r) => `/${r.slug}`), '/privacidad'];
 
 export const GET: APIRoute = () => {
   const urls = rutas

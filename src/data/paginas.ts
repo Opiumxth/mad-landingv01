@@ -1,8 +1,11 @@
 // Textos de las páginas del embudo (/ y /salones). Misma estructura, distinto enfoque.
 // Lo que va [entre corchetes] es un dato que falta. Textos de la propuesta de servicios ya enviada.
 import { condiciones, desde, mostrarPrecios, planes } from './precios';
+import { videosHome } from './videos';
+import type { DemoVideo, Faq, FormRubro, RubroDatos } from './rubros/tipos';
 
-export type Rubro = 'salon' | 'barberia' | 'spa' | 'otro';
+export type { Faq };
+export type Rubro = FormRubro;
 
 export const RUBROS: { valor: Rubro; texto: string }[] = [
   { valor: 'salon', texto: 'Salón' },
@@ -18,17 +21,16 @@ export const NECESIDADES: { valor: string; texto: string }[] = [
   { valor: 'no-se', texto: 'Aún no lo sé' },
 ];
 
-export interface Faq { pregunta: string; respuesta: string; enlace?: { texto: string; href: string } }
-
 export interface PaginaCopy {
   ruta: string;
-  esSalones: boolean; // muestra comparación de planes y condiciones completas
+  esRubro: boolean; // página de un rubro: comparación de planes, condiciones y servicios típicos
   title: string;
   description: string;
   rubroInicial: Rubro | null;
   whatsappMensaje: string;
   hero: { h1: string; sub: string; cta: string; micro: string };
-  videos: { etiqueta: string; titulo: string; lead: string };
+  videos: { etiqueta: string; titulo: string; lead: string; items: DemoVideo[] };
+  servicios?: { etiqueta: string; titulo: string; lead: string; items: { nombre: string; detalle: string }[] };
   como: { etiqueta: string; titulo: string; lead: string };
   precios: { etiqueta: string; titulo: string; lead: string };
   condiciones: { etiqueta: string; titulo: string };
@@ -55,8 +57,7 @@ const precioFaq = (salones: boolean) =>
         : `Desde ${desde}. Hay un plan con panel de citas. Los precios completos están en la página para salones, barberías y spas.`
     : 'Escríbenos por WhatsApp y te enviamos las opciones.';
 
-function faq(salones: boolean): Faq[] {
-  const negocio = salones ? 'del salón' : 'de tu negocio';
+function faq(salones: boolean, negocio: string, propias: Faq[] = []): Faq[] {
   const items: Faq[] = [
     { pregunta: '¿Qué es la demo con mi logo?', respuesta: 'Es una muestra de cómo se vería tu sitio con tu logo, para que la veas antes de decidir. No tiene costo.' },
     { pregunta: '¿Cuánto toma el trabajo completo?', respuesta: nota3Semanas },
@@ -64,6 +65,7 @@ function faq(salones: boolean): Faq[] {
   ];
   if (mostrarPrecios) items.push({ pregunta: '¿Puedo empezar por el plan Web y pasar al otro después?', respuesta: condiciones.pasarAB });
   items.push(
+    ...propias, // preguntas propias del rubro (src/data/rubros/)
     { pregunta: '¿Qué pasa con mi dominio, mi ficha de Google y mis cuentas?', respuesta: `Quedan a nombre ${negocio}. Si dejas de trabajar con nosotros, te entregamos una copia exportable de tu web y de tus datos.` },
     { pregunta: '¿Voy a salir primero en Google?', respuesta: 'No garantizamos posición, visitas ni resultados. Tener web y ficha de Google completas ayuda a que Google y los asistentes de IA entiendan tu negocio; cómo te muestren depende de ellos.' },
     { pregunta: '¿Qué no incluye?', respuesta: 'Marketing (redes, videos, anuncios y campañas) y administrar tus redes actuales. Pago en línea, recordatorios automáticos por WhatsApp y tienda en línea se cotizan aparte.' },
@@ -75,7 +77,7 @@ function faq(salones: boolean): Faq[] {
 
 export const home: PaginaCopy = {
   ruta: '/',
-  esSalones: false,
+  esRubro: false,
   title: 'MAD Software Studio | Web y reservas para tu negocio',
   description: 'Webs con reservas y paneles de gestión para negocios de servicios en Lima. Pide tu demo con tu logo, sin costo.',
   rubroInicial: null,
@@ -90,6 +92,7 @@ export const home: PaginaCopy = {
     etiqueta: 'Demo de MAD',
     titulo: 'Así se ve una demo de MAD',
     lead: 'Un sitio web y un panel de ejemplo hechos por nosotros. Los textos y precios que ves en la demo son de ejemplo.',
+    items: videosHome,
   },
   como: { etiqueta: 'Cómo trabajamos', titulo: '3 semanas, 3 etapas', lead: 'Sabes en qué paso estamos todo el tiempo.' },
   precios: {
@@ -99,32 +102,27 @@ export const home: PaginaCopy = {
   },
   condiciones: { etiqueta: 'Condiciones', titulo: 'Cómo trabajamos con tus datos' },
   form: { etiqueta: 'Tu demo', titulo: 'Cuéntanos de tu negocio', lead: 'Son 4 datos. Te escribimos por WhatsApp para preparar tu demo con tu logo.' },
-  faq: { etiqueta: 'Preguntas frecuentes', titulo: 'Lo que suelen preguntar', items: faq(false) },
+  faq: { etiqueta: 'Preguntas frecuentes', titulo: 'Lo que suelen preguntar', items: faq(false, 'de tu negocio') },
   cierre: { titulo: 'Mira tu negocio con su propia web', texto: 'Déjanos tus datos y prepara tu demo con tu logo.' },
 };
 
-export const salones: PaginaCopy = {
-  ruta: '/salones',
-  esSalones: true,
-  title: 'Web y reservas para salones y spas | MAD Software Studio',
-  description: 'Web con carta de servicios y reservas, y un panel para confirmar citas, para salones, barberías y spas. Pide tu demo con tu logo, sin costo.',
-  rubroInicial: 'salon',
-  whatsappMensaje: 'Hola, tengo un salón, barbería o spa y quiero pedir mi demo con mi logo.',
-  hero: {
-    h1: 'Web y reservas para tu salón',
-    sub: 'Para salones, barberías y spas: tu carta de servicios y reservas por WhatsApp.',
-    cta: CTA,
-    micro: MICRO,
-  },
-  videos: {
-    etiqueta: 'Demo de MAD',
-    titulo: 'Así se ve la demo de un salón',
-    lead: 'Una demo de MAD hecha para un salón: lo que ve tu cliente y lo que ves tú. Los textos y precios son de ejemplo.',
-  },
-  como: home.como,
-  precios: { etiqueta: 'Precios', titulo: 'Dos planes', lead: 'Montos en soles, pago único por la web. El mantenimiento mensual se detalla más abajo.' },
-  condiciones: { etiqueta: 'Condiciones', titulo: 'Pago, mantenimiento y tus datos' },
-  form: { etiqueta: 'Tu demo', titulo: 'Cuéntanos de tu salón, barbería o spa', lead: 'Son 4 datos. Te escribimos por WhatsApp para preparar tu demo con tu logo.' },
-  faq: { etiqueta: 'Preguntas frecuentes', titulo: 'Lo que suelen preguntar', items: faq(true) },
-  cierre: { titulo: 'Mira tu salón con su propia web', texto: 'Déjanos tus datos y prepara tu demo con tu logo.' },
-};
+// Página de un rubro (/salones, y los que se sumen en src/data/rubros/). Todo el contenido propio sale del archivo del rubro.
+export function paginaDeRubro(r: RubroDatos): PaginaCopy {
+  return {
+    ruta: `/${r.slug}`,
+    esRubro: true,
+    title: r.title,
+    description: r.description,
+    rubroInicial: r.formRubro,
+    whatsappMensaje: r.whatsappMensaje,
+    hero: { h1: r.hero.h1, sub: r.hero.sub, cta: CTA, micro: MICRO },
+    videos: { etiqueta: 'Demo de MAD', titulo: r.demo.titulo, lead: r.demo.lead, items: r.demo.videos },
+    servicios: { etiqueta: 'Servicios', titulo: r.servicios.titulo, lead: r.servicios.lead, items: r.servicios.items },
+    como: home.como,
+    precios: { etiqueta: 'Precios', titulo: 'Dos planes', lead: 'Montos en soles, pago único por la web. El mantenimiento mensual se detalla más abajo.' },
+    condiciones: { etiqueta: 'Condiciones', titulo: 'Pago, mantenimiento y tus datos' },
+    form: { etiqueta: 'Tu demo', titulo: r.formulario.titulo, lead: 'Son 4 datos. Te escribimos por WhatsApp para preparar tu demo con tu logo.' },
+    faq: { etiqueta: 'Preguntas frecuentes', titulo: 'Lo que suelen preguntar', items: faq(true, r.deNegocio, r.preguntas) },
+    cierre: r.cierre,
+  };
+}

@@ -1,7 +1,6 @@
 ---
 import { Image } from 'astro:assets';
 import Icono from './Icono.astro';
-import { videos } from '../data/videos';
 import type { PaginaCopy } from '../data/paginas';
 interface Props { copy: PaginaCopy['videos'] }
 const { copy } = Astro.props;
@@ -14,11 +13,11 @@ const { copy } = Astro.props;
       <p class="lead">{copy.lead}</p>
     </header>
     <div class="vid-grid">
-      {videos.map((v) => (
+      {copy.items.map((v) => (
         <figure class="vid" data-video-url={v.url}>
           <div class="vid__caja">
             <button type="button" class="vid__marco" data-video-btn aria-label={`Cargar el video: ${v.titulo}`}>
-              <Image src={v.poster} alt="" width={1440} height={900} widths={[480, 720, 1000]} sizes="(min-width: 48rem) 50vw, 100vw" loading="lazy" decoding="async" />
+              <Image src={v.poster} alt="" width={1920} height={1200} widths={[480, 720, 1000]} sizes="(min-width: 48rem) 50vw, 100vw" loading="lazy" decoding="async" />
               <span class="vid__play"><Icono nombre="play" tam={28} /></span>
             </button>
             <span class="vid__chip etiqueta">Demo de MAD · {v.duracion}</span>
@@ -71,14 +70,14 @@ const { copy } = Astro.props;
     position: relative; display: block; width: 100%; aspect-ratio: 16 / 10; padding: 0; overflow: hidden;
     border: 1px solid var(--borde); border-radius: var(--radio-lg); background: var(--negro-2); cursor: pointer;
   }
-  .vid__marco :global(img) { width: 100%; height: 100%; object-fit: cover; opacity: 0.85; transition: opacity var(--t-medio); }
-  .vid__marco:hover :global(img) { opacity: 1; }
+  .vid__marco :global(img) { width: 100%; height: 100%; object-fit: cover; transition: filter var(--t-medio); }
+  .vid__marco:hover :global(img) { filter: brightness(0.92); }
   .vid__play {
     position: absolute; inset: 0; margin: auto; width: 4.5rem; height: 4.5rem; display: grid; place-items: center;
     border-radius: var(--radio); background: var(--blanco); color: var(--negro); padding-left: 4px;
   }
   .vid__caja { position: relative; }
-  .vid__chip { pointer-events: none; position: absolute; left: var(--sp-3); bottom: var(--sp-3); padding: var(--sp-1) var(--sp-3); background: var(--negro); color: var(--texto-osc); border-radius: var(--radio-sm); font-size: 0.75rem; }
+  .vid__chip { pointer-events: none; position: absolute; left: var(--sp-3); bottom: var(--sp-3); padding: var(--sp-1) var(--sp-3); background: var(--negro); color: var(--texto-osc); border-radius: var(--radio-sm); font-size: var(--fs-etiqueta-min); }
   .vid__tipo { color: var(--texto-osc-suave); }
   figcaption { display: grid; gap: var(--sp-2); }
   figcaption p:not(.vid__aviso) { color: var(--suave); max-width: 36rem; }

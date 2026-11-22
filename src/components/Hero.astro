@@ -1,88 +1,94 @@
 ---
 import { Image } from 'astro:assets';
-import sitio from '../assets/demo-sitio-escritorio.webp';
-import panel from '../assets/demo-panel-escritorio.webp';
+import sitio from '../assets/demo/sitio-inicio.webp';
+import panel from '../assets/demo/panel-movil.webp';
 import type { PaginaCopy } from '../data/paginas';
 interface Props { copy: PaginaCopy['hero'] }
 const { copy } = Astro.props;
 ---
 <!--
-  Hero 3 (por defecto, el boceto): fondo blanco, título negro muy grande, bloque gris decorativo arriba a la izquierda
-  (::before) y franja gris ancha con capturas reales del demo de MAD que sangra al borde derecho y pisa el botón.
-  Hero 2 (?hero=2): imagen de fondo con capa oscura.
+  Hero 3 (por defecto): fondo blanco, texto a la izquierda y el demo de MAD en marcos de dispositivo
+  (ventana de navegador para el sitio, celular para el panel) con sombra suave. Capturas a doble resolución,
+  sin la barra de herramientas del demo. Los marcos son CSS puro (sin imágenes extra).
+  Hero 2 (?hero=2): imagen de fondo con capa oscura, texto centrado.
 -->
 <section class="hero" id="inicio">
   <div class="hero__bg" aria-hidden="true">
-    <Image src={sitio} alt="" width={1440} height={900} widths={[800, 1440]} sizes="100vw" loading="lazy" decoding="async" />
+    <Image src={sitio} alt="" width={1920} height={1200} widths={[800, 1440]} sizes="100vw" loading="lazy" decoding="async" />
     <div class="hero__capa"></div>
     <p class="hero__nota etiqueta">Fondo: captura de una demo de MAD</p>
   </div>
 
-  <div class="cont hero__texto">
-    <h1>{copy.h1}</h1>
-    <p class="lead hero__sub">{copy.sub}</p>
-    <div class="hero__cta">
-      <a class="btn btn--principal" href="#formulario">{copy.cta}</a>
-      <p class="hero__micro">{copy.micro}</p>
+  <div class="cont hero__grid">
+    <div class="hero__texto">
+      <h1>{copy.h1}</h1>
+      <p class="lead hero__sub">{copy.sub}</p>
+      <div class="hero__cta">
+        <a class="btn btn--principal" href="#formulario">{copy.cta}</a>
+        <p class="hero__micro">{copy.micro}</p>
+      </div>
     </div>
-  </div>
 
-  <div class="hero__franja">
-    <div class="franja">
-      <figure>
-        <Image src={sitio} alt="Demo de MAD: sitio web de un salón (captura de ejemplo)" width={1440} height={900} widths={[480, 720, 1000]} sizes="(min-width: 48rem) 45vw, 92vw" loading="eager" fetchpriority="high" decoding="async" />
-        <figcaption class="etiqueta">Demo de MAD · sitio web</figcaption>
-      </figure>
-      <figure>
-        <Image src={panel} alt="Demo de MAD: panel de gestión de un salón (captura de ejemplo)" width={1440} height={900} widths={[480, 720, 1000]} sizes="(min-width: 48rem) 45vw, 92vw" loading="lazy" decoding="async" />
-        <figcaption class="etiqueta">Demo de MAD · panel</figcaption>
-      </figure>
+    <div class="escena">
+      <div class="escena__lienzo">
+        <figure class="navegador">
+          <div class="navegador__barra" aria-hidden="true"><i></i><i></i><i></i><span></span></div>
+          <Image src={sitio} alt="Demo de MAD: sitio web de un salón con su carta de servicios y botón de reserva (captura de ejemplo)" width={1920} height={1200} widths={[640, 960, 1280, 1600]} sizes="(min-width: 62rem) 40rem, 92vw" loading="eager" fetchpriority="high" decoding="async" />
+        </figure>
+        <figure class="celular">
+          <Image src={panel} alt="Demo de MAD: panel del salón en el celular, con las citas por confirmar (captura de ejemplo)" width={780} height={1688} widths={[160, 320, 480]} sizes="(min-width: 62rem) 9rem, 30vw" loading="lazy" decoding="async" />
+        </figure>
+      </div>
+      <p class="escena__pie etiqueta">Demo de MAD · sitio web y panel de ejemplo</p>
     </div>
   </div>
 </section>
 
 <style>
-  .hero { --solape: calc(var(--alto-boton) / 2 + 0.75rem + 1.5rem); position: relative; overflow-x: clip; text-align: center; background: var(--blanco); color: var(--texto-claro); --suave: var(--texto-claro-suave); padding-bottom: var(--seccion-y); }
-  /* Bloque gris decorativo: sale del borde izquierdo y pisa el inicio del título */
-  .hero::before {
-    content: ''; position: absolute; z-index: 0; left: 0; top: 3rem;
-    width: min(30vw, 28rem); height: 5rem; background: var(--gris-deco);
-  }
+  .hero { position: relative; overflow-x: clip; background: var(--blanco); color: var(--texto-claro); --suave: var(--texto-claro-suave); padding-block: clamp(2.5rem, 6vw, 5rem) var(--seccion-y); }
   .hero__bg { display: none; position: absolute; inset: 0; z-index: 0; overflow: hidden; }
   .hero__bg :global(img) { width: 100%; height: 100%; object-fit: cover; filter: blur(6px); transform: scale(1.05); }
   .hero__capa { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.78); }
-  .hero__nota { position: absolute; left: var(--gutter); bottom: var(--sp-4); margin: 0; color: var(--texto-osc-suave); font-size: 0.75rem; }
+  .hero__nota { position: absolute; left: var(--gutter); bottom: var(--sp-4); margin: 0; color: var(--texto-osc-suave); font-size: var(--fs-etiqueta-min); }
 
-  .hero__texto { position: relative; z-index: 2; display: grid; justify-items: center; gap: var(--sp-5); padding-top: clamp(3rem, 9vw, 6.5rem); }
-  .hero__texto h1 { max-width: 16ch; }
+  .hero__grid { position: relative; z-index: 1; display: grid; gap: var(--sp-7); }
+  .hero__texto { display: grid; justify-items: start; align-content: center; gap: var(--sp-5); }
+  .hero__texto h1 { font-size: var(--fs-h1-hero); max-width: 16ch; }
   .hero__sub { color: var(--suave); max-width: 30rem; }
+  .hero__cta { display: grid; justify-items: start; gap: var(--sp-3); margin-top: var(--sp-2); }
+  .hero__micro { font-size: var(--fs-pequeno); color: var(--suave); }
 
-  /* La franja sube --solape (= mitad del botón + hueco + línea del texto = 4rem) para pisar el botón */
-  .hero__cta { display: grid; justify-items: center; margin-top: var(--sp-2); }
-  .hero__micro { margin: 0.75rem 0 0; height: 1.5rem; line-height: 1.5rem; font-size: var(--fs-pequeno); color: var(--suave); white-space: nowrap; }
-
-  .hero__franja {
-    position: relative; z-index: 1; margin-top: calc(var(--solape) * -1); margin-left: var(--gutter);
-    background: var(--gris-deco); padding: calc(var(--solape) + 1.5rem) var(--gutter) var(--sp-5) var(--sp-4);
-    text-align: left;
+  /* ---- Escena: ventana de navegador + celular ---- */
+  .escena { display: grid; gap: var(--sp-4); min-width: 0; }
+  .escena__lienzo { position: relative; padding-bottom: var(--sp-6); }
+  figure { margin: 0; }
+  .navegador { width: 80%; background: var(--blanco); border: 1px solid var(--gris-linea); border-radius: var(--radio-lg); box-shadow: var(--sombra-marco); overflow: hidden; }
+  .navegador__barra { display: flex; align-items: center; gap: 0.375rem; height: 1.75rem; padding-inline: var(--sp-3); background: var(--gris-suave); border-bottom: 1px solid var(--gris-linea); }
+  .navegador__barra i { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #bdbdbd; }
+  .navegador__barra span { flex: 1; max-width: 55%; height: 0.875rem; margin-left: var(--sp-3); border-radius: 999px; background: var(--blanco); border: 1px solid var(--gris-linea); }
+  .navegador :global(img) { width: 100%; height: auto; }
+  .celular {
+    position: absolute; right: 0; bottom: 0; width: 28%;
+    padding: 0.3rem; background: var(--negro); border-radius: clamp(0.875rem, 4.5vw, var(--radio-celular));
+    box-shadow: var(--sombra-marco);
   }
-  .franja { display: grid; gap: var(--sp-5); max-width: 78rem; }
-  figure { margin: 0; display: grid; gap: var(--sp-2); }
-  figure :global(img) { width: 100%; height: auto; border: 1px solid var(--gris-linea); background: var(--blanco); }
-  figcaption { color: var(--suave); }
+  .celular :global(img) { width: 100%; height: auto; border-radius: clamp(0.625rem, 3.6vw, calc(var(--radio-celular) - 0.3rem)); }
+  .escena__pie { color: var(--suave); font-size: var(--fs-etiqueta-min); }
 
-  /* Hero 2 */
+  /* ---- Hero 2 (?hero=2): oscuro, centrado, sin escena ---- */
   :global(html[data-hero='2']) .hero { background: var(--negro); color: var(--texto-osc); --suave: var(--texto-osc-suave); min-height: calc(100svh - var(--alto-cabecera)); display: grid; align-items: center; padding-block: var(--sp-8); }
-  :global(html[data-hero='2']) .hero::before { display: none; }
   :global(html[data-hero='2']) .hero__bg { display: block; }
-  :global(html[data-hero='2']) .hero__franja { display: none; }
+  :global(html[data-hero='2']) .escena { display: none; }
+  :global(html[data-hero='2']) .hero__texto { justify-items: center; text-align: center; }
+  :global(html[data-hero='2']) .hero__texto h1 { max-width: 14ch; font-size: var(--fs-h1); }
+  :global(html[data-hero='2']) .hero__cta { justify-items: center; }
   :global(html[data-hero='2']) .hero .btn--principal { border-color: var(--acento-borde-osc); }
-  :global(html[data-hero='2']) .hero__sub { color: var(--texto-osc-suave); }
   :global(html[data-hero='2']) .hero :global(:focus-visible) { outline-color: var(--blanco); box-shadow: 0 0 0 6px var(--negro); }
 
-  @media (min-width: 48rem) {
-    .hero::before { top: 4rem; height: 9rem; width: min(30vw, 30rem); }
-    .franja { grid-template-columns: 1fr 1fr; }
-    .hero__franja { margin-left: 12%; padding-right: var(--gutter); }
+  @media (min-width: 40rem) { .celular { width: 24%; padding: 0.375rem; } .navegador { width: 84%; } }
+  @media (min-width: 62rem) {
+    .hero__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: var(--sp-7); align-items: center; }
+    .celular { width: 22%; }
+    .navegador { width: 86%; }
   }
 </style>

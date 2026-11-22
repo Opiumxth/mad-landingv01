@@ -4,45 +4,56 @@ import type { PaginaCopy } from '../data/paginas';
 interface Props { copy: PaginaCopy['precios']; completo: boolean }
 const { copy, completo } = Astro.props;
 ---
-{mostrarPrecios && (
-  <section class="seccion tono-oscuro" id="precios">
+{mostrarPrecios && (completo ? (
+  <section class="seccion tono-claro" id="precios">
     <div class="cont">
       <header class="seccion__cab">
         <p class="etiqueta">{copy.etiqueta}</p>
         <h2>{copy.titulo}</h2>
         <p class="lead">{copy.lead}</p>
       </header>
-      {completo ? (
-        <div class="planes">
-          {planes.map((p) => (
-            <article class="plan">
-              <p class="etiqueta plan__nombre">Plan {p.id} · {p.nombre}</p>
-              <p class="plan__precio" aria-label={`Precio del plan ${p.nombre}`}>{p.precio}</p>
-              <p class="plan__desc">{p.resumen}</p>
-              <ul class="plan__lista">{p.incluye.map((i) => <li>{i}</li>)}</ul>
-            </article>
-          ))}
-        </div>
-      ) : (
-        <div class="desde">
-          <p class="desde__monto" aria-label={`Precios desde ${desde}`}>{desde}</p>
-          <a class="btn btn--borde" href="/salones#precios">Ver planes y precios para salones, barberías y spas</a>
-        </div>
-      )}
+      <div class="planes">
+        {planes.map((p) => (
+          <article class="plan">
+            <p class="etiqueta plan__nombre">Plan {p.id} · {p.nombre}</p>
+            <p class="plan__precio" aria-label={`Precio del plan ${p.nombre}`}>{p.precio}</p>
+            <p class="plan__desc">{p.resumen}</p>
+            <ul class="plan__lista">{p.incluye.map((i) => <li>{i}</li>)}</ul>
+          </article>
+        ))}
+      </div>
     </div>
   </section>
-)}
+) : (
+  // Home: una banda compacta de una línea (la comparación completa vive en la página del rubro)
+  <section class="banda tono-claro" id="precios" aria-label="Precios">
+    <div class="cont banda__fila">
+      <p class="etiqueta banda__etq">Precios</p>
+      <p class="banda__monto">Desde <strong>{desde}</strong></p>
+      <a class="banda__enlace" href="/salones#precios">Ver planes y precios <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+))}
 
 <style>
+  /* ---- Banda de la home ---- */
+  .banda { border-block: 1px solid var(--gris-linea); background: var(--gris-fila); }
+  .banda__fila { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--sp-2) var(--sp-6); padding-block: var(--sp-5); }
+  .banda__etq { color: var(--suave); margin: 0; }
+  .banda__monto { font-size: var(--fs-grande); }
+  .banda__monto strong { font-weight: var(--peso-h1); letter-spacing: var(--ls-cifra); font-size: 1.35em; }
+  .banda__enlace { margin-left: auto; display: inline-flex; align-items: center; min-height: var(--alto-tactil); font-weight: var(--peso-texto-fuerte); text-underline-offset: 0.25em; }
+  @media (max-width: 47.99rem) { .banda__enlace { margin-left: 0; width: 100%; } }
+
+  /* ---- Planes (/salones) ---- */
   .planes { display: grid; gap: var(--sp-5); }
-  .plan { display: grid; gap: var(--sp-3); align-content: start; padding: var(--sp-6); border: 1px solid var(--borde); border-radius: var(--radio-lg); background: var(--superficie); }
+  .plan { display: grid; gap: var(--sp-3); align-content: start; padding: var(--sp-6); border: 1px solid var(--borde); border-radius: var(--radio-lg); background: var(--blanco); }
+  .plan:last-child { border: 2px solid var(--negro); } /* plan completo (Web + sistema): borde más marcado, sin color */
   .plan__nombre { color: var(--suave); margin: 0; }
-  .plan__precio { font-family: var(--f-titulo); font-weight: var(--peso-h1); letter-spacing: -0.035em; font-size: var(--fs-h2); line-height: 1; }
+  .plan__precio { font-family: var(--f-titulo); font-weight: var(--peso-h1); letter-spacing: var(--ls-cifra); font-size: var(--fs-h2); line-height: 1; }
   .plan__desc { color: var(--suave); }
-  .plan__lista { display: grid; gap: var(--sp-2); padding-block: var(--sp-3); border-top: 1px solid var(--borde); }
+  .plan__lista { display: grid; gap: var(--sp-2); padding-top: var(--sp-4); border-top: 1px solid var(--borde); }
   .plan__lista li { padding-left: var(--sp-4); position: relative; }
   .plan__lista li::before { content: ''; position: absolute; left: 0; top: 0.65em; width: 6px; height: 6px; background: currentColor; }
-  .desde { display: grid; justify-items: start; gap: var(--sp-5); }
-  .desde__monto { font-weight: var(--peso-h1); letter-spacing: -0.035em; font-size: var(--fs-h1); line-height: 1; }
   @media (min-width: 48rem) { .planes { grid-template-columns: 1fr 1fr; } }
 </style>
