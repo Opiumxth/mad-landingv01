@@ -1,0 +1,30 @@
+/* ==========================================================================
+   FUENTES DE MARCA — DESACTIVADAS hasta confirmar la licencia web.   [Confirmar licencia]
+   - Alte Haas Grotesk (Regular y Bold): títulos, texto y etiquetas.
+   - Jane Austen: detalles puntuales (token --f-script).
+   Mathias pone los archivos en public/fonts (no se descargan de sitios de terceros).
+   Para activarlas: 1) ajusta los nombres de archivo de abajo, 2) descomenta el import en src/app/layout.tsx,
+   3) (opcional) agrega un <link rel="preload" as="font" crossorigin> de Alte Haas Regular y Bold.
+   Los tokens de tokens.css ya piden 'Alte Haas Grotesk' primero y caen a la fuente del sistema.
+   ========================================================================== */
+@font-face {
+  font-family: 'Alte Haas Grotesk';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/AlteHaasGrotesk-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Alte Haas Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/AlteHaasGrotesk-Bold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Jane Austen';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/JaneAusten.woff2') format('woff2');
+}

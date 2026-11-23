@@ -11,55 +11,68 @@
   /* En fondos oscuros el cobalto (2.7:1 contra negro) lleva un borde blanco para cumplir 3:1 */
   --acento-borde-osc: #ffffff;
 
-  /* ---- Base de marca: blanco, negro y grises (los de las propuestas) ---- */
+  /* ---- Paleta de marca (valores del encargo; [Confirmar contra el manual de marca: no estaba en el equipo]) ---- */
   --negro: #0a0a0a;
+  --grafito: #1a1a1a; /* superficies sobre negro */
+  --hueso: #f4f2ee; /* fondo claro cálido */
   --blanco: #ffffff;
-  --negro-2: #141414; /* superficies sobre negro */
-  --gris-suave: #f0f0f0; /* fondo claro alterno, bloque de títulos */
-  --gris-fila: #f7f7f7; /* filas alternas */
-  --gris-linea: #cfcfcf; /* líneas y bordes finos (decorativos) */
-  --gris-borde-osc: #2e2e2e; /* bordes finos sobre negro (decorativos) */
+  --gris-oscuro: #3a3a3a; /* bordes y fondos sobre negro */
+  --gris-texto: #595959; /* texto de apoyo sobre claro */
+  --gris-medio: #8a8a8a; /* bordes de campos */
+  --gris-claro: #a3a3a3; /* texto de apoyo sobre negro y líneas finas */
 
-  /* Degradado oscuro de la portada y del cierre (120°) */
-  --degradado-oscuro: linear-gradient(120deg, #050505 0%, #161616 55%, #2a2a2a 100%);
+  --gris-suave: var(--hueso); /* fondo claro alterno, banda de precios */
+  --gris-fila: var(--hueso);
+  --gris-linea: var(--gris-claro); /* líneas y bordes finos (decorativos) */
+  --gris-borde-osc: var(--gris-oscuro); /* bordes finos sobre negro (decorativos) */
 
-  /* Texto. Sobre blanco: #0a0a0a 19.8:1 · #555 7.5:1 (6.5:1 sobre #f0f0f0).
-     Sobre negro: #fff 19.8:1 · #e0e0e0 15.2:1 (11:1 sobre #2a2a2a). */
-  --texto-claro: #0a0a0a;
-  --texto-claro-suave: #555555;
-  --texto-osc: #ffffff;
-  --texto-osc-suave: #e0e0e0;
+  /* Degradados oscuros: cierre (120°) y pie (vertical) */
+  --degradado-oscuro: linear-gradient(120deg, var(--negro) 0%, var(--grafito) 55%, var(--gris-oscuro) 100%);
+  --degradado-pie: linear-gradient(180deg, var(--negro) 0%, var(--grafito) 100%);
+
+  /* Texto. Sobre blanco: #0a0a0a 19.8:1 · #595959 7.0:1 (6.3:1 sobre hueso).
+     Sobre negro: #fff 19.8:1 · #a3a3a3 7.9:1 (6.9:1 sobre grafito, 4.5:1 sobre #3a3a3a). */
+  --texto-claro: var(--negro);
+  --texto-claro-suave: var(--gris-texto);
+  --texto-osc: var(--blanco);
+  --texto-osc-suave: var(--gris-claro);
 
   /* Borde de campos de formulario (elemento de interfaz, >= 3:1) */
-  --campo-borde-cla: #767676; /* 4.5:1 sobre blanco */
-  --campo-borde-osc: #8a8a8a; /* 5.7:1 sobre negro */
+  --campo-borde-cla: var(--gris-medio); /* 3.5:1 sobre blanco */
+  --campo-borde-osc: var(--gris-medio); /* 5.7:1 sobre negro */
 
-  --error-cla: #c62828; /* 5.6:1 sobre blanco · 5.0:1 sobre #f0f0f0 */
+  --error-cla: #c62828; /* funcional, fuera de la paleta: 5.6:1 sobre blanco · 5.0:1 sobre hueso */
   --error-osc: #eb5757;
-  --whatsapp: #25d366; /* botón flotante · icono negro 10:1 */
+  --whatsapp: #25d366; /* verde propio de WhatsApp (botón flotante) · icono negro 10:1 */
 
-  /* ---- Tipografías ---- */
-  --f-marca: var(--font-barlow), 'Barlow Condensed', 'Arial Narrow', Impact, sans-serif; /* SOLO el nombre MAD SOFTWARE STUDIO */
-  --f-titulo: var(--font-inter), 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --f-mono: var(--font-plex), 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace; /* etiquetas */
-  --f-texto: var(--font-inter), 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* ---- Tipografías ----
+     Marca: Alte Haas Grotesk (Regular y Bold) para títulos, texto y etiquetas; Jane Austen para detalles puntuales.
+     [Confirmar licencia] web de ambas: hasta entonces NO se cargan y se usa la fuente del sistema de respaldo.
+     Para activarlas: sube los archivos a public/fonts y sigue src/styles/fuentes-marca.css. */
+  --f-sistema: 'Helvetica Neue', Helvetica, Arial, 'Liberation Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --f-alte: 'Alte Haas Grotesk', var(--f-sistema);
+  --f-marca: var(--f-alte); /* nombre MAD SOFTWARE STUDIO (Bold, mayúsculas) */
+  --f-titulo: var(--f-alte);
+  --f-etiqueta: var(--f-alte); /* etiquetas en mayúsculas con espaciado */
+  --f-texto: var(--f-alte);
+  --f-script: 'Jane Austen', 'Snell Roundhand', 'Apple Chancery', cursive;
 
-  --peso-marca: 500;
-  --ls-marca: 0.03em;
+  --peso-marca: 700;
+  --ls-marca: 0.05em;
   --marca-mayusculas: uppercase;
-  --peso-h1: 800;
+  --peso-h1: 700; /* solo hay Regular y Bold */
   --peso-titulo: 700; /* H2, H3 */
-  --ls-h1: -0.02em; /* antes -0.035em: se veía apretado */
-  --ls-titulo: -0.015em; /* H2 y H3 (antes -0.025em) */
+  --ls-h1: -0.02em;
+  --ls-titulo: -0.015em; /* H2 y H3 */
   --ls-cifra: -0.02em; /* precios grandes */
   --titulo-mayusculas: none;
-  --peso-mono: 600;
+  --peso-etiqueta: 700;
   --ls-etiqueta: 0.08em;
   --peso-texto: 400;
-  --peso-texto-fuerte: 600;
+  --peso-texto-fuerte: 700;
 
   /* ---- Escala de tamaños (fluida: mínimo → máximo según ancho de pantalla) ---- */
-  --fs-etiqueta: 0.8125rem; /* 13px · IBM Plex Mono, mayúsculas. Mínimo permitido en el sitio: 12px */
+  --fs-etiqueta: 0.8125rem; /* 13px · Alte Haas Bold, mayúsculas. Mínimo permitido en el sitio: 12px */
   --fs-etiqueta-min: 0.75rem; /* 12px · chips y pies de foto */
   --fs-pequeno: clamp(0.9375rem, 0.9rem + 0.1vw, 1rem); /* 15→16px: texto de apoyo */
   --fs-base: clamp(1rem, 0.95rem + 0.2vw, 1.125rem); /* 16px en celular → 18px en escritorio */
@@ -69,7 +82,7 @@
   --fs-h2: clamp(2rem, 1.4rem + 2.6vw, 3.5rem); /* 32→56px */
   --fs-h1: clamp(2.25rem, 7vw, 4rem); /* 36→64px (cierre y hero 2) */
   --fs-h1-hero: clamp(2.5rem, 1.5rem + 2.6vw, 3.5rem); /* 40→56px: H1 del hero (2 columnas) */
-  --fs-marca: 1.25rem; /* 20px · nombre en cabecera y pie */
+  --fs-marca: 1rem; /* 16px · nombre en cabecera y pie (Bold en mayúsculas es más ancho que la fuente condensada anterior) */
 
   /* ---- Interlineado (compacto pero cómodo: texto 1.5, apoyo 1.4, H1 1.04, H2 1.12, H3 1.22) ---- */
   --lh-texto: 1.5;

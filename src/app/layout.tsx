@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from 'next';
 import '../styles/tokens.css';
 import '../styles/global.css';
-import { inter, barlow, plexMono } from './fuentes';
+// [Confirmar licencia] Alte Haas Grotesk y Jane Austen: mientras no se confirme, se usa la fuente del sistema.
+// Cuando los archivos estén en public/fonts y la licencia confirmada, descomenta la línea siguiente (ver ese archivo):
+// import '../styles/fuentes-marca.css';
 import { SITIO } from '../data/sitio';
 
 export const metadata: Metadata = {
@@ -23,7 +25,7 @@ const scriptHero = `try{var h=new URLSearchParams(location.search).get('hero');i
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang={SITIO.idioma} data-hero="3" className={`${inter.variable} ${barlow.variable} ${plexMono.variable}`} suppressHydrationWarning>
+    <html lang={SITIO.idioma} data-hero="3" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: scriptHero }} />
       </head>

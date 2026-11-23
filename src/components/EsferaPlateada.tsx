@@ -7,10 +7,10 @@ export default function EsferaPlateada() {
       <defs>
         <radialGradient id="esf-cuerpo" cx="34%" cy="28%" r="78%">
           <stop offset="0" stopColor="#ffffff" />
-          <stop offset="0.22" stopColor="#d9d9d9" />
+          <stop offset="0.22" stopColor="#a3a3a3" />
           <stop offset="0.55" stopColor="#8a8a8a" />
           <stop offset="0.82" stopColor="#3a3a3a" />
-          <stop offset="1" stopColor="#151515" />
+          <stop offset="1" stopColor="#1a1a1a" />
         </radialGradient>
         <radialGradient id="esf-brillo" cx="50%" cy="50%" r="50%">
           <stop offset="0" stopColor="#ffffff" stopOpacity="0.85" />
