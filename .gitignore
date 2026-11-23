@@ -1,7 +1,10 @@
 node_modules/
-dist/
-.astro/
+.next/
+.open-next/
 .wrangler/
+next-env.d.ts
+*.tsbuildinfo
+public/img/
 .dev.vars
 .env
 .env.*

@@ -5,8 +5,7 @@
 // Vacío = se muestra el aviso "[Video por subir]". Ningún video se reproduce solo.
 // Los pósters son capturas distintas a las del hero.
 import type { DemoVideo } from './rubros/tipos';
-import sitioCarta from '../assets/demo/sitio-carta.webp';
-import panelAgenda from '../assets/demo/panel-agenda.webp';
+import { IMG } from '../imagenes';
 
 export const videosHome: DemoVideo[] = [
   {
@@ -14,7 +13,7 @@ export const videosHome: DemoVideo[] = [
     etiqueta: 'Sitio web',
     titulo: 'El sitio que ven tus clientes',
     texto: 'Carta de servicios, reserva en un minuto y confirmación por WhatsApp.',
-    poster: sitioCarta,
+    poster: IMG.sitioCarta,
     url: '', // TODO: URL del video del sitio web
     duracion: '[duración]',
   },
@@ -23,7 +22,7 @@ export const videosHome: DemoVideo[] = [
     etiqueta: 'Panel',
     titulo: 'El panel que usas tú',
     texto: 'Recepción confirma citas, ve los retoques que tocan y cambia las promociones.',
-    poster: panelAgenda,
+    poster: IMG.panelAgenda,
     url: '', // TODO: URL del video del panel
     duracion: '[duración]',
   },

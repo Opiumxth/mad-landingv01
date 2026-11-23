@@ -1,6 +1,0 @@
-# Sin bloqueos a rastreadores, incluidos los de buscadores con IA.
-User-agent: *
-Allow: /
-Disallow: /api/
-
-Sitemap: https://somosmad.com/sitemap.xml

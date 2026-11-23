@@ -1,7 +1,6 @@
 // Rubro: salones, barberías y spas. La demo es la de un salón real de ejemplo.
 // Lo que va [entre corchetes] es un dato que falta confirmar.
-import sitioCarta from '../../assets/demo/sitio-carta.webp';
-import panelAgenda from '../../assets/demo/panel-agenda.webp';
+import { IMG } from '../../imagenes';
 import type { RubroDatos } from './tipos';
 
 export const salones: RubroDatos = {
@@ -25,7 +24,7 @@ export const salones: RubroDatos = {
         etiqueta: 'Sitio web',
         titulo: 'La carta que ven tus clientas',
         texto: 'Servicios por categoría, duración y precio, con un botón de reserva en cada uno.',
-        poster: sitioCarta,
+        poster: IMG.sitioCarta,
         url: '', // TODO: URL del video del sitio web
         duracion: '[duración]',
       },
@@ -34,7 +33,7 @@ export const salones: RubroDatos = {
         etiqueta: 'Panel',
         titulo: 'La agenda que usa recepción',
         texto: 'Las citas de la semana en una sola vista: por confirmar, confirmadas y atendidas.',
-        poster: panelAgenda,
+        poster: IMG.panelAgenda,
         url: '', // TODO: URL del video del panel
         duracion: '[duración]',
       },

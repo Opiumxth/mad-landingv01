@@ -1,7 +1,7 @@
 // Plantilla de rubros. Cada rubro es un archivo en src/data/rubros/ con SU contenido propio.
 // Para sumar un rubro: copia salones.ts, escribe su demo, sus servicios típicos y sus preguntas, y regístralo en index.ts.
 // Si falta algo obligatorio o si un texto se repite igual en otro rubro, la compilación falla (ver validarRubros).
-import type { ImageMetadata } from 'astro';
+import type { Imagen } from '../../imagenes';
 
 export type FormRubro = 'salon' | 'barberia' | 'spa' | 'otro';
 
@@ -12,7 +12,7 @@ export interface DemoVideo {
   etiqueta: string;
   titulo: string;
   texto: string;
-  poster: ImageMetadata;
+  poster: Imagen;
   url: string; // .mp4/.webm o enlace embed; vacío = "[Video por subir]"
   duracion: string; // ej. "0:45" o "[duración]"
 }
