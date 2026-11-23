@@ -1,26 +1,40 @@
-import Image from 'next/image';
-import { IMG } from '../imagenes';
+import MadTrazos from './MadTrazos';
 import { REDES, SITIO, enlaceWhatsApp } from '../data/sitio';
 import './pie.css';
 
+// Pie: arriba, nombre + qué hacemos + enlaces + contacto; en el centro, "mad" gigante en trazos; abajo, © y "Volver arriba".
 export default function Pie({ whatsappMensaje }: { whatsappMensaje: string }) {
   return (
-    <footer className="pie tono-suave">
-      <div className="cont pie__fila">
+    <footer className="pie tono-oscuro">
+      <div className="cont pie__sup">
         <div className="pie__marca">
-          <span className="pie__logo"><Image src={IMG.logo.src} alt="" width={40} height={40} loading="lazy" /></span>
-          <p>
-            <span className="marca">{SITIO.nombre}</span><br />
-            <span className="pie__suave">© {SITIO.anio} · [TODO: razón social y RUC del titular]</span>
-          </p>
+          <p className="marca pie__nombre">{SITIO.nombre}</p>
+          <p className="pie__linea">{SITIO.queHacemos}</p>
         </div>
-        <nav aria-label="Pie de página">
-          <ul className="pie__links">
-            <li><a href={SITIO.instagramUrl} rel="noopener">Instagram {REDES[0].texto}</a></li>
-            <li><a href={enlaceWhatsApp(whatsappMensaje)} rel="noopener">WhatsApp {SITIO.whatsappVisible}</a></li>
-            <li><a href="/privacidad">Política de privacidad</a></li>
+        <nav aria-label="Pie de página" className="pie__col">
+          <p className="etiqueta pie__tit">Enlaces</p>
+          <ul>
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/salones">Salones</a></li>
+            <li><a href="/privacidad">Privacidad</a></li>
           </ul>
         </nav>
+        <div className="pie__col">
+          <p className="etiqueta pie__tit">Contacto</p>
+          <ul>
+            <li><a href={SITIO.instagramUrl} rel="noopener">Instagram {REDES[0].texto}</a></li>
+            <li><a href={enlaceWhatsApp(whatsappMensaje)} rel="noopener">WhatsApp {SITIO.whatsappVisible}</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="cont pie__mad-caja">
+        <MadTrazos className="pie__mad" />
+      </div>
+
+      <div className="cont pie__inf">
+        <p>© {SITIO.anio} · [TODO: razón social y RUC del titular]</p>
+        <a className="pie__subir" href="#">Volver arriba <span aria-hidden="true">↑</span></a>
       </div>
     </footer>
   );

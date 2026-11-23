@@ -8,6 +8,7 @@ export const SITIO = {
   instagramUsuario: 'somos_mad_pe',
   instagramUrl: 'https://www.instagram.com/somos_mad_pe/',
   idioma: 'es-PE',
+  queHacemos: 'Hacemos webs con reservas por WhatsApp para negocios de servicios en Lima.', // una línea (pie de página)
   anio: new Date().getFullYear(),
 } as const;
 
