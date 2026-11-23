@@ -1,9 +1,9 @@
 import type { Metadata, Viewport } from 'next';
+import { preload } from 'react-dom';
 import '../styles/tokens.css';
 import '../styles/global.css';
-// [Confirmar licencia] Alte Haas Grotesk y Jane Austen: mientras no se confirme, se usa la fuente del sistema.
-// Cuando los archivos estén en public/fonts y la licencia confirmada, descomenta la línea siguiente (ver ese archivo):
-// import '../styles/fuentes-marca.css';
+// [Confirmar licencia] Alte Haas Grotesk (Regular y Bold). Jane Austen NO se carga (ver ese archivo).
+import '../styles/fuentes-marca.css';
 import { SITIO } from '../data/sitio';
 
 export const metadata: Metadata = {
@@ -24,6 +24,9 @@ export const viewport: Viewport = { themeColor: '#0a0a0a' };
 const scriptHero = `try{var h=new URLSearchParams(location.search).get('hero');if(h==='2'||h==='3'||h==='4')document.documentElement.setAttribute('data-hero',h)}catch(e){}`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // Solo se precargan Alte Haas Regular y Bold (se ven en el primer pintado); Jane Austen no se usa ni se precarga.
+  preload('/fonts/AlteHaasGrotesk-Regular.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' });
+  preload('/fonts/AlteHaasGrotesk-Bold.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' });
   return (
     <html lang={SITIO.idioma} data-hero="3" suppressHydrationWarning>
       <head>

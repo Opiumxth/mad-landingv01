@@ -46,9 +46,9 @@
   --whatsapp: #25d366; /* verde propio de WhatsApp (botón flotante) · icono negro 10:1 */
 
   /* ---- Tipografías ----
-     Marca: Alte Haas Grotesk (Regular y Bold) para títulos, texto y etiquetas; Jane Austen para detalles puntuales.
-     [Confirmar licencia] web de ambas: hasta entonces NO se cargan y se usa la fuente del sistema de respaldo.
-     Para activarlas: sube los archivos a public/fonts y sigue src/styles/fuentes-marca.css. */
+     Marca: Alte Haas Grotesk (Regular y Bold) para títulos, texto y etiquetas. [Confirmar licencia] (ver src/styles/fuentes-marca.css).
+     Jane Austen: sin cargar ("for private use only" en el archivo); el token queda para cuando haya licencia.
+     Si Alte Haas no está disponible, se usa la fuente del sistema de respaldo. */
   --f-sistema: 'Helvetica Neue', Helvetica, Arial, 'Liberation Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --f-alte: 'Alte Haas Grotesk', var(--f-sistema);
   --f-marca: var(--f-alte); /* nombre MAD SOFTWARE STUDIO (Bold, mayúsculas) */

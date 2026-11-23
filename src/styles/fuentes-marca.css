@@ -1,11 +1,12 @@
 /* ==========================================================================
-   FUENTES DE MARCA — DESACTIVADAS hasta confirmar la licencia web.   [Confirmar licencia]
-   - Alte Haas Grotesk (Regular y Bold): títulos, texto y etiquetas.
-   - Jane Austen: detalles puntuales (token --f-script).
-   Mathias pone los archivos en public/fonts (no se descargan de sitios de terceros).
-   Para activarlas: 1) ajusta los nombres de archivo de abajo, 2) descomenta el import en src/app/layout.tsx,
-   3) (opcional) agrega un <link rel="preload" as="font" crossorigin> de Alte Haas Regular y Bold.
-   Los tokens de tokens.css ya piden 'Alte Haas Grotesk' primero y caen a la fuente del sistema.
+   FUENTES DE MARCA.   [Confirmar licencia]
+   - Alte Haas Grotesk (Regular y Bold): títulos, texto y etiquetas. Los metadatos del archivo dicen
+     "Copyright (c) 2007 by Yann Le Coroller. All rights reserved." y no traen texto de licencia.
+   - Jane Austen: NO ACTIVA. Los metadatos del archivo dicen "for private use only" (Pia Frauss).
+     No se carga ni se publica hasta tener licencia web/comercial. Si se activa, se declara aquí abajo.
+   Los .woff2 son una conversión de los .ttf que subió Mathias (misma fuente, sin subconjunto) y viven en public/fonts,
+   fuera de git hasta confirmar la licencia (ver REPORTE_BORRADOR.md).
+   Cobertura (ñ á é í ó ú ¿ ¡ y mayúsculas): completa. No traen las flechas ↑ →: el navegador usa la del sistema.
    ========================================================================== */
 @font-face {
   font-family: 'Alte Haas Grotesk';
@@ -21,6 +22,7 @@
   font-display: swap;
   src: url('/fonts/AlteHaasGrotesk-Bold.woff2') format('woff2');
 }
+/* Jane Austen: desactivada (licencia "private use only"). Para usarla solo donde haga falta:
 @font-face {
   font-family: 'Jane Austen';
   font-style: normal;
@@ -28,3 +30,4 @@
   font-display: swap;
   src: url('/fonts/JaneAusten.woff2') format('woff2');
 }
+*/
