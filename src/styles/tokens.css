@@ -39,10 +39,10 @@
   --whatsapp: #25d366; /* botón flotante · icono negro 10:1 */
 
   /* ---- Tipografías ---- */
-  --f-marca: 'Barlow Condensed', 'Arial Narrow', Impact, sans-serif; /* SOLO el nombre MAD SOFTWARE STUDIO */
-  --f-titulo: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --f-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace; /* etiquetas */
-  --f-texto: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --f-marca: var(--font-barlow), 'Barlow Condensed', 'Arial Narrow', Impact, sans-serif; /* SOLO el nombre MAD SOFTWARE STUDIO */
+  --f-titulo: var(--font-inter), 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --f-mono: var(--font-plex), 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace; /* etiquetas */
+  --f-texto: var(--font-inter), 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
   --peso-marca: 500;
   --ls-marca: 0.03em;

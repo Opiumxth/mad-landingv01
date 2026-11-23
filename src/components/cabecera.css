@@ -1,0 +1,26 @@
+.cab { position: sticky; top: 0; z-index: 40; background: var(--negro); color: var(--texto-osc); border-bottom: 1px solid var(--borde); }
+.cab__fila { position: relative; display: flex; align-items: center; justify-content: space-between; gap: var(--sp-5); min-height: var(--alto-cabecera); }
+.cab__logo { display: inline-flex; align-items: center; gap: var(--sp-3); text-decoration: none; }
+.cab__logo img { width: 40px; height: 40px; }
+.cab__nav, .cab__cta { display: none; }
+.cab__nav ul { display: flex; gap: var(--sp-6); }
+.cab__nav a { display: inline-block; padding-block: var(--sp-3); font-weight: var(--peso-texto-fuerte); font-size: var(--fs-pequeno); text-decoration: none; }
+.cab__nav a:hover { text-decoration: underline; text-underline-offset: 6px; }
+.cab__cta { min-height: 2.75rem; padding: var(--sp-2) var(--sp-5); font-size: var(--fs-pequeno); }
+.cab__burger { display: inline-grid; place-items: center; width: 3rem; height: 3rem; margin-right: -0.5rem; padding: 0; border: 0; background: transparent; color: inherit; cursor: pointer; }
+.cab__burger svg path { transition: transform var(--t-medio) var(--easing), opacity var(--t-rapido); transform-origin: center; transform-box: fill-box; }
+.cab__burger[aria-expanded='true'] .b-arriba { transform: translateY(5px) rotate(45deg); }
+.cab__burger[aria-expanded='true'] .b-medio { opacity: 0; }
+.cab__burger[aria-expanded='true'] .b-abajo { transform: translateY(-5px) rotate(-45deg); }
+.cab__panel { position: absolute; top: 100%; left: 0; right: 0; background: var(--negro); border-bottom: 1px solid var(--borde); padding-block: var(--sp-4) var(--sp-5); }
+.cab__panel[hidden] { display: none; }
+.cab__panel ul { display: grid; gap: var(--sp-1); }
+.cab__panel li > a:not(.btn) { display: flex; align-items: center; min-height: var(--alto-tactil); font-size: var(--fs-medio); font-weight: var(--peso-texto-fuerte); text-decoration: none; }
+.cab__panel .btn { width: 100%; margin-top: var(--sp-3); }
+@media (min-width: 56rem) {
+  .cab__nav, .cab__cta { display: block; }
+  .cab__cta { display: inline-flex; }
+  .cab__burger, .cab__panel { display: none; }
+  .cab__fila { gap: var(--sp-6); }
+  .cab__nav { margin-left: auto; }
+}

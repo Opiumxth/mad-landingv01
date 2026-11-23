@@ -1,0 +1,12 @@
+/* Cierre oscuro sobrio: degradado 120° y una esfera plateada entera al costado (nunca recortada) */
+.cierre { background: var(--degradado-oscuro); }
+.cierre__in { display: grid; gap: var(--sp-7); align-items: center; }
+.cierre__texto { display: grid; justify-items: start; gap: var(--sp-5); }
+.cierre h2 { max-width: 16ch; font-size: var(--fs-h1); font-weight: var(--peso-h1); letter-spacing: var(--ls-h1); line-height: var(--lh-h1); }
+.cierre .lead { color: var(--suave); }
+.cierre__micro { color: var(--suave); font-size: var(--fs-pequeno); }
+.cierre__esfera { width: min(55vw, 15rem); }
+@media (min-width: 62rem) {
+  .cierre__in { grid-template-columns: 1.3fr 1fr; }
+  .cierre__esfera { width: min(100%, 22rem); justify-self: center; }
+}

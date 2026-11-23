@@ -1,0 +1,15 @@
+/* /gracias */
+.gracias { min-height: calc(100svh - var(--alto-cabecera)); display: grid; align-items: center; padding-block: var(--sp-8); text-align: center; }
+.gracias__in { display: grid; justify-items: center; gap: var(--sp-5); }
+.gracias h1 { font-size: var(--fs-h2); max-width: 16ch; }
+.gracias .lead { color: var(--suave); }
+.gracias__volver { padding-block: var(--sp-3); color: var(--suave); }
+
+/* /privacidad */
+.legal { max-width: 48rem; display: grid; gap: var(--sp-4); }
+.legal h1 { font-size: var(--fs-h2); }
+.legal h2 { font-size: var(--fs-h3); margin-top: var(--sp-5); }
+.legal ul { list-style: disc; padding-left: var(--sp-5); display: grid; gap: var(--sp-2); }
+.legal .lead { color: var(--suave); }
+.legal a:not(.btn) { font-weight: var(--peso-texto-fuerte); }
+.legal p { text-wrap: pretty; }

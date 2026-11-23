@@ -1,0 +1,18 @@
+.faq { display: grid; gap: var(--sp-5); }
+.faq__lista { border-top: 2px solid var(--texto-claro); }
+.faq details { border-bottom: 1px solid var(--borde); }
+.faq summary {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4);
+  min-height: var(--alto-tactil); padding-block: var(--sp-5); cursor: pointer; list-style: none;
+  font-weight: var(--peso-texto-fuerte); font-size: var(--fs-medio);
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary svg { flex: none; transition: transform var(--t-medio) var(--easing); }
+.faq details[open] summary svg { transform: rotate(45deg); }
+.faq__resp { display: grid; gap: var(--sp-3); padding-bottom: var(--sp-5); color: var(--suave); max-width: var(--ancho-texto); }
+.faq__resp a { color: var(--texto-claro); font-weight: var(--peso-texto-fuerte); }
+@media (min-width: 62rem) { .faq { grid-template-columns: 1fr 1.6fr; gap: var(--sp-8); } .faq .seccion__cab { align-content: start; } }
+
+/* Paridad con la versión Astro: ahí no se dibujaba la línea fina entre Formulario y Preguntas.
+   Para que aparezca como entre las demás secciones claras, borra esta regla. */
+#preguntas { border-top: 0; }
