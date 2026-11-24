@@ -1,4 +1,4 @@
-import MadTrazos from './MadTrazos';
+import LogoMad from './LogoMad';
 import { REDES, SITIO, enlaceWhatsApp } from '../data/sitio';
 import './pie.css';
 
@@ -29,7 +29,7 @@ export default function Pie({ whatsappMensaje }: { whatsappMensaje: string }) {
       </div>
 
       <div className="cont pie__mad-caja">
-        <MadTrazos className="pie__mad" />
+        <LogoMad className="pie__mad" />
       </div>
 
       <div className="cont pie__inf">

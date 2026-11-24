@@ -12,20 +12,13 @@ import Cierre from './Cierre';
 import Pie from './Pie';
 import BotonWhatsApp from './BotonWhatsApp';
 import JsonLd from './JsonLd';
-import { mostrarPrecios } from '../data/precios';
 import type { PaginaCopy } from '../data/paginas';
 
 export default function Embudo({ copy }: { copy: PaginaCopy }) {
-  const enlaces = [
-    { texto: 'Demo', href: '#videos' },
-    { texto: 'Cómo trabajamos', href: '#como-trabajamos' },
-    ...(mostrarPrecios ? [{ texto: 'Precios', href: '#precios' }] : []),
-    { texto: 'Preguntas', href: '#preguntas' },
-  ];
   return (
     <>
       <JsonLd />
-      <Cabecera enlaces={enlaces} />
+      <Cabecera />
       <main id="contenido">
         <Hero copy={copy.hero} />
         <Videos copy={copy.videos} />

@@ -1,11 +1,11 @@
-// "mad" en cursiva dibujado con trazos (un solo trazo continuo, puntas redondeadas), sin fuentes ni imágenes.
-// Decorativo: el nombre real de la marca va en texto en el pie.
+// LogoMad: "mad" en cursiva dibujado con trazos (un solo trazo continuo, puntas redondeadas), sin fuentes ni imágenes.
+// Dibuja con currentColor: el color lo pone quien lo usa (negro en la cabecera, blanco semitransparente en el pie). Decorativo (aria-hidden): quien lo use pone el nombre accesible.
 //
 // Atribución: los trazos de las letras m, a y d (y la forma de encadenarlas y de inclinarlas) vienen del alfabeto de un solo trazo de
 // "Sticker Footer with Script Wordmark", de @kedhareswer (https://21st.dev/@kedhareswer/components/sticker-slap-footer),
 // licencia MIT declarada en su página pública. Adaptado: solo "mad", sin animación ni calcomanías, colores y tamaños propios.
 // [Confirmar licencia] Jane Austen: cuando esté confirmada, estos trazos se pueden reemplazar por los de esa tipografía.
-export default function MadTrazos({ className }: { className?: string }) {
+export default function LogoMad({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="-2.5 -21 49.5 23.5" fill="none" aria-hidden="true" focusable="false">
       <path
