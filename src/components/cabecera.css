@@ -32,11 +32,19 @@
   .cab__emblema img { width: 3.25rem; height: 3.25rem; }
   .cab__mad { font-size: 3rem; }
   /* "Trabajo, Soluciones, Nosotros": la coma pegada a la palabra y un espacio normal después, como texto corrido.
-     Al pasar el mouse o enfocar con teclado la palabra se pone en negrita. Para que no se muevan las demás palabras, un ::after invisible
-     (con el mismo texto en negrita) reserva el ancho de la versión Bold. */
+     Hover o foco de teclado: (1) la palabra pasa de Regular a Bold con un fundido cruzado (el peso de una fuente sin variable no se puede
+     interpolar): el <span> Regular y un ::after Bold con el mismo texto (data-texto) comparten la misma celda y el enlace mide lo del Bold,
+     así nada se mueve; (2) un subrayado se dibuja de izquierda a derecha. */
   .cab__nav ul { display: flex; align-items: center; gap: 0.3em; font-size: var(--fs-base); font-weight: 400; }
   .cab__nav li:not(:last-child)::after { content: ',' / ''; }
-  .cab__nav a { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; min-height: 2.75rem; text-decoration: none; }
-  .cab__nav a::after { content: attr(data-texto) / ''; height: 0; overflow: hidden; visibility: hidden; font-weight: 700; user-select: none; pointer-events: none; }
-  .cab__nav a:hover, .cab__nav a:focus-visible { font-weight: 700; }
+  .cab__nav a {
+    display: inline-grid; justify-items: center; align-items: center; min-height: 2.75rem; text-decoration: none;
+    background: linear-gradient(currentColor, currentColor) 0 calc(50% + 0.7em) / 0 1.5px no-repeat;
+    transition: background-size var(--t-medio) var(--easing);
+  }
+  .cab__nav a > span, .cab__nav a::after { grid-area: 1 / 1; transition: opacity var(--t-medio) var(--easing); }
+  .cab__nav a::after { content: attr(data-texto) / ''; font-weight: 700; opacity: 0; user-select: none; pointer-events: none; }
+  .cab__nav a:hover, .cab__nav a:focus-visible { background-size: 100% 1.5px; }
+  .cab__nav a:hover > span, .cab__nav a:focus-visible > span { opacity: 0; }
+  .cab__nav a:hover::after, .cab__nav a:focus-visible::after { opacity: 1; }
 }

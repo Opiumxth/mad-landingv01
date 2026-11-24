@@ -56,7 +56,7 @@ export default function Cabecera() {
 
         <div className="cab__der">
           <nav className="cab__nav" aria-label={t.navEtiqueta}>
-            <ul>{t.enlaces.map((e) => <li key={e.href}><a href={e.href} data-texto={e.texto}>{e.texto}</a></li>)}</ul>
+            <ul>{t.enlaces.map((e) => <li key={e.href}><a href={e.href} data-texto={e.texto}><span>{e.texto}</span></a></li>)}</ul>
           </nav>
 
           <button
