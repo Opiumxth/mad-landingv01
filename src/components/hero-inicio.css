@@ -1,0 +1,20 @@
+/* Hero de la home. Fondo: --fondo-hero (color sólido; el degradado lo pone Mathias en tokens.css). */
+.ih { background: var(--fondo-hero); color: var(--negro); --suave: var(--texto-claro-suave); padding-block: clamp(1.5rem, 4vw, 3.5rem) var(--sp-6); }
+.ih__in { display: grid; justify-items: center; gap: var(--sp-5); width: 100%; max-width: 100rem; margin-inline: auto; padding-inline: var(--gutter); text-align: center; }
+
+.ih__h1 { max-width: 34rem; font-size: clamp(1.125rem, 0.95rem + 0.8vw, 1.5rem); line-height: 1.25; letter-spacing: -0.01em; text-wrap: balance; }
+
+/* H2 gigante: el tamaño sale del ancho de su caja (unidades cqi), así llena el ancho sin desbordar.
+   k = ancho del texto en em (medido con Alte Haas Bold: 5,94 em la línea más larga en dos líneas, 11,65 em en una) más ~5% de margen para la fuente de respaldo.
+   Celular: dos líneas ("ESTUDIO DE" / "SOFTWARE"). Desde 48rem: una sola línea. */
+.ih__h2caja { container-type: inline-size; width: 100%; overflow-x: clip; }
+.ih__h2 {
+  font-family: var(--f-marca); font-weight: 700; text-transform: uppercase; text-wrap: balance;
+  font-size: calc(100cqi / var(--ih-k, 6.3)); line-height: 0.92; letter-spacing: -0.02em;
+}
+@media (min-width: 48rem) {
+  .ih__h2 { --ih-k: 12.4; white-space: nowrap; }
+}
+
+.ih__cta { display: grid; justify-items: center; gap: var(--sp-3); margin-top: var(--sp-2); }
+.ih__micro { font-size: var(--fs-pequeno); color: var(--suave); }

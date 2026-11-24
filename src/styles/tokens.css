@@ -26,6 +26,10 @@
   --gris-linea: var(--gris-claro); /* líneas y bordes finos (decorativos) */
   --gris-borde-osc: var(--gris-oscuro); /* bordes finos sobre negro (decorativos) */
 
+  /* Fondo de la cabecera y del hero de la home: color sólido por ahora (hueso).
+     Mathias pondrá aquí el degradado. */
+  --fondo-hero: #f4f2ee;
+
   /* Degradados oscuros: cierre (120°) y pie (vertical) */
   --degradado-oscuro: linear-gradient(120deg, var(--negro) 0%, var(--grafito) 55%, var(--gris-oscuro) 100%);
   --degradado-pie: linear-gradient(180deg, var(--negro) 0%, var(--grafito) 100%);
