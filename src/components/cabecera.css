@@ -32,19 +32,21 @@
   .cab__emblema img { width: 3.25rem; height: 3.25rem; }
   .cab__mad { font-size: 3rem; }
   /* "Trabajo, Soluciones, Nosotros": la coma pegada a la palabra y un espacio normal después, como texto corrido.
-     Hover o foco de teclado: (1) la palabra pasa de Regular a Bold con un fundido cruzado (el peso de una fuente sin variable no se puede
-     interpolar): el <span> Regular y un ::after Bold con el mismo texto (data-texto) comparten la misma celda y el enlace mide lo del Bold,
-     así nada se mueve; (2) un subrayado se dibuja de izquierda a derecha. */
+     Hover o foco de teclado: la palabra se engrosa de forma progresiva y un subrayado se dibuja de izquierda a derecha.
+     El peso de una fuente sin variable (solo Regular y Bold) no se puede interpolar, y cruzar dos capas se ve como doble exposición;
+     por eso el engrosado son cuatro sombras sin desenfoque (text-shadow, que sí se interpola) que se separan del trazo y lo engruesan,
+     sobre la misma palabra (-webkit-text-stroke no se interpola en Chrome):
+     no cambia el ancho, así que nada se mueve. */
   .cab__nav ul { display: flex; align-items: center; gap: 0.3em; font-size: var(--fs-base); font-weight: 400; }
   .cab__nav li:not(:last-child)::after { content: ',' / ''; }
   .cab__nav a {
-    display: inline-grid; justify-items: center; align-items: center; min-height: 2.75rem; text-decoration: none;
+    display: inline-flex; align-items: center; min-height: 2.75rem; text-decoration: none;
+    text-shadow: 0 0 0 currentColor, 0 0 0 currentColor, 0 0 0 currentColor, 0 0 0 currentColor;
     background: linear-gradient(currentColor, currentColor) 0 calc(50% + 0.7em) / 0 1.5px no-repeat;
-    transition: background-size var(--t-medio) var(--easing);
+    transition: background-size var(--t-medio) var(--easing), text-shadow var(--t-medio) var(--easing);
   }
-  .cab__nav a > span, .cab__nav a::after { grid-area: 1 / 1; transition: opacity var(--t-medio) var(--easing); }
-  .cab__nav a::after { content: attr(data-texto) / ''; font-weight: 700; opacity: 0; user-select: none; pointer-events: none; }
-  .cab__nav a:hover, .cab__nav a:focus-visible { background-size: 100% 1.5px; }
-  .cab__nav a:hover > span, .cab__nav a:focus-visible > span { opacity: 0; }
-  .cab__nav a:hover::after, .cab__nav a:focus-visible::after { opacity: 1; }
+  .cab__nav a:hover, .cab__nav a:focus-visible {
+    background-size: 100% 1.5px;
+    text-shadow: 0.03em 0 0 currentColor, -0.03em 0 0 currentColor, 0 0.012em 0 currentColor, 0 -0.012em 0 currentColor;
+  }
 }
