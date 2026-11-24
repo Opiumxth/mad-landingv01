@@ -17,7 +17,7 @@
   --texto: calc(6.7rem + 0.304 * 100cqi); /* alto estimado del texto del hero (H1 + título en 2 líneas + botón), para centrar el conjunto. Medido a 390 y 600 px */
 }
 @media (min-width: 48rem) {
-  .ih { --a: 0.34; --mantener: 40svh; --texto: calc(6.8rem + 0.0773 * 100cqi); /* título en una línea; medido de 820 a 1920 px (error < 30 px) */ }
+  .ih { --a: 0.34; --mantener: 40svh; --texto: calc(6.1rem + 0.0773 * 100cqi); /* título en una línea; medido de 820 a 1920 px (error < 30 px) */ }
 }
 
 /* Escenario sticky: mide lo que el frame final (+ --extra) pero solo ocupa en el flujo el alto del frame pequeño,
