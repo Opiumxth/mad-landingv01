@@ -1,0 +1,2 @@
+/* Espacio reservado para la sección Trabajo (una pantalla). Mismo fondo que el hero hasta que haya contenido. */
+.trabajo { min-height: 100svh; background: var(--fondo-hero); scroll-margin-top: var(--alto-cabecera); }
