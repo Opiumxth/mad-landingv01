@@ -1,7 +1,14 @@
+import TrabajoBanda from './TrabajoBanda';
+import { proyectos, sonDemosDeEjemplo } from '../datos/trabajo';
+import { es } from '../i18n/es';
 import './trabajo.css';
 
-// Sección "Trabajo" de la home (por construir): por ahora solo reserva el espacio y el punto de enlace (#trabajo)
-// debajo del frame del hero. No lleva texto visible.
+// Sección "Nuestro trabajo" (#trabajo): H2 + banda curva con una tarjeta al centro a la vez. Los datos están en src/datos/trabajo.ts.
 export default function Trabajo() {
-  return <section id="trabajo" className="trabajo"></section>;
+  return (
+    <section id="trabajo" className="trabajo" aria-labelledby="trabajo-h2">
+      <h2 id="trabajo-h2" className="trabajo__titulo">{es.trabajo.titulo}</h2>
+      <TrabajoBanda proyectos={proyectos} avisoDemos={sonDemosDeEjemplo} />
+    </section>
+  );
 }

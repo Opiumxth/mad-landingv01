@@ -25,6 +25,13 @@ export const es = {
     // Mensaje prellenado del WhatsApp del pie de la home
     whatsappMensaje: 'Hola, quiero conversar con MAD Software Studio sobre un proyecto.',
   },
+  // Sección "Nuestro trabajo" de la home
+  trabajo: {
+    titulo: 'Nuestro trabajo',
+    verMas: { texto: 'Ver más trabajo', href: '/trabajo' },
+    avisoDemos: 'Demos de ejemplo',
+    ruta: (slug: string) => `/trabajo/${slug}`,
+  },
 } as const;
 
 export type Diccionario = typeof es;

@@ -1,2 +1,36 @@
-/* Espacio reservado para la sección Trabajo (una pantalla). Mismo fondo que el hero hasta que haya contenido. */
-.trabajo { min-height: 100svh; background: var(--fondo-hero); scroll-margin-top: var(--alto-cabecera); }
+/* Sección "Nuestro trabajo": mismo fondo que el hero, H2 centrado, banda curva y, debajo, el proyecto del centro.
+   Colores, tipografía, radio y espaciados salen de tokens.css. */
+.trabajo { background: var(--fondo-hero); color: var(--negro); --suave: var(--texto-claro-suave); scroll-margin-top: var(--alto-cabecera); padding-block: var(--seccion-y); overflow-x: clip; }
+.trabajo__titulo { text-align: center; padding-inline: var(--margen-pagina); }
+
+.tb { display: grid; gap: var(--sp-5); margin-top: var(--sp-6); }
+
+/* Banda: alto fijo (sin saltos de layout). ~560 px en escritorio, menos en celular. Es contenedor de tamaño: las medidas
+   de las tarjetas se calculan en cqh/cqw (ver TrabajoBanda.tsx). */
+.tb__banda { position: relative; height: clamp(19rem, 14rem + 26vw, 35rem); container-type: size; overflow: hidden; }
+.tb__escena { position: absolute; inset: 0; pointer-events: none; transition: opacity 500ms; }
+.tb__tarjeta { position: absolute; transform-style: preserve-3d; }
+.tb__franja { position: absolute; top: 0; overflow: hidden; background: var(--grafito); }
+.tb__franja--ini { border-radius: var(--radio-lg) 0 0 var(--radio-lg); }
+.tb__franja--fin { border-radius: 0 var(--radio-lg) var(--radio-lg) 0; }
+.tb__franja img { position: absolute; top: 0; max-width: none; object-fit: cover; }
+/* Zona clicable de la tarjeta central (transparente, sobre la banda) */
+.tb__central { position: absolute; z-index: 2; display: block; cursor: pointer; border-radius: var(--radio-lg); }
+
+.tb__pie { display: grid; justify-items: center; gap: var(--sp-4); padding-inline: var(--margen-pagina); text-align: center; }
+/* Proyecto del centro (enlace real). Alto reservado para nombre + 2 líneas de descripción: el texto no mueve nada al cambiar. */
+.tb__texto { min-height: calc(var(--fs-grande) * var(--lh-lead) + var(--sp-1) + 2 * var(--fs-base) * var(--lh-lead)); max-width: var(--ancho-texto); transition: opacity 100ms linear; }
+.tb__texto--oculto { opacity: 0; }
+.tb__texto a { display: grid; gap: var(--sp-1); text-decoration: none; border-radius: var(--radio); }
+.tb__texto a:hover strong, .tb__texto a:focus-visible strong { text-decoration: underline; text-underline-offset: 0.2em; }
+.tb__texto strong { font-size: var(--fs-grande); font-weight: var(--peso-texto-fuerte); line-height: var(--lh-lead); }
+.tb__texto span { font-size: var(--fs-base); line-height: var(--lh-lead); color: var(--suave); }
+.tb__mas { font-size: var(--fs-base); font-weight: var(--peso-texto-fuerte); text-decoration: underline; text-underline-offset: 0.25em; text-decoration-thickness: 1.5px; display: inline-flex; align-items: center; min-height: 2.75rem; }
+.tb__mas:hover { text-decoration-thickness: 2.5px; }
+.tb__aviso { font-size: var(--fs-pequeno); color: var(--suave); }
+
+/* Sin movimiento: las tarjetas no se desplazan (la primera queda fija) */
+@media (prefers-reduced-motion: reduce) {
+  .tb__tarjeta { transition: none !important; }
+  .tb__texto { transition: none; }
+}
