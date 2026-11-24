@@ -11,10 +11,10 @@ export default function TextoRevelado({ texto, className = '' }: { texto: string
   const paso = (fin - inicio) / (ps.length - 1 + ventana);
   const r2 = (n: number) => +n.toFixed(2);
   return (
-    <p className={`enc${className ? ' ' + className : ''}`}>
+    <p className={`enc${className ? ' ' + className : ''}`} style={{ '--rp': r2(paso) } as CSSProperties}>
       {ps.map((p, i) => (
         <Fragment key={i}>
-          <span className="enc__p" style={{ '--ini': r2(inicio + i * paso), '--fin': r2(inicio + (i + ventana) * paso) } as CSSProperties}>{p}</span>
+          <span className="enc__p" style={{ '--k': i } as CSSProperties}>{p}</span>
           {i < ps.length - 1 ? ' ' : null}
         </Fragment>
       ))}

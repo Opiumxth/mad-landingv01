@@ -51,6 +51,12 @@ export const es = {
     // ⚠ provisional: sin cifras, clientes, plazos ni promesas
     parrafo: 'Somos un equipo de ingeniería de sistemas y software en Lima. Diseñamos y desarrollamos páginas web, aplicaciones y automatizaciones para negocios de todo el Perú.',
   },
+  // Sección "Preguntas frecuentes" de la home
+  faq: {
+    titulo: 'Preguntas frecuentes',
+    subtitulo: 'Lo que suelen preguntarnos antes de empezar.', // ⚠ provisional
+    enlace: { texto: '¿No encuentras tu respuesta? Escríbenos', href: '/book' },
+  },
 } as const;
 
 export type Diccionario = typeof es;

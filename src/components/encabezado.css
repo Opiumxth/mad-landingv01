@@ -1,6 +1,6 @@
 /* Encabezado de sección (EncabezadoSeccion.tsx): mismo tamaño en las tres secciones. H2 = el de "Soluciones"; subtítulo clamp(1.25rem, 2vw, 1.75rem).
    Sin fondo ni color propios: usa el color de texto del tema (--tema-texto), así vale en fondo claro (tinta) y oscuro (blanco). */
-.enc { color: var(--tema-texto); }
+.enc { color: var(--tema-texto); --r0: 30; --ventana: 2.5; /* inicio del revelado (svh) y ventana de cada palabra (pasos); --rp (paso) y --k (índice) los pone el HTML */ }
 .enc__titulo { font-size: clamp(3rem, 8vw, 7rem); line-height: var(--lh-h1); letter-spacing: var(--ls-h1); text-align: left; }
 /* Ancho de lectura cómodo; en escritorio el subtítulo ocupa como máximo dos líneas cuando el espacio lo permite */
 .enc__sub { max-width: min(100%, 64rem); margin-top: var(--sp-3); font-size: clamp(1.25rem, 2vw, 1.75rem); line-height: var(--lh-lead); text-align: left; text-wrap: pretty; }
@@ -18,7 +18,7 @@
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
     .enc { view-timeline: --enc-rev block; }
-    .enc__p { animation: enc-revela linear both; animation-timeline: --enc-rev; animation-range: cover calc(var(--ini) * 1svh) cover calc(var(--fin) * 1svh); }
+    .enc__p { animation: enc-revela linear both; animation-timeline: --enc-rev; animation-range: cover calc((var(--r0) + var(--k) * var(--rp)) * 1svh) cover calc((var(--r0) + (var(--k) + var(--ventana)) * var(--rp)) * 1svh); }
     @keyframes enc-revela { 0% { color: var(--gris-medio); } 50% { color: var(--acento); } 100% { color: var(--tema-texto); } }
   }
 }
