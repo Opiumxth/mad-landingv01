@@ -9,15 +9,15 @@ import './soluciones.css';
 
 const t = es.soluciones;
 
-// Sección "Soluciones" (#soluciones): sin fondo propio (la página pasa a tema oscuro al llegar aquí), H2 editorial y subtítulo a la izquierda
-// y cuatro tarjetas azules apiladas. El contenido va en el HTML (sin JS). Cada tarjeta se pulsa entera con UN solo enlace, extendido con
+// Sección "Soluciones" (#soluciones): sin fondo propio (la página pasa a tema oscuro al llegar aquí), encabezado (H2 + subtítulo) quieto a la izquierda
+// y cuatro tarjetas azules que se apilan debajo de él y luego lo cubren. El contenido va en el HTML (sin JS). Cada tarjeta se pulsa entera con UN solo enlace, extendido con
 // ::after (stretched link), cuyo texto es solo para lectores de pantalla.
 export default function Soluciones() {
   return (
     <section id="soluciones" className="sol" aria-labelledby="soluciones-h2">
       <div className="sol__caja tt" style={{ '--tt-n': soluciones.length } as CSSProperties}>
-        {/* Efecto "texto quieto + tarjetas que lo cubren" (texto-tapado.css): el encabezado se queda quieto y las tarjetas suben, se apilan
-            entre sí y lo tapan; al final todo sale junto. */}
+        {/* Efecto de texto quieto (texto-tapado.css): el encabezado se queda quieto, las tarjetas se apilan debajo de él y, ya apiladas,
+            el conjunto sube y lo cubre; entonces todo sale junto. */}
         <div className="tt__guia">
           <div className="tt__texto sol__cabeza">
             <EncabezadoSeccion id="soluciones-h2" titulo={t.titulo} subtitulo={t.subtitulo} />

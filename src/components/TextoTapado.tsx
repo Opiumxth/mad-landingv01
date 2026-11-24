@@ -18,7 +18,7 @@ export default function TextoTapado({ raiz }: { raiz: string }) {
     const parar = () => { observers.forEach((o) => o.disconnect()); observers = []; cont.querySelectorAll('.tt__tapa.is-pop').forEach((e) => e.classList.remove('is-pop')); };
     const montar = () => {
       parar();
-      cont.style.setProperty('--tt-h', `${texto.offsetHeight}px`);
+      cont.style.setProperty('--tt-h', `${texto.getBoundingClientRect().height}px`); // con decimales: así las tarjetas se pegan justo bajo el texto
       if (!mq.matches) return;
       const vh = window.innerHeight;
       cont.querySelectorAll<HTMLElement>('.tt__tapa').forEach((tapa) => {

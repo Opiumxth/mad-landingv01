@@ -8,13 +8,18 @@
 }
 /* Caja común del título y de las tarjetas: mismo margen lateral */
 .sol__caja { position: relative; max-width: calc(var(--ancho-max) + 2 * var(--margen-pagina)); margin-inline: auto; padding-inline: var(--margen-pagina); }
-/* Efecto "texto quieto + tarjetas que lo cubren" (ver texto-tapado.css). El encabezado (H2 + subtítulo, ver encabezado.css) se queda quieto;
-   las tarjetas suben, se apilan entre sí (cada una 24 px más abajo que la anterior) y se pegan cubriéndolo. --tt-h es una estimación del alto del
-   encabezado (H2 + 2 líneas de subtítulo); TextoTapado.tsx la reemplaza con el alto real. Sin fondo ni sombra propios: el texto es transparente. */
+/* Efecto de texto quieto (ver texto-tapado.css), en tres fases:
+   1. APILADO: el encabezado (H2 + subtítulo, ver encabezado.css) se queda quieto arriba y las tarjetas se apilan DEBAJO de él (cada una 24 px más abajo que
+      la anterior; la primera se pega justo bajo el encabezado, --tt-top = su alto). Ninguna lo toca.
+   2. CUBRIR: con las 4 apiladas, el conjunto sigue subiendo con el scroll (las tarjetas se arrastran unas a otras) y se sobrepone al encabezado hasta cubrirlo
+      por completo: ese es el único momento en que algo lo tapa (--tt-cubre = posición del borde superior de la pila en la que ya lo cubre).
+   3. SALIDA: el encabezado se suelta en ese instante y sale junto con el conjunto, siempre cubierto.
+   --tt-h es una estimación del alto del encabezado (H2 + 2 líneas de subtítulo); TextoTapado.tsx la reemplaza con el alto real. El encabezado no lleva
+   fondo propio: en la fase 1 las tarjetas nunca lo tocan, así que no hay nada que se mezcle. */
 .sol__caja {
-  --tt-top: var(--sp-3); --tt-paso: var(--sp-5);
-  --tt-tapa-h: clamp(18rem, calc(100svh - var(--sp-3) - var(--sp-4) - 3 * var(--sp-5)), 28rem); /* alto de cada tarjeta: las cuatro apiladas caben en la pantalla */
   --tt-h: calc(clamp(3rem, 8vw, 7rem) * 1.04 + var(--sp-3) + 2 * clamp(1.25rem, 2vw, 1.75rem) * 1.4 + 2 * var(--sp-4));
+  --tt-top: var(--tt-h); --tt-cubre: var(--sp-3); --tt-paso: var(--sp-5);
+  --tt-tapa-h: clamp(18rem, calc(100svh - var(--tt-h) - 4 * var(--sp-5)), 28rem); /* las cuatro apiladas caben bajo el encabezado, también en pantallas bajas */
 }
 .sol__cabeza { padding-block: var(--sp-4); }
 
@@ -53,7 +58,7 @@
 .sol__item:nth-child(3) .sol__visual { --ang: 315deg; }
 .sol__item:nth-child(4) .sol__visual { --ang: 45deg; }
 
-/* Escritorio (≥ 900 px): dos columnas. Con movimiento permitido, además suben, se apilan y tapan el encabezado (texto-tapado.css:
+/* Escritorio (≥ 900 px): dos columnas. Con movimiento permitido, además se apilan bajo el encabezado y el conjunto lo cubre (texto-tapado.css:
    sticky, pop al encajar y salida conjunta). En celular o con movimiento reducido: una tarjeta debajo de otra, sin sticky ni solapamiento. */
 @media (min-width: 56.25rem) {
   .sol__card { grid-template-columns: 1fr 1fr; gap: var(--sp-6); padding: var(--sp-7); }

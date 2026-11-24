@@ -1,7 +1,8 @@
 import type { CSSProperties } from 'react';
 import TextoTapado from './TextoTapado';
 import EncabezadoSeccion from './EncabezadoSeccion';
-import BotonHover from './BotonHover';
+import EnlaceTexto from './EnlaceTexto';
+import TextoRevelado from './TextoRevelado';
 import { imagenNosotros } from '../datos/nosotros';
 import { es } from '../i18n/es';
 import './texto-tapado.css';
@@ -9,10 +10,10 @@ import './nosotros.css';
 
 const t = es.nosotros;
 
-// Sección "Nosotros" (#nosotros): sin fondo propio (tema oscuro de la página). Arriba, dos columnas: a la izquierda el H2 y el botón "Conócenos",
-// alineados a la derecha de su columna; a la derecha, el párrafo. Abajo, una imagen ancha y baja. Con el efecto "texto quieto + tapas que lo
+// Sección "Nosotros" (#nosotros): sin fondo propio; la página vuelve al tema claro al llegar aquí (ver TemaFondo.tsx). Arriba, dos columnas: a la izquierda el
+// H2 y el enlace de texto "Conócenos" (no es un CTA), alineados a la derecha de su columna; a la derecha, el párrafo, con revelado palabra por palabra. Abajo, una imagen ancha y baja. Con el efecto "texto quieto + tapas que lo
 // cubren" (texto-tapado.css): el bloque de texto se queda quieto, la imagen sube y lo cubre por completo, y al final todo sale junto.
-// El botón es el enlace principal; la imagen también es clicable hacia el mismo destino, pero es redundante (tabindex -1, aria-hidden).
+// El enlace de texto es el principal; la imagen también es clicable hacia el mismo destino, pero es redundante (tabindex -1, aria-hidden).
 export default function Nosotros() {
   return (
     <section id="nosotros" className="nos" aria-labelledby="nosotros-h2">
@@ -21,9 +22,9 @@ export default function Nosotros() {
           <div className="tt__texto nos__texto">
             <div className="nos__izq">
               <EncabezadoSeccion id="nosotros-h2" titulo={t.titulo} alinear="derecha" />
-              <BotonHover texto={t.cta.texto} href={t.cta.href} tono="oscuro" />
+              <EnlaceTexto texto={t.cta.texto} href={t.cta.href} />
             </div>
-            <p className="nos__parrafo">{t.parrafo}</p>
+            <TextoRevelado texto={t.parrafo} className="nos__parrafo" />
           </div>
         </div>
         <div className="tt__hueco" aria-hidden="true"></div>

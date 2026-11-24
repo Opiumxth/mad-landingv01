@@ -1,22 +1,22 @@
-/* Sección "Nosotros": sin fondo propio (sigue el tema oscuro de la página, ver tokens.css). Colores, tipografía, radio y espaciados salen de
-   tokens.css; el cobalto solo aparece como fondo (botón e imagen provisional). El efecto de solapamiento está en texto-tapado.css. */
+/* Sección "Nosotros": sin fondo propio (la página vuelve al tema claro al llegar aquí: --tema-* en tokens.css, ver TemaFondo.tsx). Colores, tipografía, radio y espaciados salen de
+   tokens.css; el cobalto solo aparece como fondo (imagen provisional) y, un instante, en el frente del revelado del párrafo. El efecto de solapamiento está en texto-tapado.css. */
 .nos { position: relative; color: var(--tema-texto); scroll-margin-top: var(--alto-cabecera); padding-block: var(--seccion-y); }
 .nos__caja { max-width: calc(var(--ancho-max) + 2 * var(--margen-pagina)); margin-inline: auto; padding-inline: var(--margen-pagina);
   /* Efecto: una sola tapa (la imagen), que se pega a --tt-top. Su alto: ancha y baja, y nunca menor que el bloque de texto + su margen, para cubrirlo
      por completo (la imagen se recorta con object-fit: cover, sin deformarse). --tt-h es una estimación (H2 + botón); TextoTapado.tsx pone el real. */
-  --tt-h: calc(clamp(3rem, 8vw, 7rem) * 1.04 + var(--sp-5) + 2.75rem + 2 * var(--sp-4));
+  --tt-h: calc(clamp(3rem, 8vw, 7rem) * 1.04 + var(--sp-5) + 2.75rem + 2 * var(--sp-4)); /* estimación: H2 + enlace */
   --tt-tapa-h: max(clamp(16rem, 42svh, 28rem), calc(var(--tt-h) + var(--tt-top) + var(--sp-4)));
 }
 
 /* Bloque de texto: en celular una columna (título, párrafo, botón, imagen); en escritorio dos columnas */
 .nos__texto { display: grid; gap: var(--sp-5); padding-block: var(--sp-4); }
 .nos__izq { display: grid; justify-items: start; gap: var(--sp-5); }
-.nos__parrafo { max-width: 34rem; font-size: clamp(1.25rem, 2vw, 1.75rem); line-height: var(--lh-lead); text-wrap: pretty; }
+.nos__parrafo { max-width: 34rem; font-size: clamp(1.25rem, 2vw, 1.75rem); line-height: var(--lh-lead); text-wrap: pretty; text-align: left; }
 /* Celular: el orden es título, párrafo, botón (la imagen va después de todo) */
 @media (max-width: 56.1875rem) {
   .nos__izq { display: contents; }
   .nos__parrafo { order: 1; }
-  .nos__izq .btn { order: 2; justify-self: start; }
+  .nos__izq .enlace-texto { order: 2; justify-self: start; }
 }
 
 /* Imagen ancha y baja, con var(--radio). Clicable hacia el mismo destino que el botón; hover sutil. */
