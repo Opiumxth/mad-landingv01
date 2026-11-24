@@ -1,29 +1,24 @@
-/* Sección "Soluciones": sin fondo propio (la página cambia a tema oscuro al llegar aquí: --tema-* en tokens.css), H2 editorial y subtítulo
-   a la izquierda y tarjetas de cobalto con texto blanco. Colores, tipografía, radio y espaciados salen de tokens.css.
-   El cobalto es fondo de las tarjetas; como color de texto solo aparece un instante en el frente del revelado, nunca en el estado final. */
+/* Sección "Soluciones": sin fondo propio (la página cambia a tema oscuro al llegar aquí: --tema-* en tokens.css), encabezado
+   (H2 + subtítulo) fijo a la izquierda y tarjetas de cobalto con texto blanco apiladas debajo. Colores, tipografía, radio y espaciados salen de tokens.css.
+   El cobalto es fondo de las tarjetas; como color de texto solo aparece un instante en el frente del revelado del encabezado, nunca en el estado final. */
 .sol {
   --franja: clamp(10rem, 16vw, 15rem); /* medida de referencia del aire superior (antes alojaba el degradado; el espacio se conserva) */
   position: relative; color: var(--tema-texto); scroll-margin-top: var(--alto-cabecera);
-  padding-block: calc(var(--franja) - var(--seccion-y) - var(--sp-5)) var(--seccion-y);
+  padding-block: calc(var(--franja) - var(--seccion-y) - var(--sp-5) - var(--sp-4)) var(--seccion-y);
 }
 /* Caja común del título y de las tarjetas: mismo margen lateral */
 .sol__caja { position: relative; max-width: calc(var(--ancho-max) + 2 * var(--margen-pagina)); margin-inline: auto; padding-inline: var(--margen-pagina); }
-.sol__titulo { text-align: left; font-size: clamp(3rem, 8vw, 7rem); line-height: var(--lh-h1); letter-spacing: var(--ls-h1); }
-
-/* Subtítulo, fuera de las tarjetas y alineado a la izquierda como el título */
-.sol__sub { max-width: var(--ancho-texto); margin-top: var(--sp-3); font-size: clamp(1.125rem, 1.6vw, 1.5rem); line-height: var(--lh-lead); }
-
-/* Revelado por palabras con el scroll: gris (--gris-medio, legible en claro y oscuro) → cobalto en el frente → color de texto del tema.
-   Solo donde hay animaciones por scroll y sin movimiento reducido; si no, el texto queda completo en el color del tema. El estado final nunca es azul. */
-@media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    .sol__cabeza { view-timeline: --sol-rev block; }
-    .sol__p { animation: sol-revela linear both; animation-timeline: --sol-rev; animation-range: cover calc(var(--ini) * 1%) cover calc(var(--fin) * 1%); }
-    @keyframes sol-revela { 0% { color: var(--gris-medio); } 50% { color: var(--acento); } 100% { color: var(--tema-texto); } }
-  }
+/* Encabezado (H2 + subtítulo, ver encabezado.css): fijo arriba mientras dura el apilado. Lleva el fondo del tema (variable, sin degradado) a todo
+   el ancho de la pantalla, así las tarjetas desaparecen limpiamente por debajo de él antes de pegarse. Su alto real lo mide SolucionesPop.tsx
+   y lo escribe en --enc-h; el valor de aquí es una estimación (H2 + 2 líneas de subtítulo) para antes de que cargue el JS. */
+.sol {
+  --enc-h: calc(clamp(3rem, 8vw, 7rem) * 1.04 + var(--sp-3) + 2 * clamp(1.25rem, 2vw, 1.75rem) * 1.4 + 2 * var(--sp-4));
 }
+.sol__cabeza { padding-block: var(--sp-4); background: var(--tema-fondo); position: relative; z-index: 3; }
+/* El fondo se extiende hasta los bordes de la pantalla (sin cambiar el layout ni crear scroll horizontal) */
+.sol__cabeza { box-shadow: 0 0 0 100vmax var(--tema-fondo); clip-path: inset(0 -100vmax); }
 
-.sol__lista { display: grid; gap: var(--sp-4); margin-top: var(--sp-6); }
+.sol__lista { display: grid; gap: var(--sp-4); margin-top: var(--sp-2); }
 
 /* Tarjeta: cobalto con texto blanco puro (7,7:1), una columna en celular. Sin borde visible (el borde transparente mantiene las medidas) */
 .sol__card {
@@ -69,9 +64,12 @@
   .sol__lista { gap: var(--sp-6); }
   /* Relleno al final de la lista: dentro del bloque donde las tarjetas se pegan, así la pila completa se mantiene un trecho antes de salir */
   .sol__lista::after { content: ''; height: var(--sp-8); }
+  /* Cada tarjeta se pega bajo el encabezado fijo (su alto real, --enc-h) con 24 px más que la anterior; el alto de la tarjeta se ajusta
+     a la pantalla para que las cuatro apiladas quepan debajo del encabezado también en pantallas bajas. */
+  .sol__cabeza { position: sticky; top: 0; }
   .sol__item {
-    position: sticky; top: calc(var(--alto-cabecera) + var(--sp-4) + var(--i) * var(--sp-5));
-    height: max(18rem, min(28rem, calc(100svh - 14rem)));
+    position: sticky; top: calc(var(--enc-h) + var(--i) * var(--sp-5));
+    height: clamp(18rem, calc(100svh - var(--enc-h) - 4 * var(--sp-5)), 28rem);
   }
   /* "Pop" al encajar: 1 → 1,02 → 1 en 250 ms con ease-out. SolucionesPop pone `is-pop` cuando la tarjeta llega a su posición. Solo transform. */
   .sol__item.is-pop { animation: sol-pop 250ms ease-out; }

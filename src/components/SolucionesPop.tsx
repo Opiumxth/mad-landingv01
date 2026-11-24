@@ -5,13 +5,18 @@ import { useEffect } from 'react';
 // (escala 1 → 1,02 → 1, ver soluciones.css); la clase se quita al soltarse y la tarjeta vuelve a hacerlo al encajar de nuevo.
 // Detección con IntersectionObserver: cada tarjeta se observa con una franja de 1 px a la altura de su `top` sticky;
 // la tarjeta "llega" cuando su borde superior alcanza esa franja. No renderiza nada. Solo ≥ 900 px y sin movimiento reducido.
+// Además mide el alto real del encabezado fijo (H2 + subtítulo) y lo escribe en --enc-h de la sección: con él el CSS calcula dónde se pega
+// cada tarjeta (siempre debajo del encabezado, sin taparlo) y su alto; se vuelve a medir si el encabezado cambia de tamaño.
 export default function SolucionesPop() {
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 56.25rem) and (prefers-reduced-motion: no-preference)');
     let observers: IntersectionObserver[] = [];
+    const sec = document.getElementById('soluciones');
+    const cab = sec?.querySelector<HTMLElement>('.sol__cabeza');
     const parar = () => { observers.forEach((o) => o.disconnect()); observers = []; document.querySelectorAll('.sol__item.is-pop').forEach((e) => e.classList.remove('is-pop')); };
     const montar = () => {
       parar();
+      if (sec && cab) sec.style.setProperty('--enc-h', `${cab.offsetHeight}px`);
       if (!mq.matches) return;
       const vh = window.innerHeight;
       document.querySelectorAll<HTMLElement>('#soluciones .sol__item').forEach((li) => {
@@ -31,7 +36,9 @@ export default function SolucionesPop() {
     const alCambiar = () => { window.clearTimeout(t); t = window.setTimeout(montar, 150); };
     mq.addEventListener('change', alCambiar);
     window.addEventListener('resize', alCambiar);
-    return () => { window.clearTimeout(t); mq.removeEventListener('change', alCambiar); window.removeEventListener('resize', alCambiar); parar(); };
+    const ro = new ResizeObserver(alCambiar);
+    if (cab) ro.observe(cab);
+    return () => { ro.disconnect(); window.clearTimeout(t); mq.removeEventListener('change', alCambiar); window.removeEventListener('resize', alCambiar); parar(); };
   }, []);
   return null;
 }

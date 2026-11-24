@@ -28,6 +28,7 @@ export const es = {
   // Sección "Nuestro trabajo" de la home
   trabajo: {
     titulo: 'Nuestro trabajo',
+    subtitulo: 'Ejemplos de lo que podemos construir para tu negocio.', // ⚠ provisional
     verMas: { texto: 'Ver más trabajo', href: '/trabajo' },
     avisoDemos: 'Demos de ejemplo',
     ruta: (slug: string) => `/trabajo/${slug}`,
@@ -41,6 +42,7 @@ export const es = {
   // Sección "Cómo trabajamos" de la home
   comoTrabajamos: {
     titulo: 'Cómo trabajamos', // ⚠ provisional
+    subtitulo: 'Cinco pasos claros, de la primera conversación a la puesta en línea.', // ⚠ provisional
   },
 } as const;
 
