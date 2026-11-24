@@ -1,47 +1,66 @@
-/* Sección "Soluciones": tarjetas oscuras (negro / grafito) sobre el fondo hueso. Colores, tipografía, radio y espaciados salen de tokens.css.
-   El cobalto no se usa aquí (es solo fondo de botón). */
-.sol { background: var(--fondo-hero); color: var(--negro); scroll-margin-top: var(--alto-cabecera); padding-block: var(--seccion-y); }
-.sol__titulo { text-align: center; padding-inline: var(--margen-pagina); }
-
-.sol__lista { display: grid; gap: var(--sp-4); margin-top: var(--sp-6); padding-inline: var(--margen-pagina); max-width: calc(var(--ancho-max) + 2 * var(--margen-pagina)); margin-inline: auto; }
-
-/* Tarjeta: una columna en celular; las pares usan grafito y las impares negro, para distinguir una de otra al apilarse */
-.sol__card {
-  --fondo: var(--negro); --fondo-hover: var(--grafito);
-  position: relative; display: grid; gap: var(--sp-5); height: 100%;
-  padding: var(--sp-5); border-radius: var(--radio-lg); border: 1px solid var(--gris-borde-osc);
-  background: var(--fondo); color: var(--hueso);
+/* Sección "Soluciones": fondo oscuro (--negro), H2 editorial a la izquierda y tarjetas de cobalto con texto blanco.
+   Colores, tipografía, radio y espaciados salen de tokens.css. El cobalto es solo fondo, nunca color de texto. */
+.sol {
+  --franja: clamp(10rem, 16vw, 15rem); /* alto de la transición hueso → negro (160 a 240 px) */
+  position: relative; background: var(--negro); color: var(--blanco); scroll-margin-top: var(--alto-cabecera);
+  /* El degradado ocupa el borde superior; el título empieza donde ya es casi negro */
+  padding-block: calc(var(--franja) - var(--seccion-y) - var(--sp-5)) var(--seccion-y);
 }
-.sol__item:nth-child(even) .sol__card { --fondo: var(--grafito); --fondo-hover: var(--negro); }
-.sol__texto { display: grid; align-content: start; gap: var(--sp-3); }
-.sol__numero { font-family: var(--f-etiqueta); font-weight: var(--peso-etiqueta); font-size: var(--fs-grande); letter-spacing: var(--ls-etiqueta); color: var(--texto-osc-suave); }
-.sol__card h3 { color: var(--blanco); }
-.sol__desc { max-width: 28rem; color: var(--texto-osc-suave); }
-.sol__enlace { justify-self: start; display: inline-flex; align-items: center; min-height: 2.75rem; margin-top: var(--sp-2); font-weight: var(--peso-texto-fuerte); color: var(--blanco); text-underline-offset: 0.25em; text-decoration-thickness: 1.5px; text-decoration-line: none; }
+/* Transición suave entre Trabajo (hueso) y Soluciones (negro): una franja de degradado que empieza sobre el aire inferior de Trabajo
+   (sin tocar su contenido) y termina dentro de esta sección. Es decorativa; no cambia el alto de nada (CLS). */
+.sol::before {
+  content: ''; position: absolute; left: 0; right: 0; top: calc(-1 * var(--seccion-y)); height: var(--franja); pointer-events: none;
+  background: linear-gradient(to bottom, var(--fondo-hero), var(--negro));
+}
+/* Mejora: el degradado se desliza un poco con el scroll al entrar (solo donde hay animaciones por scroll) */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .sol::before { animation: sol-franja linear both; animation-timeline: view(); animation-range: entry 0% entry 100%; }
+    @keyframes sol-franja { from { transform: translateY(var(--sp-7)); } to { transform: translateY(0); } }
+  }
+}
+
+/* Caja común del título y de las tarjetas: mismo margen lateral */
+.sol__caja { position: relative; max-width: calc(var(--ancho-max) + 2 * var(--margen-pagina)); margin-inline: auto; padding-inline: var(--margen-pagina); }
+.sol__titulo { text-align: left; font-size: clamp(3rem, 8vw, 7rem); line-height: var(--lh-h1); letter-spacing: var(--ls-h1); color: var(--blanco); }
+
+.sol__lista { display: grid; gap: var(--sp-4); margin-top: var(--sp-6); }
+
+/* Tarjeta: cobalto con texto blanco puro (7,7:1), una columna en celular. Borde blanco fino: el cobalto contra negro solo llega a 2,7:1 (ver tokens.css) */
+.sol__card {
+  position: relative; display: grid; gap: var(--sp-5); height: 100%;
+  padding: var(--sp-5); border-radius: var(--radio); border: 1px solid var(--acento-borde-osc);
+  background: var(--acento); color: var(--acento-texto);
+}
+.sol__texto { display: grid; align-content: space-between; gap: var(--sp-5); }
+/* Bloque compacto: número muy pegado al título, descripción justo debajo */
+.sol__grupo { display: grid; gap: var(--sp-1); align-content: start; }
+.sol__numero { font-family: var(--f-etiqueta); font-weight: var(--peso-etiqueta); font-size: var(--fs-etiqueta); letter-spacing: var(--ls-etiqueta); line-height: 1; }
+.sol__card h3 { font-size: clamp(2rem, 4vw, 3.75rem); line-height: var(--lh-h1); letter-spacing: var(--ls-h1); color: var(--blanco); }
+.sol__desc { max-width: 26rem; margin-top: var(--sp-1); font-size: var(--fs-pequeno); line-height: var(--lh-lead); }
+.sol__enlace { justify-self: start; display: inline-flex; align-items: center; min-height: 2.75rem; font-weight: var(--peso-texto-fuerte); color: var(--blanco); text-underline-offset: 0.25em; text-decoration-thickness: 1.5px; text-decoration-line: none; }
 /* Enlace extendido: el área pulsable es toda la tarjeta */
 .sol__enlace::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }
-/* Foco de teclado: el aro rodea toda la tarjeta, no solo el texto */
+/* Foco de teclado: el aro rodea toda la tarjeta, no solo el texto (blanco con halo negro: se ve sobre el fondo oscuro) */
 .sol__enlace:focus-visible { outline: none; box-shadow: none; text-decoration-line: underline; }
-.sol__card:has(.sol__enlace:focus-visible) { outline: 3px solid var(--negro); outline-offset: 3px; box-shadow: 0 0 0 6px var(--blanco); }
+.sol__card:has(.sol__enlace:focus-visible) { outline: 3px solid var(--blanco); outline-offset: 3px; box-shadow: 0 0 0 6px var(--negro); }
 @media (hover: hover) {
   .sol__card { transition: background-color var(--t-medio) var(--easing); }
-  .sol__card:hover { background: var(--fondo-hover); cursor: pointer; }
+  .sol__card:hover { background: var(--acento-hover); cursor: pointer; }
   .sol__card:hover .sol__enlace { text-decoration-line: underline; }
 }
 
-/* Espacio visual provisional (degradado de la paleta; el ángulo cambia por tarjeta) */
-.sol__visual { min-height: 10rem; border-radius: var(--radio); background: linear-gradient(var(--ang, 135deg), var(--gris-oscuro) 0%, var(--negro) 100%); border: 1px solid var(--gris-borde-osc); }
+/* Espacio visual provisional (degradado de la paleta, sin texto; el ángulo cambia por tarjeta) */
+.sol__visual { min-height: 10rem; border-radius: var(--radio); background: linear-gradient(var(--ang, 135deg), var(--acento-hover) 0%, var(--negro) 100%); }
 .sol__item:nth-child(2) .sol__visual { --ang: 225deg; }
 .sol__item:nth-child(3) .sol__visual { --ang: 315deg; }
 .sol__item:nth-child(4) .sol__visual { --ang: 45deg; }
 
-/* Escritorio (≥ 900 px) y con movimiento permitido: dos columnas y apilado con sticky.
+/* Escritorio (≥ 900 px): dos columnas. Con movimiento permitido, además se apilan con sticky.
    Cada tarjeta se pega arriba con 24 px más que la anterior (96 px + 24 px × n); la siguiente sube y la tapa dejando asomar su borde.
    En celular o con movimiento reducido: una tarjeta debajo de otra, sin sticky. */
 @media (min-width: 56.25rem) {
   .sol__card { grid-template-columns: 1fr 1fr; gap: var(--sp-6); padding: var(--sp-7); }
-  .sol__texto { grid-template-rows: auto auto 1fr auto; align-content: stretch; }
-  .sol__enlace { align-self: end; }
   .sol__visual { min-height: 0; }
 }
 @media (min-width: 56.25rem) and (prefers-reduced-motion: no-preference) {
@@ -50,8 +69,11 @@
   .sol__lista::after { content: ''; height: var(--sp-8); }
   .sol__item {
     position: sticky; top: calc(var(--alto-cabecera) + var(--sp-4) + var(--i) * var(--sp-5));
-    height: max(18rem, min(26rem, calc(100svh - 14rem)));
+    height: max(18rem, min(28rem, calc(100svh - 14rem)));
   }
+  /* "Pop" al encajar: 1 → 1,02 → 1 en 250 ms con ease-out. SolucionesPop pone `is-pop` cuando la tarjeta llega a su posición. Solo transform. */
+  .sol__item.is-pop { animation: sol-pop 250ms ease-out; }
+  @keyframes sol-pop { 50% { transform: scale(1.02); } }
   /* Mejora: la tarjeta tapada se reduce un poco mientras la siguiente sube (solo donde hay animaciones por scroll) */
   @supports (animation-timeline: view()) and (timeline-scope: --a) {
     .sol__lista { timeline-scope: --sol-2, --sol-3, --sol-4; }

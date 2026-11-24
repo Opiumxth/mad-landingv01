@@ -8,13 +8,7 @@ import { SITIO } from '../data/sitio';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITIO.dominio),
-  icons: {
-    icon: [
-      { url: '/favicon.ico', sizes: '48x48' },
-      { url: '/favicon-512.png', type: 'image/png', sizes: '512x512' },
-    ],
-    apple: '/apple-touch-icon.png',
-  },
+  // Iconos: por convención de archivos de la app (src/app/icon.png, favicon.ico, apple-icon.png); no se declaran aquí.
 };
 
 export const viewport: Viewport = { themeColor: '#0a0a0a' };

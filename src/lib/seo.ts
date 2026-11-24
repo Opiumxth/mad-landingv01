@@ -27,7 +27,7 @@ export const organizacion = {
   '@type': 'Organization',
   name: SITIO.nombre,
   url: SITIO.dominio,
-  logo: `${SITIO.dominio}/favicon-512.png`,
+  logo: `${SITIO.dominio}/icon.png`,
   sameAs: [SITIO.instagramUrl, `https://wa.me/${SITIO.whatsappNumero}`],
   contactPoint: {
     '@type': 'ContactPoint',
