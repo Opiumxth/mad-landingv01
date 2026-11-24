@@ -18,12 +18,13 @@ export default function HeroInicio() {
             <h2 className="ih__h2">{t.h2}</h2>
           </div>
           <div className="ih__cta">
-            <a className="btn btn--principal" href={t.cta.href}>{t.cta.texto}</a>
+            <a className="btn btn--principal ih__btn" href={t.cta.href}>{t.cta.texto}</a>
             <p className="ih__micro">{t.micro}</p>
           </div>
         </div>
-        <div className="marco__cola" aria-hidden="true"></div>
+        <div className="marco__espera" aria-hidden="true"></div>
       </div>
+      <div className="marco__cola" aria-hidden="true"></div>
     </section>
   );
 }

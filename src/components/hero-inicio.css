@@ -25,5 +25,6 @@
   .ih__h2 { --ih-k: 12.4; white-space: nowrap; }
 }
 
+.ih__btn { min-height: 2.75rem; padding: var(--sp-2) var(--sp-3); } /* menos aire dentro del botón; conserva 44 px de alto mínimo para el dedo */
 .ih__cta { display: grid; justify-items: center; gap: var(--sp-3); margin-top: var(--sp-2); }
 .ih__micro { font-size: var(--fs-pequeno); color: var(--suave); }

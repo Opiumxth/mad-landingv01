@@ -4,7 +4,7 @@ import './pie.css';
 // Pie: arriba, nombre + qué hacemos + enlaces + contacto; en el centro, "mad" gigante en Jane Austen (solo local); abajo, © y "Volver arriba".
 export default function Pie({ whatsappMensaje }: { whatsappMensaje: string }) {
   return (
-    <footer className="pie tono-oscuro">
+    <footer className="pie tono-claro">
       <div className="cont pie__sup">
         <div className="pie__marca">
           <p className="marca pie__nombre">{SITIO.nombre}</p>

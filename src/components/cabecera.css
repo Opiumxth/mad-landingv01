@@ -1,40 +1,33 @@
-/* Cabecera estática, fondo claro (el mismo del hero). Tres zonas: izquierda | logo al centro | derecha. */
+/* Cabecera estática, fondo claro (el mismo del hero). Logo a la izquierda y los tres enlaces a la derecha. */
 .cab { position: relative; z-index: 40; background: var(--fondo-hero, var(--hueso)); color: var(--negro); --borde: var(--gris-linea); }
-.cab__fila { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; column-gap: var(--sp-4); min-height: var(--alto-cabecera); }
-.cab__izq { display: flex; align-items: center; justify-self: start; }
-.cab__der { display: flex; align-items: center; justify-content: flex-end; justify-self: end; gap: var(--sp-5); }
+.cab__fila { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4); min-height: var(--alto-cabecera); }
 
 /* Logo: "mad" en negro (currentColor). El área táctil mide 44 px como mínimo. */
-.cab__logo { display: grid; place-items: center; min-width: 2.75rem; min-height: 2.75rem; padding-inline: var(--sp-2); color: inherit; text-decoration: none; }
+.cab__logo { display: grid; place-items: center; min-width: 2.75rem; min-height: 2.75rem; margin-left: -0.5rem; padding-inline: var(--sp-2); color: inherit; text-decoration: none; }
 .cab__mad { font-size: 2.5rem; padding-bottom: 0.25rem; }
 
-/* Celular: menú a la izquierda, "Hablemos" compacto a la derecha */
-.cab__lugar, .cab__nav { display: none; }
-.cab__menu { display: inline-grid; place-items: center; width: 2.75rem; height: 2.75rem; margin-left: -0.625rem; padding: 0; border: 0; background: transparent; color: inherit; cursor: pointer; }
+/* Celular: botón de menú a la derecha */
+.cab__nav { display: none; }
+.cab__menu { display: inline-grid; place-items: center; width: 2.75rem; height: 2.75rem; margin-right: -0.625rem; padding: 0; border: 0; background: transparent; color: inherit; cursor: pointer; }
 .cab__menu svg path { transition: transform var(--t-medio) var(--easing), opacity var(--t-rapido); transform-origin: center; transform-box: fill-box; }
 .cab__menu[aria-expanded='true'] .m-arriba { transform: translateY(5px) rotate(45deg); }
 .cab__menu[aria-expanded='true'] .m-medio { opacity: 0; }
 .cab__menu[aria-expanded='true'] .m-abajo { transform: translateY(-5px) rotate(-45deg); }
-.cab__cta { min-height: 2.75rem; padding: var(--sp-2) var(--sp-4); font-size: var(--fs-etiqueta); letter-spacing: 0.04em; }
 
 .cab__panel { position: absolute; top: 100%; left: 0; right: 0; background: var(--fondo-hero, var(--hueso)); border-bottom: 1px solid var(--borde); padding-block: var(--sp-2) var(--sp-4); }
 .cab__panel[hidden] { display: none; }
 .cab__panel li > a { display: flex; align-items: center; min-height: 2.75rem; font-size: var(--fs-medio); font-weight: var(--peso-texto-fuerte); text-decoration: none; }
 
 @media (min-width: 48rem) {
-  .cab__fila { column-gap: var(--sp-6); }
   .cab__menu, .cab__panel { display: none; }
-  .cab__lugar { display: grid; gap: 0.125rem; margin: 0; font-size: var(--fs-etiqueta); line-height: 1.25; color: var(--texto-claro-suave); }
-  .cab__lugar span:first-child { color: var(--negro); font-weight: var(--peso-texto-fuerte); }
   .cab__nav { display: block; }
-  /* Enlaces como en la referencia: "Trabajo, Soluciones, Nosotros", con subrayado que se dibuja al pasar o enfocar */
+  /* Enlaces como en la referencia: "Trabajo, Soluciones, Nosotros", bien separados, con subrayado que se dibuja al pasar o enfocar */
   .cab__nav ul { display: flex; align-items: center; }
-  .cab__nav li:not(:last-child)::after { content: ',' / ''; margin-right: 0.35em; }
+  .cab__nav li:not(:last-child)::after { content: ',' / ''; margin-right: var(--sp-6); }
   .cab__nav a {
-    display: inline-flex; align-items: center; min-height: 2.75rem; font-size: var(--fs-pequeno); font-weight: var(--peso-texto-fuerte); text-decoration: none;
+    display: inline-flex; align-items: center; min-height: 2.75rem; font-size: var(--fs-base); font-weight: var(--peso-texto-fuerte); text-decoration: none;
     background: linear-gradient(currentColor, currentColor) 0 calc(50% + 0.7em) / 0 1.5px no-repeat; transition: background-size var(--t-medio) var(--easing);
   }
   .cab__nav a:hover, .cab__nav a:focus-visible { background-size: 100% 1.5px; }
   .cab__mad { font-size: 3rem; }
-  .cab__cta { padding-inline: var(--sp-5); font-size: var(--fs-pequeno); }
 }

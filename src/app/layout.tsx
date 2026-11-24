@@ -34,7 +34,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <script dangerouslySetInnerHTML={{ __html: scriptHero }} />
       </head>
-      <body>
+      {/* suppressHydrationWarning: algunas extensiones del navegador (p. ej. "vc-init") añaden clases al <body> antes de hidratar */}
+      <body suppressHydrationWarning>
         <a className="salto" href="#contenido">Saltar al contenido</a>
         {children}
       </body>

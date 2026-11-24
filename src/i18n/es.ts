@@ -3,8 +3,6 @@
 // Lo marcado [Confirmar copy] en REPORTE_BORRADOR.md son propuestas de texto que Mathias debe aprobar.
 export const es = {
   cabecera: {
-    ubicacion: 'Lima, Perú',
-    cobertura: 'Atendemos todo el Perú',
     logoEtiqueta: 'MAD Software Studio, inicio',
     navEtiqueta: 'Principal',
     abrirMenu: 'Abrir menú',
@@ -14,7 +12,6 @@ export const es = {
       { texto: 'Soluciones', href: '/#soluciones' },
       { texto: 'Nosotros', href: '/#nosotros' },
     ],
-    cta: { texto: 'Hablemos', href: '/book' },
   },
   inicio: {
     // Metadatos de la home (título y descripción únicos en el sitio)

@@ -28,11 +28,13 @@ export async function iniciar(caja: HTMLElement): Promise<() => void> {
       const a = parseFloat(getComputedStyle(caja).getPropertyValue('--a')) || (movil ? 0.7 : 0.34);
       // Si la pantalla es alta, el frame final queda centrado más abajo que el pequeño: el tramo sobrante del escenario (--extra)
       const bajar = () => Math.max(0, escena.offsetHeight - caja.offsetHeight);
-      // Recorrido: del scroll 0 hasta el momento en que el escenario sticky se suelta (su borde inferior llega al final de la pista).
+      // Recorrido: del scroll 0 hasta el momento en que el escenario sticky se suelta. El sticky se rige por la caja CON margen del
+      // escenario (el margen inferior es negativo): se suelta cuando esa caja llega al final de la pista.
       const finDelRecorrido = () => {
         const finPista = pista.getBoundingClientRect().bottom + window.scrollY;
         const arriba = parseFloat(getComputedStyle(escena).top) || 0;
-        return finPista - arriba - escena.offsetHeight;
+        const cajaConMargen = escena.offsetHeight + (parseFloat(getComputedStyle(escena).marginBottom) || 0);
+        return finPista - cajaConMargen - arriba;
       };
       const tl = gsap.timeline({
         defaults: { ease: 'none' },
