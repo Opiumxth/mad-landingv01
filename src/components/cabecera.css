@@ -20,6 +20,7 @@
 .cab__panel { position: absolute; top: 100%; left: 0; right: 0; background: var(--fondo-hero, var(--hueso)); border-bottom: 1px solid var(--borde); padding-block: var(--sp-2) var(--sp-4); }
 .cab__panel[hidden] { display: none; }
 .cab__lista { padding-inline: var(--margen-pagina); }
+.cab__panel li > a:hover { font-weight: 700; }
 .cab__panel li > a { display: flex; align-items: center; min-height: 2.75rem; font-size: var(--fs-medio); font-weight: 400; text-decoration: none; }
 
 @media (min-width: 48rem) {
@@ -31,12 +32,11 @@
   .cab__emblema img { width: 3.25rem; height: 3.25rem; }
   .cab__mad { font-size: 3rem; }
   /* "Trabajo, Soluciones, Nosotros": la coma pegada a la palabra y un espacio normal después, como texto corrido.
-     El subrayado se dibuja solo bajo la palabra, al pasar el mouse o enfocar con teclado. */
+     Al pasar el mouse o enfocar con teclado la palabra se pone en negrita. Para que no se muevan las demás palabras, un ::after invisible
+     (con el mismo texto en negrita) reserva el ancho de la versión Bold. */
   .cab__nav ul { display: flex; align-items: center; gap: 0.3em; font-size: var(--fs-base); font-weight: 400; }
   .cab__nav li:not(:last-child)::after { content: ',' / ''; }
-  .cab__nav a {
-    display: inline-flex; align-items: center; min-height: 2.75rem; text-decoration: none;
-    background: linear-gradient(currentColor, currentColor) 0 calc(50% + 0.7em) / 0 1.5px no-repeat; transition: background-size var(--t-medio) var(--easing);
-  }
-  .cab__nav a:hover, .cab__nav a:focus-visible { background-size: 100% 1.5px; }
+  .cab__nav a { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; min-height: 2.75rem; text-decoration: none; }
+  .cab__nav a::after { content: attr(data-texto) / ''; height: 0; overflow: hidden; visibility: hidden; font-weight: 700; user-select: none; pointer-events: none; }
+  .cab__nav a:hover, .cab__nav a:focus-visible { font-weight: 700; }
 }
