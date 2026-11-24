@@ -15,10 +15,15 @@ export default function Soluciones() {
   return (
     <section id="soluciones" className="sol" aria-labelledby="soluciones-h2">
       <div className="sol__caja">
-        {/* Encabezado fijo (sticky) mientras dura el apilado de las tarjetas; las tarjetas se apilan debajo de él (ver soluciones.css) */}
-        <div className="sol__cabeza">
-          <EncabezadoSeccion id="soluciones-h2" titulo={t.titulo} subtitulo={t.subtitulo} />
+        {/* Encabezado fijo (sticky) mientras dura el apilado de las tarjetas; las tarjetas se apilan debajo de él (ver soluciones.css).
+            .sol__guia es el bloque donde es sticky: termina justo cuando la última tarjeta empieza a salir, así el encabezado se suelta
+            en ese momento y sube con todo lo demás. .sol__hueco reserva su sitio en el flujo (solo escritorio con movimiento). */}
+        <div className="sol__guia">
+          <div className="sol__cabeza">
+            <EncabezadoSeccion id="soluciones-h2" titulo={t.titulo} subtitulo={t.subtitulo} />
+          </div>
         </div>
+        <div className="sol__hueco" aria-hidden="true"></div>
         <ol className="sol__lista">
           {soluciones.map((s, i) => (
             <li key={s.id} className="sol__item" style={{ '--i': i } as CSSProperties}>

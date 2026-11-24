@@ -15,6 +15,7 @@
   --enc-h: calc(clamp(3rem, 8vw, 7rem) * 1.04 + var(--sp-3) + 2 * clamp(1.25rem, 2vw, 1.75rem) * 1.4 + 2 * var(--sp-4));
 }
 .sol__cabeza { padding-block: var(--sp-4); background: var(--tema-fondo); position: relative; z-index: 3; }
+.sol__hueco { display: none; }
 /* El fondo se extiende hasta los bordes de la pantalla (sin cambiar el layout ni crear scroll horizontal) */
 .sol__cabeza { box-shadow: 0 0 0 100vmax var(--tema-fondo); clip-path: inset(0 -100vmax); }
 
@@ -66,13 +67,24 @@
   .sol__lista::after { content: ''; height: var(--sp-8); }
   /* Cada tarjeta se pega bajo el encabezado fijo (su alto real, --enc-h) con 24 px más que la anterior; el alto de la tarjeta se ajusta
      a la pantalla para que las cuatro apiladas quepan debajo del encabezado también en pantallas bajas. */
-  .sol__cabeza { position: sticky; top: 0; }
+  .sol {
+    --card-h: clamp(18rem, calc(100svh - var(--enc-h) - 4 * var(--sp-5)), 28rem); /* alto de cada tarjeta */
+    /* Tramo final: lo que mide la pila entera por debajo del encabezado (la última tarjeta + los 3 desfases de 24 px de las demás) */
+    --tramo: calc(var(--card-h) + 3 * var(--sp-5));
+  }
+  /* SALIDA DEL APILADO. El encabezado es sticky dentro de .sol__guia, un bloque que ocupa toda la caja MENOS el tramo final: se suelta justo
+     cuando el fondo de la lista llega a (alto del encabezado + tramo), que es el instante en que la última tarjeta deja de estar pegada y
+     empieza a subir cubriendo y arrastrando a las demás. Desde ahí el encabezado sube con el scroll a la misma velocidad que la pila
+     (siempre queda 72 px por encima de la tarjeta que sale), así que nunca queda encima de una tarjeta. */
+  .sol__guia { position: absolute; z-index: 3; top: 0; left: var(--margen-pagina); right: var(--margen-pagina); bottom: var(--tramo); pointer-events: none; }
+  .sol__cabeza { position: sticky; top: 0; pointer-events: auto; }
+  .sol__hueco { display: block; height: var(--enc-h); }
   .sol__item {
     position: sticky; top: calc(var(--enc-h) + var(--i) * var(--sp-5));
-    height: clamp(18rem, calc(100svh - var(--enc-h) - 4 * var(--sp-5)), 28rem);
+    height: var(--card-h);
   }
   /* "Pop" al encajar: 1 → 1,02 → 1 en 250 ms con ease-out. SolucionesPop pone `is-pop` cuando la tarjeta llega a su posición. Solo transform. */
-  .sol__item.is-pop { animation: sol-pop 250ms ease-out; }
+  .sol__item.is-pop { animation: sol-pop 250ms ease-out; transform-origin: 50% 0; /* crece hacia abajo: el borde superior no sube bajo el encabezado fijo */ }
   @keyframes sol-pop { 50% { transform: scale(1.02); } }
   /* Mejora: la tarjeta tapada se reduce un poco mientras la siguiente sube (solo donde hay animaciones por scroll) */
   @supports (animation-timeline: view()) and (timeline-scope: --a) {
