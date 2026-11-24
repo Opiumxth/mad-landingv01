@@ -4,8 +4,9 @@
    Estados: A pequeño · B crece · C pegado un momento · D se suelta y sigue la página.
    Sin JS o con movimiento reducido: tamaño final, sin pin (ver el final del archivo). */
 .ih {
-  /* Variables en el hero entero (la pista y la cola las leen). --w: ancho final del frame = todo el ancho (o, si la pantalla es baja y ancha, lo que permita la altura sin pasar de 100svh) */
-  --w: min(100cqi, 177.78svh);
+  /* Variables en el hero entero (la pista y la cola las leen). --w: ancho final del frame = todo el ancho (o, si la pantalla es baja y ancha, lo que permita la altura menos 2 × --aire-v) */
+  --w: min(100cqi, calc((100svh - 2 * var(--aire-v)) * 1.7778));
+  --aire-v: 1.5rem; /* margen mínimo arriba y abajo con el frame ya grande: en ventanas bajas el borde de arriba siempre se ve */
   --hf: calc(var(--w) * 0.5625); /* alto final, 16:9 */
   --a: 0.7; /* escala inicial: el frame pequeño mide ~70% del ancho en celular */
   --r: 8px; /* esquinas al inicio, en pantalla */
