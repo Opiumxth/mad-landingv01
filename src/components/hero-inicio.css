@@ -1,5 +1,5 @@
 /* La home entera (hero + frame) va sobre --fondo-hero. */
-.inicio { background: var(--fondo-hero); }
+.inicio { background: var(--tema-fondo); } /* = --fondo-hero en tema claro; en tema oscuro (al bajar a Soluciones) = --negro */
 /* Hero de la home. Fondo: --fondo-hero (color sólido; el degradado lo pone Mathias en tokens.css). */
 .ih {
   --tope: calc(var(--alto-cabecera) + 1.5rem); /* donde se pega el frame (mínimo): justo bajo la cabecera + 24 px */

@@ -35,8 +35,7 @@ export const es = {
   // Sección "Soluciones" de la home
   soluciones: {
     titulo: 'Soluciones',
-    subtitulo: 'Páginas web, apps y automatización a la medida de tu negocio.', // ⚠ provisional
-    enlace: 'Ver solución',
+    subtitulo: 'Desde una página web hasta un sistema a la medida: diseñamos, desarrollamos y automatizamos lo que tu negocio necesita para trabajar mejor.', // ⚠ provisional
     enlaceEtiqueta: (titulo: string) => `Ver solución: ${titulo}`,
   },
 } as const;

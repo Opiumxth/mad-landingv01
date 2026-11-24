@@ -135,3 +135,24 @@
     --gutter: 2rem;
   }
 }
+
+/* ---- Tema de la página (home): fondo, texto principal y texto suave cambian juntos de claro a oscuro al bajar a "Soluciones".
+   Se activan con <html data-tema="oscuro"> (ver TemaFondo.tsx). Registradas como <color> para que la transición (~300 ms) las interpole.
+   Valores iniciales = --fondo-hero, --texto-claro, --texto-claro-suave. El pie no usa estas variables (se ve igual en ambos temas). ---- */
+@property --tema-fondo { syntax: '<color>'; inherits: true; initial-value: #f4f2ee; }
+@property --tema-texto { syntax: '<color>'; inherits: true; initial-value: #0a0a0a; }
+@property --tema-suave { syntax: '<color>'; inherits: true; initial-value: #595959; }
+:root {
+  --tema-fondo: var(--fondo-hero);
+  --tema-texto: var(--texto-claro);
+  --tema-suave: var(--texto-claro-suave);
+  transition: --tema-fondo 300ms ease, --tema-texto 300ms ease, --tema-suave 300ms ease;
+}
+:root[data-tema='oscuro'] {
+  --tema-fondo: var(--negro);
+  --tema-texto: var(--texto-osc);
+  --tema-suave: var(--texto-osc-suave);
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { transition: none; }
+}

@@ -1,6 +1,6 @@
-/* Sección "Nuestro trabajo": mismo fondo que el hero, H2 centrado, banda curva y, debajo, el proyecto del centro.
+/* Sección "Nuestro trabajo": sin fondo propio (usa el de la página, que cambia con el tema), H2 centrado, banda curva y, debajo, el proyecto del centro.
    Colores, tipografía, radio y espaciados salen de tokens.css. */
-.trabajo { background: var(--fondo-hero); color: var(--negro); --suave: var(--texto-claro-suave); scroll-margin-top: var(--alto-cabecera); padding-block: var(--seccion-y); overflow-x: clip; }
+.trabajo { color: var(--tema-texto); --suave: var(--tema-suave); scroll-margin-top: var(--alto-cabecera); padding-block: var(--seccion-y); overflow-x: clip; }
 .trabajo__titulo { text-align: center; padding-inline: var(--margen-pagina); }
 
 .tb { display: grid; gap: var(--sp-5); margin-top: var(--sp-6); }
