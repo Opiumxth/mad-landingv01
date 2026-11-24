@@ -96,3 +96,6 @@ h3 { font-size: var(--fs-h3); line-height: var(--lh-h3); }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
+
+/* Logo "mad" (Jane Austen). El tamaño lo da quien lo usa con font-size. */
+.logo-mad { display: inline-block; font-family: var(--f-script); font-weight: 400; line-height: 1; white-space: nowrap; }

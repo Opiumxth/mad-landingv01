@@ -1,8 +1,7 @@
-import LogoMad from './LogoMad';
 import { REDES, SITIO, enlaceWhatsApp } from '../data/sitio';
 import './pie.css';
 
-// Pie: arriba, nombre + qué hacemos + enlaces + contacto; en el centro, "mad" gigante en trazos; abajo, © y "Volver arriba".
+// Pie: arriba, nombre + qué hacemos + enlaces + contacto; en el centro, "mad" gigante en Jane Austen (solo local); abajo, © y "Volver arriba".
 export default function Pie({ whatsappMensaje }: { whatsappMensaje: string }) {
   return (
     <footer className="pie tono-oscuro">
@@ -29,7 +28,7 @@ export default function Pie({ whatsappMensaje }: { whatsappMensaje: string }) {
       </div>
 
       <div className="cont pie__mad-caja">
-        <LogoMad className="pie__mad" />
+        <p className="pie__mad" aria-hidden="true">mad</p>
       </div>
 
       <div className="cont pie__inf">
