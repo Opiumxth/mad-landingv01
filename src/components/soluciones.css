@@ -1,35 +1,24 @@
 /* Sección "Soluciones": fondo oscuro (--negro), H2 editorial a la izquierda y tarjetas de cobalto con texto blanco.
    Colores, tipografía, radio y espaciados salen de tokens.css. El cobalto es solo fondo, nunca color de texto. */
 .sol {
-  --franja: clamp(10rem, 16vw, 15rem); /* alto de la transición hueso → negro (160 a 240 px) */
+  --franja: clamp(10rem, 16vw, 15rem); /* medida de referencia del aire superior (antes alojaba el degradado; el espacio se conserva) */
   position: relative; background: var(--negro); color: var(--blanco); scroll-margin-top: var(--alto-cabecera);
-  /* El degradado ocupa el borde superior; el título empieza donde ya es casi negro */
+  /* Cambio seco de hueso a negro en el borde superior de la sección (borde recto, sin degradado) */
   padding-block: calc(var(--franja) - var(--seccion-y) - var(--sp-5)) var(--seccion-y);
 }
-/* Transición suave entre Trabajo (hueso) y Soluciones (negro): una franja de degradado que empieza sobre el aire inferior de Trabajo
-   (sin tocar su contenido) y termina dentro de esta sección. Es decorativa; no cambia el alto de nada (CLS). */
-.sol::before {
-  content: ''; position: absolute; left: 0; right: 0; top: calc(-1 * var(--seccion-y)); height: var(--franja); pointer-events: none;
-  background: linear-gradient(to bottom, var(--fondo-hero), var(--negro));
-}
-/* Mejora: el degradado se desliza un poco con el scroll al entrar (solo donde hay animaciones por scroll) */
-@media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    .sol::before { animation: sol-franja linear both; animation-timeline: view(); animation-range: entry 0% entry 100%; }
-    @keyframes sol-franja { from { transform: translateY(var(--sp-7)); } to { transform: translateY(0); } }
-  }
-}
-
 /* Caja común del título y de las tarjetas: mismo margen lateral */
 .sol__caja { position: relative; max-width: calc(var(--ancho-max) + 2 * var(--margen-pagina)); margin-inline: auto; padding-inline: var(--margen-pagina); }
 .sol__titulo { text-align: left; font-size: clamp(3rem, 8vw, 7rem); line-height: var(--lh-h1); letter-spacing: var(--ls-h1); color: var(--blanco); }
 
+/* Subtítulo, fuera de las tarjetas y alineado a la izquierda como el título */
+.sol__sub { max-width: var(--ancho-texto); margin-top: var(--sp-3); font-size: var(--fs-grande); line-height: var(--lh-lead); color: var(--texto-osc-suave); }
+
 .sol__lista { display: grid; gap: var(--sp-4); margin-top: var(--sp-6); }
 
-/* Tarjeta: cobalto con texto blanco puro (7,7:1), una columna en celular. Borde blanco fino: el cobalto contra negro solo llega a 2,7:1 (ver tokens.css) */
+/* Tarjeta: cobalto con texto blanco puro (7,7:1), una columna en celular. Sin borde visible (el borde transparente mantiene las medidas) */
 .sol__card {
   position: relative; display: grid; gap: var(--sp-5); height: 100%;
-  padding: var(--sp-5); border-radius: var(--radio); border: 1px solid var(--acento-borde-osc);
+  padding: var(--sp-5); border-radius: var(--radio); border: 1px solid transparent;
   background: var(--acento); color: var(--acento-texto);
 }
 .sol__texto { display: grid; align-content: space-between; gap: var(--sp-5); }

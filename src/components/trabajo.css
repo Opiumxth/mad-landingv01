@@ -7,7 +7,7 @@
 
 /* Banda: alto fijo (sin saltos de layout). ~560 px en escritorio, menos en celular. Es contenedor de tamaño: las medidas
    de las tarjetas se calculan en cqh/cqw (ver TrabajoBanda.tsx). */
-.tb__banda { position: relative; height: clamp(19rem, 14rem + 26vw, 35rem); container-type: size; overflow: hidden; }
+.tb__banda { touch-action: pan-y; user-select: none; -webkit-user-select: none; cursor: grab; position: relative; height: clamp(19rem, 14rem + 26vw, 35rem); container-type: size; overflow: hidden; }
 .tb__escena { position: absolute; inset: 0; pointer-events: none; transition: opacity 500ms; }
 .tb__tarjeta { position: absolute; transform-style: preserve-3d; }
 .tb__franja { position: absolute; top: 0; overflow: hidden; background: var(--grafito); }
@@ -15,7 +15,8 @@
 .tb__franja--fin { border-radius: 0 var(--radio-lg) var(--radio-lg) 0; }
 .tb__franja img { position: absolute; top: 0; max-width: none; object-fit: cover; }
 /* Zona clicable de la tarjeta central (transparente, sobre la banda) */
-.tb__central { position: absolute; z-index: 2; display: block; cursor: pointer; border-radius: var(--radio-lg); }
+.tb__banda:active, .tb__banda:active .tb__central { cursor: grabbing; }
+.tb__central { -webkit-user-drag: none; position: absolute; z-index: 2; display: block; cursor: pointer; border-radius: var(--radio-lg); }
 
 .tb__pie { display: grid; justify-items: center; gap: var(--sp-4); padding-inline: var(--margen-pagina); text-align: center; }
 /* Proyecto del centro (enlace real). Alto reservado para nombre + 2 líneas de descripción: el texto no mueve nada al cambiar. */

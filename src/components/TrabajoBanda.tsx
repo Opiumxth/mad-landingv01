@@ -35,6 +35,8 @@ const AXIS = 50; // centro vertical de la fila, % del alto (propio: sin contenid
 const CURVE = 80; // grados que se curva la fila hasta el borde
 const FADE_EDGE = 12; // ancho del desvanecido de cada extremo, % del ancho
 const MAX_PRECARGA = 8; // con más imágenes que esto, solo se montan las de las tarjetas cercanas
+const UMBRAL = 50; // px que hay que arrastrar para pasar a la tarjeta anterior o siguiente
+const RUEDA = 40; // desplazamiento horizontal acumulado de la rueda/trackpad que cuenta como un gesto
 
 const BEND = (Math.min(85, Math.max(5, CURVE)) * Math.PI) / 180;
 
@@ -72,7 +74,11 @@ export default function TrabajoBanda({ proyectos, avisoDemos }: { proyectos: Pro
   const L = proyectos.length;
 
   const [medida, setMedida] = useState<ReturnType<typeof measure> | null>(null);
-  const [paso, setPaso] = useState(0); // contador de pasos (sin tope); el centro es el proyecto `paso mod L`
+  // `paso`: contador de pasos (sin tope, puede bajar); el centro es el proyecto `paso mod L`. `dir`: sentido del último paso (1 = siguiente, -1 = anterior).
+  // `tick`: cuenta cada paso (el texto cambia con él).
+  const [est, setEst] = useState({ paso: 0, dir: 1, tick: 0 });
+  const { paso, dir, tick } = est;
+  const [tocando, setTocando] = useState(false); // el usuario está arrastrando o usando la rueda sobre la banda
   const [textoIdx, setTextoIdx] = useState(0); // proyecto que muestra el texto de abajo (cambia con un fundido)
   const [textoOculto, setTextoOculto] = useState(false);
   const [reducido, setReducido] = useState(false);
@@ -108,16 +114,18 @@ export default function TrabajoBanda({ proyectos, avisoDemos }: { proyectos: Pro
     return () => { mq.removeEventListener('change', alCambiar); document.removeEventListener('visibilitychange', alVer); io.disconnect(); };
   }, []);
 
-  const corre = enVista && !encima && !foco && !oculta && !reducido;
+  const corre = enVista && !encima && !foco && !oculta && !reducido && !tocando;
 
   // Un solo temporizador. `reposo` cuenta solo el tiempo en marcha: al reanudar, la tarjeta completa lo que le faltaba.
   const reposo = useRef(0);
   const desde = useRef(0);
+  const manual = useRef(false); // el último paso lo dio el usuario: el temporizador empieza de cero
   useEffect(() => {
+    if (manual.current) { reposo.current = 0; manual.current = false; }
     if (!corre) return;
     desde.current = performance.now();
     let disparado = false;
-    const id = window.setTimeout(() => { disparado = true; reposo.current = 0; setPaso((p) => p + 1); }, Math.max(0, MOVE + DWELL - reposo.current));
+    const id = window.setTimeout(() => { disparado = true; reposo.current = 0; setEst((e) => ({ paso: e.paso + 1, dir: 1, tick: e.tick + 1 })); }, Math.max(0, MOVE + DWELL - reposo.current));
     return () => {
       window.clearTimeout(id);
       // El paso en curso termina aunque se pause (una transición CSS no se detiene), así que cuenta como completo.
@@ -127,11 +135,67 @@ export default function TrabajoBanda({ proyectos, avisoDemos }: { proyectos: Pro
 
   // El texto cambia con un fundido corto, de modo que termine cuando la tarjeta llega al centro.
   useEffect(() => {
-    if (paso === 0) return;
+    if (tick === 0) return;
     const a = window.setTimeout(() => setTextoOculto(true), MOVE - FADE);
     const b = window.setTimeout(() => { setTextoIdx(mod(paso, L)); setTextoOculto(false); }, MOVE - FADE / 2);
     return () => { window.clearTimeout(a); window.clearTimeout(b); };
-  }, [paso, L]);
+  }, [tick, paso, L]);
+
+  // ---- Mover a mano: rueda/trackpad en horizontal, arrastre con el ratón y deslizar con el dedo. Cada gesto pasa a la tarjeta anterior o siguiente. ----
+  const ultimo = useRef(0);
+  const ir = useCallback((d: 1 | -1) => {
+    const ahora = performance.now();
+    if (ahora - ultimo.current < MOVE * 0.7) return; // no se encadenan pasos a mitad de movimiento
+    ultimo.current = ahora;
+    manual.current = true;
+    setEst((e) => ({ paso: e.paso + d, dir: d, tick: e.tick + 1 }));
+  }, []);
+  useEffect(() => {
+    const el = banda.current;
+    if (!el) return;
+    // Rueda o trackpad en horizontal (un gesto = un paso; la inercia del trackpad no cuenta de nuevo). El scroll vertical no se toca.
+    let acum = 0, bloqueada = false, tr = 0;
+    const alRodar = (e: WheelEvent) => {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      e.preventDefault();
+      setTocando(true);
+      window.clearTimeout(tr);
+      tr = window.setTimeout(() => { acum = 0; bloqueada = false; setTocando(false); }, 160);
+      if (bloqueada) return;
+      acum += e.deltaX;
+      if (Math.abs(acum) >= RUEDA) { ir(acum > 0 ? 1 : -1); bloqueada = true; acum = 0; }
+    };
+    // Arrastre con ratón, lápiz o dedo. En táctil el navegador sigue haciendo el scroll vertical (touch-action: pan-y en el CSS).
+    let id = -1, x0 = 0, y0 = 0, arrastra = false, hecho = false;
+    const alBajar = (e: PointerEvent) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      id = e.pointerId; x0 = e.clientX; y0 = e.clientY; arrastra = false; hecho = false;
+      setTocando(true);
+    };
+    const alMover = (e: PointerEvent) => {
+      if (e.pointerId !== id) return;
+      const dx = e.clientX - x0;
+      if (!arrastra && Math.abs(dx) > 6 && Math.abs(dx) > Math.abs(e.clientY - y0)) {
+        arrastra = true;
+        try { el.setPointerCapture(id); } catch { /* el puntero ya terminó */ } // así el clic final no entra al enlace de la tarjeta central
+      }
+      if (arrastra && !hecho && Math.abs(dx) >= UMBRAL) { hecho = true; ir(dx < 0 ? 1 : -1); }
+    };
+    const alSoltar = (e: PointerEvent) => { if (e.pointerId === id) { id = -1; setTocando(false); } };
+    el.addEventListener('wheel', alRodar, { passive: false });
+    el.addEventListener('pointerdown', alBajar);
+    el.addEventListener('pointermove', alMover);
+    el.addEventListener('pointerup', alSoltar);
+    el.addEventListener('pointercancel', alSoltar);
+    return () => {
+      window.clearTimeout(tr);
+      el.removeEventListener('wheel', alRodar);
+      el.removeEventListener('pointerdown', alBajar);
+      el.removeEventListener('pointermove', alMover);
+      el.removeEventListener('pointerup', alSoltar);
+      el.removeEventListener('pointercancel', alSoltar);
+    };
+  }, [ir]);
 
   const alEnfocar = useCallback(() => setFoco(true), []);
   const alDesenfocar = useCallback((e: React.FocusEvent) => { if (!raiz.current?.contains(e.relatedTarget as Node)) setFoco(false); }, []);
@@ -178,11 +242,12 @@ export default function TrabajoBanda({ proyectos, avisoDemos }: { proyectos: Pro
         >
           {Array.from({ length: N }, (_, i) => {
             const puesto = puestoDe(i, paso);
-            const salto = puestoDe(i, paso - 1) === -atras && puesto === N - 1 - atras; // envoltura: sin transición
+            // envoltura (sin transición): al avanzar, la tarjeta que sale por la izquierda pasa al extremo derecho; al retroceder, al revés
+            const salto = dir > 0 ? puestoDe(i, paso - 1) === -atras && puesto === N - 1 - atras : puestoDe(i, paso + 1) === N - 1 - atras && puesto === -atras;
             const visible = esVisible(puesto);
             // La visibilidad cambia justo cuando el centro de la tarjeta cruza `limit` durante el paso: ni antes (se vería desaparecer
             // una tarjeta aún en pantalla) ni después (tras la cámara se proyecta enorme).
-            const viene = puestoDe(i, paso - 1);
+            const viene = puestoDe(i, paso - dir);
             const cruza = !salto && visible !== esVisible(viene);
             const espera = cruza ? Math.round(tiempoParaAvance(Math.abs(limit - Math.abs(viene) * pitch) / pitch) * MOVE) : 0;
             const cerca = L <= MAX_PRECARGA || Math.abs(puesto) <= visiblesPorLado + 2;
@@ -230,6 +295,7 @@ export default function TrabajoBanda({ proyectos, avisoDemos }: { proyectos: Pro
           href={href}
           tabIndex={-1}
           style={{ left: `calc(50% - ${u(ASPECT / 2)})`, top: `calc(${AXIS}% - ${u(0.5)})`, width: u(ASPECT), height: u(1) }}
+          draggable={false}
           onPointerEnter={() => setEncima(true)}
           onPointerLeave={() => setEncima(false)}
         />

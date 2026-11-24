@@ -35,6 +35,7 @@ export const es = {
   // Sección "Soluciones" de la home
   soluciones: {
     titulo: 'Soluciones',
+    subtitulo: 'Páginas web, apps y automatización a la medida de tu negocio.', // ⚠ provisional
     enlace: 'Ver solución',
     enlaceEtiqueta: (titulo: string) => `Ver solución: ${titulo}`,
   },

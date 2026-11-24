@@ -6,13 +6,14 @@ import './soluciones.css';
 
 const t = es.soluciones;
 
-// Sección "Soluciones" (#soluciones): fondo oscuro, H2 editorial a la izquierda y cuatro tarjetas azules apiladas.
+// Sección "Soluciones" (#soluciones): fondo oscuro, H2 editorial y subtítulo a la izquierda y cuatro tarjetas azules apiladas.
 // El contenido va en el HTML (sin JS). Cada tarjeta se pulsa entera con UN solo enlace ("Ver solución"), extendido con ::after (stretched link).
 export default function Soluciones() {
   return (
     <section id="soluciones" className="sol" aria-labelledby="soluciones-h2">
       <div className="sol__caja">
         <h2 id="soluciones-h2" className="sol__titulo">{t.titulo}</h2>
+        <p className="sol__sub">{t.subtitulo}</p>
         <ol className="sol__lista">
           {soluciones.map((s, i) => (
             <li key={s.id} className="sol__item" style={{ '--i': i } as CSSProperties}>
