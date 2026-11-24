@@ -1,0 +1,32 @@
+/* Frame que crece con el scroll. El CSS ya trae el estado inicial (A: pequeño) y el recorrido sticky, sin saltos de layout:
+   JS solo escribe transform y clip-path. Sin JS o con movimiento reducido: tamaño final, sin pin (ver el final del archivo).
+   Estados: A pequeño bajo el hero · B crece hasta casi todo el ancho, esquinas a 0 · C pegado un momento · D se suelta. */
+.marco { container-type: inline-size; position: relative; z-index: 2; pointer-events: none; }
+.marco__pista {
+  /* --w: ancho final del frame = todo el ancho (o, si la pantalla es baja y ancha, lo que permita la altura para no pasarse de 100svh) */
+  --w: min(100cqi, 177.78svh);
+  --hf: calc(var(--w) * 0.5625); /* alto final, 16:9 */
+  --a: 0.85; /* escala inicial: ~85% del ancho en celular */
+  --r: 8px; /* esquinas al inicio, en pantalla */
+  --recorrido: 50svh; /* scroll mientras está pegado (más corto en celular) */
+  height: calc(var(--hf) + var(--recorrido));
+  /* Sube la pista para que el frame pequeño quede justo debajo del hero (el escenario mide lo que el frame final) */
+  margin-top: calc(var(--sp-5) - var(--hf) * (1 - var(--a)) / 2);
+}
+.marco__escena { position: sticky; top: calc((100svh - var(--hf)) / 2); height: var(--hf); display: grid; place-items: center; }
+.marco__caja {
+  position: relative; width: var(--w); height: var(--hf); overflow: hidden; background: var(--acento);
+  transform: scale(var(--a)); clip-path: inset(0 round calc(var(--r) / var(--a))); will-change: transform;
+}
+.marco__caja video, .marco__caja img { width: 100%; height: 100%; object-fit: cover; }
+
+@media (min-width: 48rem) {
+  .marco__pista { --a: 0.55; --recorrido: 100svh; }
+}
+
+/* Final sin animación: sin JavaScript, con prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce), (scripting: none) {
+  .marco__pista { height: auto; margin-top: var(--sp-5); }
+  .marco__escena { position: static; height: auto; }
+  .marco__caja { transform: none; clip-path: none; will-change: auto; }
+}
