@@ -44,6 +44,13 @@ export const es = {
     titulo: 'Cómo trabajamos', // ⚠ provisional
     subtitulo: 'Cinco pasos claros, de la primera conversación a la puesta en línea.', // ⚠ provisional
   },
+  // Sección "Nosotros" de la home
+  nosotros: {
+    titulo: 'Nosotros',
+    cta: { texto: 'Conócenos', href: '/nosotros' },
+    // ⚠ provisional: sin cifras, clientes, plazos ni promesas
+    parrafo: 'Somos un equipo de ingeniería de sistemas y software en Lima. Diseñamos y desarrollamos páginas web, aplicaciones y automatizaciones para negocios de todo el Perú.',
+  },
 } as const;
 
 export type Diccionario = typeof es;

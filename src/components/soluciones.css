@@ -8,16 +8,15 @@
 }
 /* Caja común del título y de las tarjetas: mismo margen lateral */
 .sol__caja { position: relative; max-width: calc(var(--ancho-max) + 2 * var(--margen-pagina)); margin-inline: auto; padding-inline: var(--margen-pagina); }
-/* Encabezado (H2 + subtítulo, ver encabezado.css): fijo arriba mientras dura el apilado. Lleva el fondo del tema (variable, sin degradado) a todo
-   el ancho de la pantalla, así las tarjetas desaparecen limpiamente por debajo de él antes de pegarse. Su alto real lo mide SolucionesPop.tsx
-   y lo escribe en --enc-h; el valor de aquí es una estimación (H2 + 2 líneas de subtítulo) para antes de que cargue el JS. */
-.sol {
-  --enc-h: calc(clamp(3rem, 8vw, 7rem) * 1.04 + var(--sp-3) + 2 * clamp(1.25rem, 2vw, 1.75rem) * 1.4 + 2 * var(--sp-4));
+/* Efecto "texto quieto + tarjetas que lo cubren" (ver texto-tapado.css). El encabezado (H2 + subtítulo, ver encabezado.css) se queda quieto;
+   las tarjetas suben, se apilan entre sí (cada una 24 px más abajo que la anterior) y se pegan cubriéndolo. --tt-h es una estimación del alto del
+   encabezado (H2 + 2 líneas de subtítulo); TextoTapado.tsx la reemplaza con el alto real. Sin fondo ni sombra propios: el texto es transparente. */
+.sol__caja {
+  --tt-top: var(--sp-3); --tt-paso: var(--sp-5);
+  --tt-tapa-h: clamp(18rem, calc(100svh - var(--sp-3) - var(--sp-4) - 3 * var(--sp-5)), 28rem); /* alto de cada tarjeta: las cuatro apiladas caben en la pantalla */
+  --tt-h: calc(clamp(3rem, 8vw, 7rem) * 1.04 + var(--sp-3) + 2 * clamp(1.25rem, 2vw, 1.75rem) * 1.4 + 2 * var(--sp-4));
 }
-.sol__cabeza { padding-block: var(--sp-4); background: var(--tema-fondo); position: relative; z-index: 3; }
-.sol__hueco { display: none; }
-/* El fondo se extiende hasta los bordes de la pantalla (sin cambiar el layout ni crear scroll horizontal) */
-.sol__cabeza { box-shadow: 0 0 0 100vmax var(--tema-fondo); clip-path: inset(0 -100vmax); }
+.sol__cabeza { padding-block: var(--sp-4); }
 
 .sol__lista { display: grid; gap: var(--sp-4); margin-top: var(--sp-2); }
 
@@ -54,48 +53,14 @@
 .sol__item:nth-child(3) .sol__visual { --ang: 315deg; }
 .sol__item:nth-child(4) .sol__visual { --ang: 45deg; }
 
-/* Escritorio (≥ 900 px): dos columnas. Con movimiento permitido, además se apilan con sticky.
-   Cada tarjeta se pega arriba con 24 px más que la anterior (96 px + 24 px × n); la siguiente sube y la tapa dejando asomar su borde.
-   En celular o con movimiento reducido: una tarjeta debajo de otra, sin sticky. */
+/* Escritorio (≥ 900 px): dos columnas. Con movimiento permitido, además suben, se apilan y tapan el encabezado (texto-tapado.css:
+   sticky, pop al encajar y salida conjunta). En celular o con movimiento reducido: una tarjeta debajo de otra, sin sticky ni solapamiento. */
 @media (min-width: 56.25rem) {
   .sol__card { grid-template-columns: 1fr 1fr; gap: var(--sp-6); padding: var(--sp-7); }
   .sol__visual { min-height: 0; }
 }
 @media (min-width: 56.25rem) and (prefers-reduced-motion: no-preference) {
   .sol__lista { gap: var(--sp-6); }
-  /* Relleno al final de la lista: dentro del bloque donde las tarjetas se pegan, así la pila completa se mantiene un trecho antes de salir */
-  .sol__lista::after { content: ''; height: var(--sp-8); }
-  /* Cada tarjeta se pega bajo el encabezado fijo (su alto real, --enc-h) con 24 px más que la anterior; el alto de la tarjeta se ajusta
-     a la pantalla para que las cuatro apiladas quepan debajo del encabezado también en pantallas bajas. */
-  .sol {
-    --card-h: clamp(18rem, calc(100svh - var(--enc-h) - 4 * var(--sp-5)), 28rem); /* alto de cada tarjeta */
-    /* Tramo final: lo que mide la pila entera por debajo del encabezado (la última tarjeta + los 3 desfases de 24 px de las demás) */
-    --tramo: calc(var(--card-h) + 3 * var(--sp-5));
-  }
-  /* SALIDA DEL APILADO. El encabezado es sticky dentro de .sol__guia, un bloque que ocupa toda la caja MENOS el tramo final: se suelta justo
-     cuando el fondo de la lista llega a (alto del encabezado + tramo), que es el instante en que la última tarjeta deja de estar pegada y
-     empieza a subir cubriendo y arrastrando a las demás. Desde ahí el encabezado sube con el scroll a la misma velocidad que la pila
-     (siempre queda 72 px por encima de la tarjeta que sale), así que nunca queda encima de una tarjeta. */
-  .sol__guia { position: absolute; z-index: 3; top: 0; left: var(--margen-pagina); right: var(--margen-pagina); bottom: var(--tramo); pointer-events: none; }
-  .sol__cabeza { position: sticky; top: 0; pointer-events: auto; }
-  .sol__hueco { display: block; height: var(--enc-h); }
-  .sol__item {
-    position: sticky; top: calc(var(--enc-h) + var(--i) * var(--sp-5));
-    height: var(--card-h);
-  }
-  /* "Pop" al encajar: 1 → 1,02 → 1 en 250 ms con ease-out. SolucionesPop pone `is-pop` cuando la tarjeta llega a su posición. Solo transform. */
-  .sol__item.is-pop { animation: sol-pop 250ms ease-out; transform-origin: 50% 0; /* crece hacia abajo: el borde superior no sube bajo el encabezado fijo */ }
-  @keyframes sol-pop { 50% { transform: scale(1.02); } }
-  /* Mejora: la tarjeta tapada se reduce un poco mientras la siguiente sube (solo donde hay animaciones por scroll) */
-  @supports (animation-timeline: view()) and (timeline-scope: --a) {
-    .sol__lista { timeline-scope: --sol-2, --sol-3, --sol-4; }
-    .sol__item:nth-child(2) { view-timeline: --sol-2 block; }
-    .sol__item:nth-child(3) { view-timeline: --sol-3 block; }
-    .sol__item:nth-child(4) { view-timeline: --sol-4 block; }
-    .sol__item:nth-child(-n + 3) .sol__card { transform-origin: 50% 0; animation: sol-tapada linear both; animation-range: entry 40% entry 100%; }
-    .sol__item:nth-child(1) .sol__card { animation-timeline: --sol-2; }
-    .sol__item:nth-child(2) .sol__card { animation-timeline: --sol-3; }
-    .sol__item:nth-child(3) .sol__card { animation-timeline: --sol-4; }
-    @keyframes sol-tapada { to { transform: scale(0.95); } }
-  }
+  /* Las tarjetas ya apiladas NO se reducen (antes bajaban a scale 0,95 con scroll-driven): ahora tienen que tapar por completo el encabezado
+     que queda quieto detrás, y una tarjeta más angosta dejaría asomar el borde izquierdo del título. */
 }

@@ -14,8 +14,8 @@ export const REVELADO = { inicio: 100 - 70, fin: 100 - 45, ventana: 2.5 };
 interface Props {
   id: string; // id del h2 (la sección lo usa en aria-labelledby)
   titulo: string;
-  subtitulo: string;
-  alinear?: 'izquierda' | 'centro';
+  subtitulo?: string; // opcional (Nosotros usa un párrafo propio en su lugar)
+  alinear?: 'izquierda' | 'centro' | 'derecha';
 }
 
 const palabras = (t: string) => t.split(' ');
@@ -23,7 +23,7 @@ const r2 = (n: number) => +n.toFixed(2);
 
 export default function EncabezadoSeccion({ id, titulo, subtitulo, alinear = 'izquierda' }: Props) {
   const pt = palabras(titulo);
-  const ps = palabras(subtitulo);
+  const ps = subtitulo ? palabras(subtitulo) : [];
   const { inicio, fin, ventana } = REVELADO;
   const paso = (fin - inicio) / (pt.length + ps.length - 1 + ventana);
   const span = (p: string, k: number, ultima: boolean) => (
@@ -33,9 +33,9 @@ export default function EncabezadoSeccion({ id, titulo, subtitulo, alinear = 'iz
     </Fragment>
   );
   return (
-    <div className={'enc' + (alinear === 'centro' ? ' enc--centro' : '')}>
+    <div className={'enc' + (alinear === 'centro' ? ' enc--centro' : alinear === 'derecha' ? ' enc--der' : '')}>
       <h2 id={id} className="enc__titulo">{pt.map((p, i) => span(p, i, i === pt.length - 1))}</h2>
-      <p className="enc__sub">{ps.map((p, i) => span(p, pt.length + i, i === ps.length - 1))}</p>
+      {ps.length ? <p className="enc__sub">{ps.map((p, i) => span(p, pt.length + i, i === ps.length - 1))}</p> : null}
     </div>
   );
 }

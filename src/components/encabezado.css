@@ -6,6 +6,11 @@
 .enc__sub { max-width: min(100%, 64rem); margin-top: var(--sp-3); font-size: clamp(1.25rem, 2vw, 1.75rem); line-height: var(--lh-lead); text-align: left; text-wrap: pretty; }
 .enc--centro .enc__titulo, .enc--centro .enc__sub { text-align: center; }
 .enc--centro .enc__sub { margin-inline: auto; }
+/* A la derecha solo en escritorio (en celular una sola columna, alineada a la izquierda) */
+@media (min-width: 56.25rem) {
+  .enc--der .enc__titulo, .enc--der .enc__sub { text-align: right; }
+  .enc--der .enc__sub { margin-left: auto; }
+}
 
 /* Revelado por palabras con el scroll: gris-medio (legible en claro y oscuro) → cobalto en el frente → color de texto del tema.
    El estado final es siempre el color de texto del tema (nunca azul). Solo donde hay animaciones por scroll y sin movimiento reducido;

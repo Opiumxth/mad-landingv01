@@ -1,9 +1,10 @@
 import type { CSSProperties } from 'react';
-import SolucionesPop from './SolucionesPop';
+import TextoTapado from './TextoTapado';
 import TemaFondo from './TemaFondo';
 import EncabezadoSeccion from './EncabezadoSeccion';
 import { soluciones } from '../datos/soluciones';
 import { es } from '../i18n/es';
+import './texto-tapado.css';
 import './soluciones.css';
 
 const t = es.soluciones;
@@ -14,19 +15,18 @@ const t = es.soluciones;
 export default function Soluciones() {
   return (
     <section id="soluciones" className="sol" aria-labelledby="soluciones-h2">
-      <div className="sol__caja">
-        {/* Encabezado fijo (sticky) mientras dura el apilado de las tarjetas; las tarjetas se apilan debajo de él (ver soluciones.css).
-            .sol__guia es el bloque donde es sticky: termina justo cuando la última tarjeta empieza a salir, así el encabezado se suelta
-            en ese momento y sube con todo lo demás. .sol__hueco reserva su sitio en el flujo (solo escritorio con movimiento). */}
-        <div className="sol__guia">
-          <div className="sol__cabeza">
+      <div className="sol__caja tt" style={{ '--tt-n': soluciones.length } as CSSProperties}>
+        {/* Efecto "texto quieto + tarjetas que lo cubren" (texto-tapado.css): el encabezado se queda quieto y las tarjetas suben, se apilan
+            entre sí y lo tapan; al final todo sale junto. */}
+        <div className="tt__guia">
+          <div className="tt__texto sol__cabeza">
             <EncabezadoSeccion id="soluciones-h2" titulo={t.titulo} subtitulo={t.subtitulo} />
           </div>
         </div>
-        <div className="sol__hueco" aria-hidden="true"></div>
-        <ol className="sol__lista">
+        <div className="tt__hueco" aria-hidden="true"></div>
+        <ol className="sol__lista tt__tapas">
           {soluciones.map((s, i) => (
-            <li key={s.id} className="sol__item" style={{ '--i': i } as CSSProperties}>
+            <li key={s.id} className="sol__item tt__tapa" style={{ '--i': i } as CSSProperties}>
               <article className="sol__card">
                 <div className="sol__texto">
                   {/* Número, título y descripción forman un solo bloque compacto */}
@@ -45,7 +45,7 @@ export default function Soluciones() {
         </ol>
       </div>
       <TemaFondo />
-      <SolucionesPop />
+      <TextoTapado raiz="soluciones" />
     </section>
   );
 }
