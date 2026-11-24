@@ -7,4 +7,5 @@ export const IMG = {
   panelAgenda: { src: '/img/panel-agenda', width: 1920, height: 1200 },
   panelMovil: { src: '/img/panel-movil', width: 780, height: 1688 },
   logo: { src: '/img/logo-mad-blanco', width: 512, height: 512 },
+  logoNegro: { src: '/img/logo-mad-negro', width: 512, height: 512 },
 } as const satisfies Record<string, Imagen>;

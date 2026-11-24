@@ -106,6 +106,7 @@
   --sp-8: 4.5rem; /* 72 */
   --seccion-y: clamp(3.5rem, 2rem + 5vw, 6rem); /* aire vertical igual en todas las secciones (56→96px) */
   --gutter: 1rem; /* margen lateral en celular (16px) */
+  --margen-pagina: clamp(1rem, 3vw, 3.5rem); /* margen lateral de la cabecera y del título gigante del hero: van alineados */
   --ancho-max: 72rem; /* 1152px */
   --ancho-texto: 40rem; /* 640px */
   --alto-cabecera: 4rem; /* 64px */

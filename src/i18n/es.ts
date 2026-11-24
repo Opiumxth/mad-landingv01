@@ -16,12 +16,11 @@ export const es = {
   inicio: {
     // Metadatos de la home (título y descripción únicos en el sitio)
     title: 'MAD Software Studio | Webs, apps y automatización en Perú',
-    description: 'Estudio de software en Lima. Hacemos webs, apps y automatización para negocios de todo el Perú. Webs desde S/750.',
+    description: 'Estudio de software en Lima. Hacemos webs, apps y automatización para negocios de todo el Perú.',
     hero: {
       h1: 'Webs, apps y automatización para negocios de todo el Perú',
       h2: 'Estudio de software',
       cta: { texto: 'Hablemos', href: '/book' },
-      micro: 'Webs desde S/750',
     },
     // Mensaje prellenado del WhatsApp del pie de la home
     whatsappMensaje: 'Hola, quiero conversar con MAD Software Studio sobre un proyecto.',

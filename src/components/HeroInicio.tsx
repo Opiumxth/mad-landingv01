@@ -5,7 +5,7 @@ import './hero-inicio.css';
 const t = es.inicio.hero;
 
 // Hero de la home, como en la referencia: el frame pequeño arriba, y debajo el H1 (único de la página), "ESTUDIO DE SOFTWARE"
-// gigante como H2, el botón Hablemos y el precio de entrada. El frame crece al bajar mientras este texto sube por debajo.
+// gigante como H2, el botón Hablemos. El frame crece al bajar mientras este texto sube por debajo.
 // El texto no se anima: es lo primero que se pinta (LCP).
 export default function HeroInicio() {
   return (
@@ -19,7 +19,6 @@ export default function HeroInicio() {
           </div>
           <div className="ih__cta">
             <a className="btn btn--principal ih__btn" href={t.cta.href}>{t.cta.texto}</a>
-            <p className="ih__micro">{t.micro}</p>
           </div>
         </div>
         <div className="marco__espera" aria-hidden="true"></div>

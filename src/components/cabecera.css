@@ -1,12 +1,15 @@
-/* Cabecera estática, fondo claro (el mismo del hero). Logo a la izquierda y los tres enlaces a la derecha. */
+/* Cabecera estática, fondo claro (el mismo del hero). Tres zonas: emblema a la izquierda | "mad" al centro | enlaces a la derecha.
+   Los márgenes laterales son los mismos del título gigante del hero (--margen-pagina): quedan alineados con sus bordes. */
 .cab { position: relative; z-index: 40; background: var(--fondo-hero, var(--hueso)); color: var(--negro); --borde: var(--gris-linea); }
-.cab__fila { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4); min-height: var(--alto-cabecera); }
+.cab__fila { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; column-gap: var(--sp-4); min-height: var(--alto-cabecera); padding-inline: var(--margen-pagina); }
 
-/* Logo: "mad" en negro (currentColor). El área táctil mide 44 px como mínimo. */
-.cab__logo { display: grid; place-items: center; min-width: 2.75rem; min-height: 2.75rem; margin-left: -0.5rem; padding-inline: var(--sp-2); color: inherit; text-decoration: none; }
-.cab__mad { font-size: 2.5rem; padding-bottom: 0.25rem; }
+/* Emblema negro (sin fondo). El área táctil mide 44 px como mínimo. */
+.cab__emblema { display: grid; place-items: center; justify-self: start; width: 2.75rem; height: 2.75rem; margin-left: -0.25rem; }
+.cab__emblema img { width: 2.5rem; height: 2.5rem; }
+/* "mad" en negro (currentColor), al centro */
+.cab__mad { font-size: 2.5rem; padding-bottom: 0.25rem; justify-self: center; }
 
-/* Celular: botón de menú a la derecha */
+.cab__der { display: flex; align-items: center; justify-content: flex-end; }
 .cab__nav { display: none; }
 .cab__menu { display: inline-grid; place-items: center; width: 2.75rem; height: 2.75rem; margin-right: -0.625rem; padding: 0; border: 0; background: transparent; color: inherit; cursor: pointer; }
 .cab__menu svg path { transition: transform var(--t-medio) var(--easing), opacity var(--t-rapido); transform-origin: center; transform-box: fill-box; }
@@ -16,18 +19,22 @@
 
 .cab__panel { position: absolute; top: 100%; left: 0; right: 0; background: var(--fondo-hero, var(--hueso)); border-bottom: 1px solid var(--borde); padding-block: var(--sp-2) var(--sp-4); }
 .cab__panel[hidden] { display: none; }
+.cab__lista { padding-inline: var(--margen-pagina); }
 .cab__panel li > a { display: flex; align-items: center; min-height: 2.75rem; font-size: var(--fs-medio); font-weight: var(--peso-texto-fuerte); text-decoration: none; }
 
 @media (min-width: 48rem) {
   .cab__menu, .cab__panel { display: none; }
   .cab__nav { display: block; }
-  /* Enlaces como en la referencia: "Trabajo, Soluciones, Nosotros", bien separados, con subrayado que se dibuja al pasar o enfocar */
-  .cab__nav ul { display: flex; align-items: center; }
-  .cab__nav li:not(:last-child)::after { content: ',' / ''; margin-right: var(--sp-6); }
+  .cab__emblema { width: 3.5rem; height: 3.5rem; }
+  .cab__emblema img { width: 3.25rem; height: 3.25rem; }
+  .cab__mad { font-size: 3rem; }
+  /* "Trabajo, Soluciones, Nosotros": la coma pegada a la palabra y un espacio normal después, como texto corrido.
+     El subrayado se dibuja solo bajo la palabra, al pasar el mouse o enfocar con teclado. */
+  .cab__nav ul { display: flex; align-items: center; gap: 0.3em; font-size: var(--fs-base); font-weight: var(--peso-texto-fuerte); }
+  .cab__nav li:not(:last-child)::after { content: ',' / ''; }
   .cab__nav a {
-    display: inline-flex; align-items: center; min-height: 2.75rem; font-size: var(--fs-base); font-weight: var(--peso-texto-fuerte); text-decoration: none;
+    display: inline-flex; align-items: center; min-height: 2.75rem; text-decoration: none;
     background: linear-gradient(currentColor, currentColor) 0 calc(50% + 0.7em) / 0 1.5px no-repeat; transition: background-size var(--t-medio) var(--easing);
   }
   .cab__nav a:hover, .cab__nav a:focus-visible { background-size: 100% 1.5px; }
-  .cab__mad { font-size: 3rem; }
 }

@@ -15,6 +15,7 @@ const IMAGENES = [
   { nombre: 'panel-agenda', archivo: 'demo/panel-agenda.webp', anchos: TODOS },
   { nombre: 'panel-movil', archivo: 'demo/panel-movil.webp', anchos: TODOS },
   { nombre: 'logo-mad-blanco', archivo: 'logo-mad-blanco.webp', anchos: [40, 80] },
+  { nombre: 'logo-mad-negro', archivo: 'logo-mad-negro.webp', anchos: [80, 160] }, // cabecera (fondo claro)
 ];
 
 await mkdir(SALIDA, { recursive: true });
