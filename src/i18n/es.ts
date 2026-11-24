@@ -38,6 +38,10 @@ export const es = {
     subtitulo: 'Desde una página web hasta un sistema a la medida: diseñamos, desarrollamos y automatizamos lo que tu negocio necesita para trabajar mejor.', // ⚠ provisional
     enlaceEtiqueta: (titulo: string) => `Ver solución: ${titulo}`,
   },
+  // Sección "Cómo trabajamos" de la home
+  comoTrabajamos: {
+    titulo: 'Cómo trabajamos', // ⚠ provisional
+  },
 } as const;
 
 export type Diccionario = typeof es;
