@@ -1,0 +1,67 @@
+/* Sección "Soluciones": tarjetas oscuras (negro / grafito) sobre el fondo hueso. Colores, tipografía, radio y espaciados salen de tokens.css.
+   El cobalto no se usa aquí (es solo fondo de botón). */
+.sol { background: var(--fondo-hero); color: var(--negro); scroll-margin-top: var(--alto-cabecera); padding-block: var(--seccion-y); }
+.sol__titulo { text-align: center; padding-inline: var(--margen-pagina); }
+
+.sol__lista { display: grid; gap: var(--sp-4); margin-top: var(--sp-6); padding-inline: var(--margen-pagina); max-width: calc(var(--ancho-max) + 2 * var(--margen-pagina)); margin-inline: auto; }
+
+/* Tarjeta: una columna en celular; las pares usan grafito y las impares negro, para distinguir una de otra al apilarse */
+.sol__card {
+  --fondo: var(--negro); --fondo-hover: var(--grafito);
+  position: relative; display: grid; gap: var(--sp-5); height: 100%;
+  padding: var(--sp-5); border-radius: var(--radio-lg); border: 1px solid var(--gris-borde-osc);
+  background: var(--fondo); color: var(--hueso);
+}
+.sol__item:nth-child(even) .sol__card { --fondo: var(--grafito); --fondo-hover: var(--negro); }
+.sol__texto { display: grid; align-content: start; gap: var(--sp-3); }
+.sol__numero { font-family: var(--f-etiqueta); font-weight: var(--peso-etiqueta); font-size: var(--fs-grande); letter-spacing: var(--ls-etiqueta); color: var(--texto-osc-suave); }
+.sol__card h3 { color: var(--blanco); }
+.sol__desc { max-width: 28rem; color: var(--texto-osc-suave); }
+.sol__enlace { justify-self: start; display: inline-flex; align-items: center; min-height: 2.75rem; margin-top: var(--sp-2); font-weight: var(--peso-texto-fuerte); color: var(--blanco); text-underline-offset: 0.25em; text-decoration-thickness: 1.5px; text-decoration-line: none; }
+/* Enlace extendido: el área pulsable es toda la tarjeta */
+.sol__enlace::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }
+/* Foco de teclado: el aro rodea toda la tarjeta, no solo el texto */
+.sol__enlace:focus-visible { outline: none; box-shadow: none; text-decoration-line: underline; }
+.sol__card:has(.sol__enlace:focus-visible) { outline: 3px solid var(--negro); outline-offset: 3px; box-shadow: 0 0 0 6px var(--blanco); }
+@media (hover: hover) {
+  .sol__card { transition: background-color var(--t-medio) var(--easing); }
+  .sol__card:hover { background: var(--fondo-hover); cursor: pointer; }
+  .sol__card:hover .sol__enlace { text-decoration-line: underline; }
+}
+
+/* Espacio visual provisional (degradado de la paleta; el ángulo cambia por tarjeta) */
+.sol__visual { min-height: 10rem; border-radius: var(--radio); background: linear-gradient(var(--ang, 135deg), var(--gris-oscuro) 0%, var(--negro) 100%); border: 1px solid var(--gris-borde-osc); }
+.sol__item:nth-child(2) .sol__visual { --ang: 225deg; }
+.sol__item:nth-child(3) .sol__visual { --ang: 315deg; }
+.sol__item:nth-child(4) .sol__visual { --ang: 45deg; }
+
+/* Escritorio (≥ 900 px) y con movimiento permitido: dos columnas y apilado con sticky.
+   Cada tarjeta se pega arriba con 24 px más que la anterior (96 px + 24 px × n); la siguiente sube y la tapa dejando asomar su borde.
+   En celular o con movimiento reducido: una tarjeta debajo de otra, sin sticky. */
+@media (min-width: 56.25rem) {
+  .sol__card { grid-template-columns: 1fr 1fr; gap: var(--sp-6); padding: var(--sp-7); }
+  .sol__texto { grid-template-rows: auto auto 1fr auto; align-content: stretch; }
+  .sol__enlace { align-self: end; }
+  .sol__visual { min-height: 0; }
+}
+@media (min-width: 56.25rem) and (prefers-reduced-motion: no-preference) {
+  .sol__lista { gap: var(--sp-6); }
+  /* Relleno al final de la lista: dentro del bloque donde las tarjetas se pegan, así la pila completa se mantiene un trecho antes de salir */
+  .sol__lista::after { content: ''; height: var(--sp-8); }
+  .sol__item {
+    position: sticky; top: calc(var(--alto-cabecera) + var(--sp-4) + var(--i) * var(--sp-5));
+    height: max(18rem, min(26rem, calc(100svh - 14rem)));
+  }
+  /* Mejora: la tarjeta tapada se reduce un poco mientras la siguiente sube (solo donde hay animaciones por scroll) */
+  @supports (animation-timeline: view()) and (timeline-scope: --a) {
+    .sol__lista { timeline-scope: --sol-2, --sol-3, --sol-4; }
+    .sol__item:nth-child(2) { view-timeline: --sol-2 block; }
+    .sol__item:nth-child(3) { view-timeline: --sol-3 block; }
+    .sol__item:nth-child(4) { view-timeline: --sol-4 block; }
+    .sol__item:nth-child(-n + 3) .sol__card { transform-origin: 50% 0; animation: sol-tapada linear both; animation-range: entry 40% entry 100%; }
+    .sol__item:nth-child(1) .sol__card { animation-timeline: --sol-2; }
+    .sol__item:nth-child(2) .sol__card { animation-timeline: --sol-3; }
+    .sol__item:nth-child(3) .sol__card { animation-timeline: --sol-4; }
+    @keyframes sol-tapada { to { transform: scale(0.95); } }
+  }
+}

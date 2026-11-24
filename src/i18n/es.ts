@@ -32,6 +32,12 @@ export const es = {
     avisoDemos: 'Demos de ejemplo',
     ruta: (slug: string) => `/trabajo/${slug}`,
   },
+  // Sección "Soluciones" de la home
+  soluciones: {
+    titulo: 'Soluciones',
+    enlace: 'Ver solución',
+    enlaceEtiqueta: (titulo: string) => `Ver solución: ${titulo}`,
+  },
 } as const;
 
 export type Diccionario = typeof es;
