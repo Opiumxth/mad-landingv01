@@ -1,7 +1,6 @@
 // Home nueva (cabecera + hero + frame). La home anterior (embudo con formulario) queda en el historial de git.
 import Cabecera from '../components/Cabecera';
 import HeroInicio from '../components/HeroInicio';
-import DemoFrame from '../components/DemoFrame';
 import Pie from '../components/Pie';
 import JsonLd from '../components/JsonLd';
 import { es } from '../i18n/es';
@@ -16,7 +15,6 @@ export default function Home() {
       <Cabecera />
       <main id="contenido" className="inicio">
         <HeroInicio />
-        <DemoFrame />
       </main>
       <Pie whatsappMensaje={es.inicio.whatsappMensaje} />
     </>

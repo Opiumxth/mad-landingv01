@@ -10,11 +10,12 @@ interface Props {
 
 const esVideo = (s: string) => /\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(s);
 
-// Frame 16:9 que crece al bajar. Mejora progresiva:
+// Escenario del frame 16:9 que crece al bajar. Va como PRIMER hijo de la pista del hero (ver HeroInicio y demo-frame.css):
+// pequeño bajo la cabecera, pegado (sticky) mientras el texto del hero sube por debajo, y crece hasta casi todo el ancho.
+// Mejora progresiva:
 //  - sin JavaScript, con prefers-reduced-motion o si falla la carga de las librerías, el CSS lo deja en su tamaño final (sin pin);
 //  - GSAP y ScrollTrigger se importan de forma dinámica cuando el navegador está libre o en la primera interacción.
 export default function DemoFrame({ src, poster, alt }: Props) {
-  const pista = useRef<HTMLDivElement>(null);
   const caja = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
 
@@ -31,7 +32,7 @@ export default function DemoFrame({ src, poster, alt }: Props) {
       iniciado = true;
       detener();
       import('./demo-frame-anim')
-        .then((m) => m.iniciar(pista.current!, caja.current!))
+        .then((m) => m.iniciar(caja.current!))
         .then((f) => { if (cancelado) f(); else limpiar = f; })
         .catch(() => { /* sin librerías: el frame queda como en el CSS */ });
     };
@@ -57,14 +58,10 @@ export default function DemoFrame({ src, poster, alt }: Props) {
   }, [src]);
 
   return (
-    <div className="marco">
-      <div ref={pista} className="marco__pista">
-        <div className="marco__escena">
-          <div ref={caja} className="marco__caja" aria-hidden={alt ? undefined : true} role={alt ? 'img' : undefined} aria-label={alt}>
-            {src && esVideo(src) && <video ref={video} src={src} poster={poster} muted playsInline loop preload="none" />}
-            {src && !esVideo(src) && <img src={src} alt="" width={1920} height={1080} loading="lazy" decoding="async" />}
-          </div>
-        </div>
+    <div className="marco__escena">
+      <div ref={caja} className="marco__caja" aria-hidden={alt ? undefined : true} role={alt ? 'img' : undefined} aria-label={alt}>
+        {src && esVideo(src) && <video ref={video} src={src} poster={poster} muted playsInline loop preload="none" />}
+        {src && !esVideo(src) && <img src={src} alt="" width={1920} height={1080} loading="lazy" decoding="async" />}
       </div>
     </div>
   );

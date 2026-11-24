@@ -1,32 +1,46 @@
-/* Frame que crece con el scroll. El CSS ya trae el estado inicial (A: pequeño) y el recorrido sticky, sin saltos de layout:
-   JS solo escribe transform y clip-path. Sin JS o con movimiento reducido: tamaño final, sin pin (ver el final del archivo).
-   Estados: A pequeño bajo el hero · B crece hasta casi todo el ancho, esquinas a 0 · C pegado un momento · D se suelta. */
-.marco { container-type: inline-size; position: relative; z-index: 2; pointer-events: none; }
-.marco__pista {
-  /* --w: ancho final del frame = todo el ancho (o, si la pantalla es baja y ancha, lo que permita la altura para no pasarse de 100svh) */
+/* Frame que crece con el scroll, como en la referencia: pequeño bajo la cabecera y sobre el título; al bajar se queda pegado
+   (sticky), el texto del hero sube por debajo de él y el frame crece hasta casi todo el ancho, con esquinas a 0.
+   El CSS ya trae el estado inicial (A) y la geometría, sin saltos de layout: JS solo escribe transform y clip-path.
+   Estados: A pequeño · B crece · C pegado un momento · D se suelta y sigue la página.
+   Sin JS o con movimiento reducido: tamaño final, sin pin (ver el final del archivo). */
+.ih__pista {
+  /* --w: ancho final del frame = todo el ancho (o, si la pantalla es baja y ancha, lo que permita la altura sin pasar de 100svh) */
   --w: min(100cqi, 177.78svh);
   --hf: calc(var(--w) * 0.5625); /* alto final, 16:9 */
-  --a: 0.85; /* escala inicial: ~85% del ancho en celular */
+  --a: 0.7; /* escala inicial: el frame pequeño mide ~70% del ancho en celular */
   --r: 8px; /* esquinas al inicio, en pantalla */
-  --recorrido: 50svh; /* scroll mientras está pegado (más corto en celular) */
-  height: calc(var(--hf) + var(--recorrido));
-  /* Sube la pista para que el frame pequeño quede justo debajo del hero (el escenario mide lo que el frame final) */
-  margin-top: calc(var(--sp-5) - var(--hf) * (1 - var(--a)) / 2);
+  --hs: calc(var(--hf) * var(--a)); /* alto del frame pequeño */
+  --hueco: var(--sp-5); /* aire entre el frame pequeño y el H1 */
+  /* Si la pantalla es alta (celular), el frame final centrado queda más abajo que el pequeño: el escenario crece ese tramo */
+  --extra: max(0px, calc((100svh - var(--hf)) / 2 - var(--tope)));
+  --mantener: 30svh; /* scroll extra con el frame ya grande y pegado (estado C) */
+  /* Aire bajo el escenario hasta el borde de la pantalla: así el pie no asoma mientras el frame todavía crece (en celular sobra pantalla) */
+  padding-bottom: max(0px, calc(100svh - min((100svh - var(--hf)) / 2, var(--tope)) - var(--hf) - var(--extra)));
 }
-.marco__escena { position: sticky; top: calc((100svh - var(--hf)) / 2); height: var(--hf); display: grid; place-items: center; }
+@media (min-width: 48rem) {
+  .ih__pista { --a: 0.34; --mantener: 40svh; }
+}
+
+/* Escenario sticky: mide lo que el frame final (+ --extra) pero solo ocupa en el flujo el alto del frame pequeño,
+   por eso el margen inferior negativo; así el H1 empieza justo debajo del frame pequeño. */
+.marco__escena {
+  position: sticky; top: min(calc((100svh - var(--hf)) / 2), var(--tope)); z-index: 2; pointer-events: none;
+  height: calc(var(--hf) + var(--extra));
+  margin-bottom: calc(var(--hs) - var(--hf) - var(--extra) + var(--hueco));
+  display: flex; justify-content: center; align-items: flex-start;
+}
 .marco__caja {
-  position: relative; width: var(--w); height: var(--hf); overflow: hidden; background: var(--acento);
-  transform: scale(var(--a)); clip-path: inset(0 round calc(var(--r) / var(--a))); will-change: transform;
+  position: relative; flex: none; width: var(--w); height: var(--hf); overflow: hidden; background: var(--acento);
+  transform-origin: 50% 0; transform: scale(var(--a)); clip-path: inset(0 round calc(var(--r) / var(--a))); will-change: transform;
 }
 .marco__caja video, .marco__caja img { width: 100%; height: 100%; object-fit: cover; }
+/* Cola: el scroll extra mientras el frame está pegado. Con el texto que sube, el escenario se suelta cuando termina la pista. */
+.marco__cola { order: 2; height: calc(var(--mantener) + var(--hf) + var(--extra) - var(--hs) - var(--hueco)); }
 
-@media (min-width: 48rem) {
-  .marco__pista { --a: 0.55; --recorrido: 100svh; }
-}
-
-/* Final sin animación: sin JavaScript, con prefers-reduced-motion */
+/* Final sin animación: sin JavaScript, con prefers-reduced-motion. El texto queda arriba (lo importante) y el frame debajo, completo. */
 @media (prefers-reduced-motion: reduce), (scripting: none) {
-  .marco__pista { height: auto; margin-top: var(--sp-5); }
-  .marco__escena { position: static; height: auto; }
+  .ih__pista { padding-bottom: 0; }
+  .marco__escena { order: 3; position: static; height: auto; margin: var(--sp-6) 0 0; }
   .marco__caja { transform: none; clip-path: none; will-change: auto; }
+  .marco__cola { display: none; }
 }

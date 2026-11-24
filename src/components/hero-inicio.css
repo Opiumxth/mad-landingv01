@@ -1,10 +1,17 @@
 /* La home entera (hero + frame) va sobre --fondo-hero. */
 .inicio { background: var(--fondo-hero); }
 /* Hero de la home. Fondo: --fondo-hero (color sólido; el degradado lo pone Mathias en tokens.css). */
-.ih { background: var(--fondo-hero); color: var(--negro); --suave: var(--texto-claro-suave); padding-block: clamp(1.5rem, 4vw, 3.5rem) var(--sp-6); }
-.ih__in { display: grid; justify-items: center; gap: var(--sp-5); width: 100%; max-width: 100rem; margin-inline: auto; padding-inline: var(--gutter); text-align: center; }
+.ih {
+  --tope: 5.5rem; /* donde queda el frame pequeño: justo bajo la cabecera (64 px) + 24 px */
+  container-type: inline-size; background: var(--fondo-hero); color: var(--negro); --suave: var(--texto-claro-suave);
+  padding-top: calc(var(--tope) - var(--alto-cabecera));
+}
+/* Pista del hero (padre del escenario sticky del frame; ver demo-frame.css). Orden vertical, como en la referencia:
+   frame pequeño · H1 · ESTUDIO DE SOFTWARE · botón · precio. El frame crece y el texto sube por debajo. */
+.ih__pista { display: flex; flex-direction: column; }
+.ih__in { order: 1; display: grid; justify-items: center; gap: var(--sp-5); width: 100%; max-width: 100rem; margin-inline: auto; padding-inline: var(--gutter); text-align: center; }
 
-.ih__h1 { max-width: 34rem; font-size: clamp(1.125rem, 0.95rem + 0.8vw, 1.5rem); line-height: 1.25; letter-spacing: -0.01em; text-wrap: balance; }
+.ih__h1 { max-width: 34rem; font-size: clamp(1rem, 0.9rem + 0.5vw, 1.375rem); font-weight: 400; line-height: 1.3; letter-spacing: -0.01em; text-wrap: balance; }
 
 /* H2 gigante: el tamaño sale del ancho de su caja (unidades cqi), así llena el ancho sin desbordar.
    k = ancho del texto en em (medido con Alte Haas Bold: 5,94 em la línea más larga en dos líneas, 11,65 em en una) más ~5% de margen para la fuente de respaldo.
