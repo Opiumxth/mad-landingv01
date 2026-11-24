@@ -37,15 +37,14 @@
 /* ---- Efecto hover del botón "Hablemos" ----
    Inspirado en "Interactive Hover Button" (Magic UI, MIT, crédito @AayushBharti), reescrito en CSS plano con los tokens del proyecto.
    Reposo: igual que siempre (--acento con texto blanco). Hover o foco de teclado: un punto de --negro crece desde la esquina hasta llenar el
-   botón, el texto sale hacia la derecha y entra, desde la derecha, una capa con el mismo texto (aria-hidden) y una flecha. Blanco sobre
+   botón, el texto sale hacia la derecha y entra, desde la derecha, una capa con el mismo texto (aria-hidden), sin icono. Blanco sobre
    --negro contrasta 19,8:1. El hover solo se aplica en dispositivos con puntero (en táctil el botón se ve completo, sin estados pegados). */
 .ih__btn { position: relative; overflow: hidden; isolation: isolate; transition: border-color var(--t-medio) var(--easing); }
 .ih__btn-txt { display: inline-block; transition: transform var(--t-medio) var(--easing), opacity var(--t-medio) var(--easing); }
 .ih__btn-hover {
-  position: absolute; inset: 0; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 0.25rem; /* texto + flecha caben con ~4 px de aire a cada lado: el botón no cambia de ancho */
+  position: absolute; inset: 0; z-index: 2; display: flex; align-items: center; justify-content: center; /* solo el texto, centrado igual que en reposo: el botón no cambia de ancho */
   opacity: 0; transform: translateX(3rem); transition: transform var(--t-medio) var(--easing), opacity var(--t-medio) var(--easing);
 }
-.ih__btn-hover svg { flex: none; }
 .ih__btn-fondo {
   position: absolute; z-index: 1; left: 20%; top: 40%; width: 0.5rem; height: 0.5rem; border-radius: var(--radio); background: var(--negro);
   opacity: 0; transform: scale(1); transition: left var(--t-medio) var(--easing), top var(--t-medio) var(--easing), width var(--t-medio) var(--easing), height var(--t-medio) var(--easing), transform var(--t-medio) var(--easing), opacity var(--t-medio) var(--easing);

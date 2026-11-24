@@ -24,9 +24,6 @@ export default function HeroInicio() {
               <span className="ih__btn-txt">{t.cta.texto}</span>
               <span className="ih__btn-hover" aria-hidden="true">
                 <span>{t.cta.texto}</span>
-                <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" focusable="false">
-                  <path d="M2 8h11M9 3.5 13.5 8 9 12.5" />
-                </svg>
               </span>
               <span className="ih__btn-fondo" aria-hidden="true"></span>
             </a>
