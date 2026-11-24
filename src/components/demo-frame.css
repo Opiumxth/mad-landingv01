@@ -14,10 +14,10 @@
   /* Si la pantalla es alta (celular), el frame final centrado queda más abajo que el pequeño: el escenario crece ese tramo */
   --extra: max(0px, calc((100svh - var(--hf)) / 2 - var(--tope)));
   --mantener: 30svh; /* scroll extra con el frame ya grande y pegado (estado C) */
-  --texto: calc(8.5rem + 0.304 * 100cqi); /* alto estimado del texto del hero (H1 + título en 2 líneas + botón), para centrar el conjunto. Medido a 390 y 600 px */
+  --texto: calc(6.7rem + 0.304 * 100cqi); /* alto estimado del texto del hero (H1 + título en 2 líneas + botón), para centrar el conjunto. Medido a 390 y 600 px */
 }
 @media (min-width: 48rem) {
-  .ih { --a: 0.34; --mantener: 40svh; --texto: calc(9.5rem + 0.0773 * 100cqi); /* título en una línea; medido de 820 a 1920 px (error < 30 px) */ }
+  .ih { --a: 0.34; --mantener: 40svh; --texto: calc(6.8rem + 0.0773 * 100cqi); /* título en una línea; medido de 820 a 1920 px (error < 30 px) */ }
 }
 
 /* Escenario sticky: mide lo que el frame final (+ --extra) pero solo ocupa en el flujo el alto del frame pequeño,

@@ -109,7 +109,7 @@
   --margen-pagina: clamp(1rem, 3vw, 3.5rem); /* margen lateral de la cabecera y del título gigante del hero: van alineados */
   --ancho-max: 72rem; /* 1152px */
   --ancho-texto: 40rem; /* 640px */
-  --alto-cabecera: 4rem; /* 64px */
+  --alto-cabecera: 5rem; /* 80px */
 
   /* ---- Radio de esquinas: un solo criterio para botones, campos, tarjetas y marcos.
      8px: suave pero serio. Pon --radio: 0px para volver a esquinas rectas. ---- */

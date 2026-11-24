@@ -2,8 +2,8 @@
 .inicio { background: var(--fondo-hero); }
 /* Hero de la home. Fondo: --fondo-hero (color sólido; el degradado lo pone Mathias en tokens.css). */
 .ih {
-  --tope: 5.5rem; /* donde se pega el frame (mínimo): justo bajo la cabecera (64 px) + 24 px */
-  container-type: inline-size; background: var(--fondo-hero); color: var(--negro); --suave: var(--texto-claro-suave);
+  --tope: calc(var(--alto-cabecera) + 1.5rem); /* donde se pega el frame (mínimo): justo bajo la cabecera + 24 px */
+  container-type: inline-size; overflow-x: clip; background: var(--fondo-hero); color: var(--negro); --suave: var(--texto-claro-suave);
 }
 /* Pista del hero (padre del escenario sticky del frame; ver demo-frame.css). Orden vertical, como en la referencia:
    frame pequeño · H1 · ESTUDIO DE SOFTWARE · botón · precio. El frame crece y el texto sube por debajo. */
@@ -12,9 +12,21 @@
   /* Centra el conjunto (frame pequeño + texto) en la primera pantalla, como en la referencia. --texto es una estimación del alto del texto. */
   padding-top: max(calc(var(--tope) - var(--alto-cabecera)), calc((100svh - var(--alto-cabecera) - var(--hs) - var(--hueco) - var(--texto)) / 2));
 }
-.ih__in { order: 1; display: grid; justify-items: center; gap: var(--sp-5); width: 100%; padding-inline: var(--margen-pagina); text-align: center; }
+.ih__in { order: 1; display: grid; justify-items: center; gap: var(--sp-3); width: 100%; padding-inline: var(--margen-pagina); text-align: center; }
 
-.ih__h1 { max-width: 34rem; font-size: clamp(1rem, 0.9rem + 0.5vw, 1.375rem); font-weight: 400; line-height: 1.3; letter-spacing: -0.01em; text-wrap: balance; }
+/* H1: en pantallas anchas, UNA línea con el mismo ancho que el H2 (mismos márgenes), palabras repartidas parejo (text-align-last: justify).
+   El tamaño sale del ancho (cqi) para que el texto natural llene ~93% de la línea y los espacios queden parejos, sin huecos grandes.
+   Mayúsculas por CSS (el HTML va en minúsculas), Alte Haas Regular. Debajo de 56,25rem (900 px): dos líneas centradas, sin justificar. */
+.ih__h1 {
+  max-width: 34rem; font-size: 1rem; font-weight: 400; text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.3; text-wrap: balance;
+}
+@media (min-width: 56.25rem) {
+  .ih__h1 {
+    /* 97,9% = lo que mide el texto del H2 dentro de su caja (11,65 em de 11,9 em): mismo ancho de línea que "ESTUDIO DE SOFTWARE" */
+    max-width: none; width: 97.9%; font-size: calc(100cqi / var(--h1-k, 50)); letter-spacing: 0.12em;
+    text-align: justify; text-align-last: justify; text-wrap: nowrap;
+  }
+}
 
 /* H2 gigante: el tamaño sale del ancho de su caja (unidades cqi), así llena el ancho sin desbordar.
    k = ancho del texto en em (medido con Alte Haas Bold: 5,94 em la línea más larga en dos líneas, 11,65 em en una) más ~1,5% de margen para la fuente de respaldo (el título ocupa casi todo el ancho entre los márgenes de página).

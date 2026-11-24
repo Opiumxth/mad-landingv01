@@ -15,10 +15,10 @@ export const es = {
   },
   inicio: {
     // Metadatos de la home (título y descripción únicos en el sitio)
-    title: 'MAD Software Studio | Webs, apps y automatización en Perú',
-    description: 'Estudio de software en Lima. Hacemos webs, apps y automatización para negocios de todo el Perú.',
+    title: 'MAD Software Studio | Páginas web, apps y automatización',
+    description: 'Estudio de software en Lima. Creamos páginas web, apps y automatización para negocios de todo el Perú.',
     hero: {
-      h1: 'Webs, apps y automatización para negocios de todo el Perú',
+      h1: 'Páginas web, apps y automatización para negocios de todo el Perú',
       h2: 'Estudio de software',
       cta: { texto: 'Hablemos', href: '/book' },
     },
