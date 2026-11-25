@@ -18,26 +18,22 @@
   font-size: var(--fs-grande); line-height: var(--lh-lead); cursor: pointer; list-style: none;
 }
 .faq__pregunta::-webkit-details-marker { display: none; }
-.faq__pregunta:focus-visible { outline: 3px solid var(--negro); outline-offset: 3px; box-shadow: none; border-radius: var(--radio); }
+.faq__pregunta:focus-visible { outline: 3px solid var(--tema-texto); outline-offset: 3px; box-shadow: none; border-radius: var(--radio); }
 
 /* Indicador dibujado con CSS: un "más" (dos barras) que gira y pasa a "menos" al abrir (la barra vertical se pliega) */
 .faq__marca { position: relative; flex: none; width: 1.125rem; height: 1.125rem; }
 .faq__marca::before, .faq__marca::after { content: ''; position: absolute; left: 0; top: 50%; width: 100%; height: 2px; margin-top: -1px; background: currentColor; border-radius: 1px; }
 .faq__marca::after { transform: rotate(90deg); }
-.faq__item[open] .faq__marca { transform: rotate(180deg); }
-.faq__item[open] .faq__marca::after { transform: rotate(0deg); }
+.faq__item[open]:not([data-cerrando]) .faq__marca { transform: rotate(180deg); }
+.faq__item[open]:not([data-cerrando]) .faq__marca::after { transform: rotate(0deg); }
 
 /* Respuesta: aparece directa (sin efecto de letras ni desenfoque) */
 .faq__respuesta { padding-bottom: var(--sp-5); }
 .faq__respuesta p { max-width: 40rem; font-size: var(--fs-base); line-height: var(--lh-texto); color: var(--tema-suave); }
 
-/* Apertura y cierre rápidos (~200 ms): transición del alto de la respuesta con ::details-content e interpolate-size donde el navegador lo permite;
-   si no, la apertura es inmediata. Sin transición con movimiento reducido. Las respuestas cerradas siguen en el DOM. */
+/* Apertura y cierre: la animación del alto y el fundido de la respuesta los hace FaqAcordeon.tsx (Web Animations API, ~350 ms con ease-out). Aquí solo el
+   indicador, con la misma duración y curva para ir sincronizado. Sin JS el acordeón sigue funcionando de forma nativa (inmediato); con movimiento
+   reducido no hay transición. */
 @media (prefers-reduced-motion: no-preference) {
-  .faq__marca, .faq__marca::after { transition: transform 200ms ease; }
-  @supports (selector(::details-content)) and (interpolate-size: allow-keywords) {
-    .faq__item { interpolate-size: allow-keywords; }
-    .faq__item::details-content { block-size: 0; overflow: clip; transition: block-size 200ms ease, content-visibility 200ms allow-discrete; }
-    .faq__item[open]::details-content { block-size: auto; }
-  }
+  .faq__marca, .faq__marca::after { transition: transform 350ms cubic-bezier(0.22, 0.61, 0.36, 1); }
 }

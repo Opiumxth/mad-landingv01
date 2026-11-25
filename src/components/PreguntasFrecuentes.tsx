@@ -1,5 +1,6 @@
 import EncabezadoSeccion from './EncabezadoSeccion';
 import EnlaceTexto from './EnlaceTexto';
+import FaqAcordeon from './FaqAcordeon';
 import { preguntas } from '../datos/faq';
 import { es } from '../i18n/es';
 import './preguntas-frecuentes.css';
@@ -8,7 +9,7 @@ const t = es.faq;
 
 // Sección "Preguntas frecuentes" (#faq): tema claro, sin franja. Dos columnas: a la izquierda el encabezado estandarizado (H2 + subtítulo con revelado) y
 // el enlace de texto; a la derecha el acordeón. Construido desde cero con <details>/<summary> nativos: `name` compartido para que solo una pregunta esté
-// abierta a la vez; las respuestas cerradas siguen en el HTML. Referencia solo de layout: "text-reveal-faqs" (Ruixen UI, 21st.dev); su código no se usó.
+// abierta a la vez (sin JS); con JS, FaqAcordeon.tsx anima la apertura y el cierre con la Web Animations API. Las respuestas cerradas siguen en el HTML. Referencia solo de layout: "text-reveal-faqs" (Ruixen UI, 21st.dev); su código no se usó.
 export default function PreguntasFrecuentes() {
   return (
     <section id="faq" className="faq" aria-labelledby="faq-h2">
@@ -31,6 +32,7 @@ export default function PreguntasFrecuentes() {
           ))}
         </div>
       </div>
+      <FaqAcordeon />
     </section>
   );
 }
