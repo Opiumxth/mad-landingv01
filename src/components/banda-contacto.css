@@ -1,21 +1,36 @@
-/* CTA de la home: panel ancho de esquinas redondeadas con fondo claro tipo mármol sutil, hecho solo con degradados suaves de los tokens (blanco, hueso y gris
-   claro; sin imagen). Tema claro de la página. Colores, tipografía y espaciados salen de tokens.css; el cobalto es solo el fondo del botón. */
-.con { color: var(--tema-texto); scroll-margin-top: var(--alto-cabecera); padding-block: var(--seccion-y); }
-.con__panel {
-  display: grid; justify-items: center; gap: var(--sp-6); text-align: center;
-  max-width: calc(var(--ancho-max) + 2 * var(--margen-pagina)); margin-inline: auto;
-  /* En celular el panel ocupa el ancho con los márgenes de la página; el aire interior crece con la pantalla */
-  width: calc(100% - 2 * var(--margen-pagina)); padding: clamp(2.5rem, 7vw, 6rem) clamp(1.25rem, 5vw, 4rem);
-  border-radius: calc(var(--radio) * 3); /* 24 px: esquinas bien redondeadas, derivadas del --radio */
-  /* Mármol sutil: luz blanca arriba a la izquierda, una veta gris muy suave abajo a la derecha y otra tenue en diagonal, sobre un degradado blanco → hueso */
-  background:
-    radial-gradient(90% 70% at 12% 8%, color-mix(in srgb, var(--blanco) 95%, transparent) 0%, transparent 60%),
-    radial-gradient(70% 60% at 88% 92%, color-mix(in srgb, var(--gris-claro) 28%, transparent) 0%, transparent 62%),
-    linear-gradient(115deg, transparent 38%, color-mix(in srgb, var(--gris-claro) 14%, transparent) 46%, transparent 54%, transparent 70%, color-mix(in srgb, var(--blanco) 55%, transparent) 76%, transparent 84%),
-    linear-gradient(135deg, var(--blanco) 0%, var(--hueso) 55%, color-mix(in srgb, var(--gris-claro) 20%, var(--hueso)) 100%);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gris-claro) 35%, transparent);
+/* CTA de la home: sin panel, marco ni centrado. Sección sobre el mismo fondo hueso del resto (tema claro de la página), con márgenes generosos arriba y abajo y todo
+   alineado a la izquierda sobre el mismo borde y ancho de contenedor que las demás secciones (como .faq__caja). Colores, tipografía y espaciados salen de tokens.css;
+   el cobalto es solo el fondo del botón primario. */
+.con { position: relative; overflow-x: clip; color: var(--tema-texto); scroll-margin-top: var(--alto-cabecera); padding-block: calc(var(--seccion-y) * 1.5); }
+.con__caja { position: relative; z-index: 1; max-width: calc(var(--ancho-max) + 2 * var(--margen-pagina)); margin-inline: auto; padding-inline: var(--margen-pagina); display: grid; justify-items: start; gap: var(--sp-5); text-align: left; }
+
+/* Título grande y liviano: Alte Haas Regular (no Bold), interlineado ajustado, claramente mayor que los títulos de sección de arriba */
+.con__titulo { font-weight: 400; font-size: clamp(2.75rem, 6vw, 5rem); line-height: var(--lh-h1); letter-spacing: var(--ls-h1); text-wrap: balance; }
+/* Subtítulo en gris (--tema-suave: 6,3:1 sobre hueso; el gris medio no llega a 4,5:1), unos 40 caracteres por línea, con palabras destacadas en el color principal */
+.con__sub { max-width: 40ch; font-size: clamp(1.25rem, 2.2vw, 1.5rem); line-height: var(--lh-lead); color: var(--tema-suave); }
+.con__enfasis { font-weight: 400; color: var(--tema-texto); }
+
+/* Fila de dos botones, a la izquierda, con 12 px de separación. Mismo alto y radio los dos. */
+.con__botones { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+/* Secundario: blanco, borde fino, sombra muy suave, sin color de marca. Misma medida (alto mínimo, relleno, mayúsculas) que el primario; el borde fino va como anillo
+   interior para que el alto no cambie respecto al borde de 2 px del primario. */
+.btn.con__sec {
+  min-height: 2.75rem; padding: var(--sp-2) var(--sp-3); background: var(--blanco); color: var(--tema-texto); border-color: transparent;
+  text-transform: uppercase; letter-spacing: 0.03em;
+  box-shadow: inset 0 0 0 1px var(--gris-linea), 0 1px 2px color-mix(in srgb, var(--negro) 6%, transparent), 0 6px 14px -8px color-mix(in srgb, var(--negro) 14%, transparent);
+  transition: background-color var(--t-medio) var(--easing), box-shadow var(--t-medio) var(--easing);
 }
-/* Subtítulo en gris (el gris de texto suave del tema), también al terminar el revelado: se redefine --tema-texto solo para esa línea */
-.con .enc__sub { --tema-texto: var(--tema-suave); color: var(--tema-suave); }
-.con__accion { display: grid; justify-items: center; gap: var(--sp-3); }
+@media (hover: hover) { .btn.con__sec:hover { background: var(--hueso); box-shadow: inset 0 0 0 1px var(--negro), 0 1px 2px color-mix(in srgb, var(--negro) 6%, transparent); } }
+.btn.con__sec:focus-visible { outline: 3px solid var(--negro); outline-offset: 3px; box-shadow: inset 0 0 0 1px var(--negro); }
+@media (prefers-reduced-motion: reduce) { .btn.con__sec { transition: none; } }
+
 .con__precio { font-size: var(--fs-pequeno); line-height: var(--lh-lead); color: var(--tema-suave); }
+
+/* Arco decorativo: una curva muy fina y de contraste casi nulo que cruza el fondo detrás del contenido (de abajo a la izquierda a arriba a la derecha) */
+.con__arco { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; color: var(--tema-texto); opacity: 0.09; pointer-events: none; }
+
+/* Celular: sigue a la izquierda, el título baja de tamaño (clamp) y los botones se apilan a todo el ancho */
+@media (max-width: 37.4375rem) {
+  .con__botones { flex-direction: column; align-items: stretch; width: 100%; }
+  .con__botones .btn { width: 100%; }
+}

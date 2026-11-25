@@ -58,11 +58,12 @@ export const es = {
     subtitulo: 'Lo que suelen preguntarnos antes de empezar.', // ⚠ provisional
     enlace: { texto: '¿No encuentras tu respuesta? Escríbenos', href: '/book' },
   },
-  // CTA de la home (antes del pie)
+  // CTA de la home (antes del pie). Las palabras destacadas del subtítulo van entre asteriscos.
   contacto: {
     titulo: '¿Hablamos de tu proyecto?', // ⚠ provisional
-    subtitulo: 'Cuéntanos qué necesitas y nos ponemos en contacto contigo.', // ⚠ provisional
+    subtitulo: 'Cuéntanos *qué necesitas* y nos ponemos *en contacto* contigo.', // ⚠ provisional
     cta: { texto: 'Pide tu demo', href: '/book' },
+    cta2: { texto: 'Ver nuestro trabajo', href: '#trabajo' },
   },
 } as const;
 
