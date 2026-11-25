@@ -3,9 +3,9 @@ import EnlaceTexto from './EnlaceTexto';
 import { pie } from '../datos/pie';
 import './pie-inicio.css';
 
-// Pie de la home: ocupa como mínimo una pantalla (la última), con el campo de píxeles arriba y el bloque de información pegado al fondo. Arriba, un campo de cuadritos azules (CampoPixeles) anclado abajo, con borde irregular hacia arriba, y la "mad" cursiva (Jane Austen, texto HTML)
+// Pie de la home: ocupa como mínimo una pantalla (la última), con el campo de píxeles arriba, el bloque de información justo debajo y la fila inferior anclada al fondo. Arriba, un campo de cuadritos azules (CampoPixeles) anclado abajo, con borde irregular hacia arriba, y la "mad" cursiva (Jane Austen, texto HTML)
 // centrada encima, en la zona llena. Al medio: "Estudio de software" / "Lima, Perú" a la izquierda y, pegado al borde derecho, un solo bloque con las columnas
-// Navegar y Conectar. Abajo: teléfono (enlace a WhatsApp), derechos, privacidad y "Volver arriba". Mantiene su propio aspecto claro: no cambia con el tema de la página.
+// Navegar y Conectar. Abajo: derechos y "Volver arriba". Mantiene su propio aspecto claro: no cambia con el tema de la página.
 // (El pie anterior, Pie.tsx, sigue en las páginas antiguas del embudo.)
 export default function PieInicio() {
   return (
@@ -14,7 +14,7 @@ export default function PieInicio() {
         <p className="pi__mad">mad</p>
       </CampoPixeles>
 
-      {/* Bloque de información: va pegado al fondo del pie (que mide al menos una pantalla); el espacio sobrante queda entre la "mad" y los enlaces */}
+      {/* Bloque de información: justo debajo de la "mad"; el espacio sobrante del pie (que mide al menos una pantalla) queda entre este bloque y la fila inferior */}
       <div className="pi__info">
         <div className="pi__medio">
           <div className="pi__marca">
@@ -35,16 +35,10 @@ export default function PieInicio() {
           </div>
         </div>
 
+        {/* Fila inferior, anclada al fondo del pie: solo los derechos y "Volver arriba", sin cajas, bordes ni líneas */}
         <div className="pi__base">
-          <a className="pi__tel" href={pie.telefono.href} rel="noopener" aria-label={pie.telefono.etiqueta}>
-            <span className="pi__tel-pre">{pie.telefono.prefijo}</span>
-            {pie.telefono.cajas.map((c) => <span key={c} className="pi__caja">{c}</span>)}
-          </a>
           <p className="pi__derechos">{pie.derechos}</p>
-          <div className="pi__legal">
-            <a className="pi__link" href={pie.privacidad.href}>{pie.privacidad.texto}</a>
-            <a className="pi__link pi__subir" href="#">{pie.subir} <span aria-hidden="true">↑</span></a>
-          </div>
+          <a className="pi__link pi__subir" href="#">{pie.subir} <span aria-hidden="true">↑</span></a>
         </div>
       </div>
     </footer>

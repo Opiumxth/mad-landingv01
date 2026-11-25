@@ -12,7 +12,7 @@
   background: var(--fondo-hero); color: var(--negro);
 }
 @media (max-width: 39.9375rem) { .pi { --pi-ref: clamp(240px, 38vh, 380px); --pi-recorte: calc(var(--pi-ref) * 0.18); } }
-.pi__info { margin-top: auto; }
+.pi__info { flex: 1; display: flex; flex-direction: column; } /* ocupa el resto del pie: la información arriba (junto a la "mad") y la fila inferior abajo */
 
 /* Campo de cuadritos + "mad": todo el ancho del pie; alto ≈ clamp(280px, 45vh, 520px) (menor en celular). La cuadrícula tenue de fondo coincide con las costuras
    que vacía el canvas (la celda y su posición las escribe CampoPixeles.tsx). */
@@ -44,7 +44,8 @@
 }
 
 /* Parte media: mismo contenedor que las demás secciones */
-.pi__medio { display: grid; gap: var(--sp-7); max-width: calc(var(--ancho-max) + 2 * var(--margen-pagina)); margin-inline: auto; padding: var(--sp-8) var(--margen-pagina) var(--sp-7); }
+/* Separación moderada entre la "mad" y el bloque de información: clamp(32px, 6vh, 72px). El espacio que sobra va debajo, entre este bloque y la fila inferior. */
+.pi__medio { display: grid; gap: var(--sp-7); width: 100%; max-width: calc(var(--ancho-max) + 2 * var(--margen-pagina)); margin-inline: auto; padding: clamp(32px, 6vh, 72px) var(--margen-pagina) var(--sp-7); }
 /* "ESTUDIO DE SOFTWARE": el mismo estilo tipográfico del título del hero (--f-marca, Bold, mayúsculas, tracking −0,02 em, interlineado 0,92) a un tamaño propio del pie (--fs-h3) */
 .pi__nombre { font-family: var(--f-marca); font-weight: 700; text-transform: uppercase; font-size: var(--fs-h3); line-height: 0.92; letter-spacing: -0.02em; }
 .pi__lugar { margin-top: var(--sp-2); color: var(--gris-texto); font-size: var(--fs-pequeno); text-transform: none; }
@@ -54,20 +55,16 @@
 .pi__etiqueta { margin: 0 0 var(--sp-1); font-family: var(--f-etiqueta); font-weight: var(--peso-etiqueta); font-size: var(--fs-etiqueta); letter-spacing: var(--ls-etiqueta); text-transform: uppercase; color: var(--gris-texto); }
 /* Enlaces: los del header (EnlaceTexto, enlace-texto.css): simples, y en hover y foco un poco de negrita con subrayado, sin cambiar el ancho */
 .pi__col ul { display: grid; gap: 0; }
-.pi__link:focus-visible, .pi__tel:focus-visible { outline: 3px solid var(--negro); outline-offset: 3px; box-shadow: none; }
 @media (min-width: 48rem) {
   .pi__medio { grid-template-columns: 1fr auto; align-items: start; }
   .pi__cols { flex-direction: row; gap: var(--sp-8); justify-self: end; }
 }
 
-/* Fila inferior */
-.pi__base { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-4) var(--sp-6); max-width: calc(var(--ancho-max) + 2 * var(--margen-pagina)); margin-inline: auto; padding: var(--sp-5) var(--margen-pagina) var(--sp-7); border-top: 1px solid var(--gris-linea); }
-.pi__tel { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); color: var(--negro); text-decoration: none; font-size: var(--fs-pequeno); }
-.pi__caja { display: inline-block; padding: 0.15rem 0.6rem; border: 1px solid var(--gris-linea); border-radius: var(--radio); font-size: var(--fs-pequeno); line-height: 1.4; letter-spacing: 0.02em; transition: border-color 150ms ease; }
-.pi__tel:hover .pi__caja, .pi__tel:focus-visible .pi__caja { border-color: var(--negro); }
+/* Fila inferior, anclada al fondo del pie (margin-top: auto): a la izquierda los derechos y a la derecha "Volver arriba"; sin cajas, bordes ni líneas */
+.pi__base { margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-2) var(--sp-6); width: 100%; max-width: calc(var(--ancho-max) + 2 * var(--margen-pagina)); margin-inline: auto; padding: var(--sp-5) var(--margen-pagina) var(--sp-6); }
 .pi__derechos { color: var(--gris-texto); font-size: var(--fs-pequeno); }
-.pi__legal { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2) var(--sp-5); }
 .pi__link { display: inline-flex; align-items: center; gap: var(--sp-2); min-height: var(--alto-tactil); font-size: var(--fs-pequeno); color: var(--negro); text-underline-offset: 0.25em; }
 .pi__link:hover { text-decoration: underline; }
-@media (max-width: 39.9375rem) { .pi__base { flex-direction: column; align-items: flex-start; } .pi__tel { max-width: 100%; } }
-@media (prefers-reduced-motion: reduce) { .pi__caja { transition: none; } }
+.pi__link:focus-visible { outline: 3px solid var(--negro); outline-offset: 3px; box-shadow: none; }
+/* Celular: apilados, los derechos arriba y "Volver arriba" debajo */
+@media (max-width: 39.9375rem) { .pi__base { flex-direction: column; align-items: flex-start; } }
