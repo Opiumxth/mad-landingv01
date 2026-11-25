@@ -4,9 +4,10 @@ import './enlace-texto.css';
 // la sección). Hover y foco de teclado: subrayado que se dibuja de izquierda a derecha y un poco más de negrita, sin cambiar el ancho.
 // `flecha`: añade una flecha diagonal (↗) al final, SVG en línea del mismo color y tamaño que el texto (aria-hidden), a ~4 px del texto, que se
 // desplaza unos 3 px hacia arriba a la derecha en hover y foco (sin desplazamiento con movimiento reducido).
-export default function EnlaceTexto({ texto, href, className = '', flecha = false }: { texto: string; href: string; className?: string; flecha?: boolean }) {
+// `externo`: se abre en otra pestaña (target _blank con rel noopener).
+export default function EnlaceTexto({ texto, href, className = '', flecha = false, externo = false }: { texto: string; href: string; className?: string; flecha?: boolean; externo?: boolean }) {
   return (
-    <a className={`enlace-texto${className ? ' ' + className : ''}`} href={href}>
+    <a className={`enlace-texto${className ? ' ' + className : ''}`} href={href} {...(externo ? { target: '_blank', rel: 'noopener' } : {})}>
       {texto}
       {flecha ? (
         <svg className="enlace-texto__flecha" viewBox="0 0 16 16" width="1em" height="1em" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">

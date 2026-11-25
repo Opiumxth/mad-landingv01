@@ -169,8 +169,10 @@ export default function CampoPixeles({ children }: { children?: ReactNode }) {
       celda = movil ? CELDA.movil : CELDA.escritorio;
       ancho = panel.clientWidth;
       alto = panel.clientHeight;
+      // La grilla sube hasta la mitad del CTA (35 % en celular), contada desde el borde superior real del bloque: el pie se solapa algo con el CTA
       const cta = document.getElementById('contacto');
-      ext = Math.round((cta ? cta.offsetHeight : 0) * (movil ? EXTENSION.movil : EXTENSION.escritorio));
+      const rc = cta?.getBoundingClientRect(), rp = panel.getBoundingClientRect();
+      ext = rc ? Math.max(0, Math.round(rp.top - (rc.top + rc.height * (1 - (movil ? EXTENSION.movil : EXTENSION.escritorio))))) : 0;
       total = alto + ext;
       panel.style.setProperty('--pi-ext', `${ext}px`); // el CSS estira el canvas hacia arriba esa cantidad
       canvas.width = Math.round(ancho * dpr);

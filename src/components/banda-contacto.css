@@ -1,7 +1,7 @@
 /* CTA de la home: sin panel ni marco, sobre el mismo fondo del resto (tema claro de la página), con márgenes generosos arriba y abajo y todo alineado a la DERECHA,
    pegado al borde derecho del mismo contenedor que usan las demás secciones (como .faq__caja). El título y el subtítulo son los del encabezado estandarizado
    (encabezado.css: mismo tamaño y mismo revelado). Colores, tipografía y espaciados salen de tokens.css; el cobalto es solo el fondo del botón primario. */
-.con { position: relative; color: var(--tema-texto); scroll-margin-top: var(--alto-cabecera); padding-block: calc(var(--seccion-y) * 1.5); }
+.con { position: relative; color: var(--tema-texto); scroll-margin-top: var(--alto-cabecera); padding-block: calc(var(--seccion-y) * 1.5) 0; /* sin aire abajo: la "mad" del pie queda más cerca de los botones (el pie ya trae su propio espacio) */ }
 .con__caja { position: relative; z-index: 1; /* por encima del campo de píxeles del pie, que sube sobre la mitad baja del CTA */ max-width: calc(var(--ancho-max) + 2 * var(--margen-pagina)); margin-inline: auto; padding-inline: var(--margen-pagina); display: grid; justify-items: end; gap: var(--sp-6); text-align: right; }
 /* El encabezado alinea a la derecha solo en escritorio; aquí también en celular */
 .con .enc__titulo, .con .enc__sub { text-align: right; }
