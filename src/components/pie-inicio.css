@@ -51,9 +51,13 @@
 .pi__lugar { margin-top: var(--sp-2); color: var(--gris-texto); font-size: var(--fs-pequeno); text-transform: none; }
 /* Un solo bloque de columnas, pegado al borde derecho del contenedor, con espacio equilibrado entre ellas */
 .pi__cols { display: flex; flex-direction: column; gap: var(--sp-6); }
-/* Etiquetas de columna: pequeñas, mayúsculas, con tracking y en gris */
-.pi__etiqueta { margin: 0 0 var(--sp-1); font-family: var(--f-etiqueta); font-weight: var(--peso-etiqueta); font-size: var(--fs-etiqueta); letter-spacing: var(--ls-etiqueta); text-transform: uppercase; color: var(--gris-texto); }
-/* Enlaces: los del header (EnlaceTexto, enlace-texto.css): simples, y en hover y foco un poco de negrita con subrayado, sin cambiar el ancho */
+/* Títulos de columna (NAVEGAR, CONECTAR): Alte Haas Bold, mayúsculas, tracking leve y color principal */
+.pi__etiqueta { margin: 0 0 var(--sp-1); font-family: var(--f-alte); font-weight: 700; font-size: 0.8125rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--negro); }
+/* Enlaces: Alte Haas Regular en gris (el texto suave del pie, contraste ≥ 6:1); en hover y foco pasan al color principal con un poco de negrita y subrayado, sin cambiar el
+   ancho (la técnica de EnlaceTexto: sombras de texto sin desenfoque, no un cambio real de font-weight). Con movimiento reducido el cambio es instantáneo. */
+.pi__col .enlace-texto { font-family: var(--f-alte); font-weight: 400; color: var(--gris-texto); transition: color var(--t-medio) var(--easing), background-size var(--t-medio) var(--easing), text-shadow var(--t-medio) var(--easing); }
+.pi__col .enlace-texto:hover, .pi__col .enlace-texto:focus-visible { color: var(--negro); }
+@media (prefers-reduced-motion: reduce) { .pi__col .enlace-texto { transition: none; } }
 .pi__col ul { display: grid; gap: 0; }
 @media (min-width: 48rem) {
   .pi__medio { grid-template-columns: 1fr auto; align-items: start; }
