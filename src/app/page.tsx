@@ -7,7 +7,7 @@ import ComoTrabajamos from '../components/ComoTrabajamos';
 import Nosotros from '../components/Nosotros';
 import PreguntasFrecuentes from '../components/PreguntasFrecuentes';
 import BandaContacto from '../components/BandaContacto';
-import Pie from '../components/Pie';
+import PieInicio from '../components/PieInicio';
 import JsonLd from '../components/JsonLd';
 import { es } from '../i18n/es';
 import { metaPagina } from '../lib/seo';
@@ -28,7 +28,7 @@ export default function Home() {
         <PreguntasFrecuentes />
         <BandaContacto />
       </main>
-      <Pie whatsappMensaje={es.inicio.whatsappMensaje} />
+      <PieInicio />
     </>
   );
 }

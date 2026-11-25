@@ -1,0 +1,59 @@
+/* Pie de la home. Aspecto claro propio (no cambia con el tema de la página): fondo --fondo-hero, texto --negro y --gris-texto. Colores, tipografía y espaciados
+   salen de tokens.css; el cobalto solo aparece en el campo de cuadritos (tintes de azul) y en el hover de los enlaces. */
+.pi { background: var(--fondo-hero); color: var(--negro); }
+
+/* Campo de cuadritos + "mad": todo el ancho del pie; alto ≈ clamp(280px, 45vh, 520px) (menor en celular). La cuadrícula tenue de fondo coincide con las costuras
+   que vacía el canvas (la celda y su posición las escribe CampoPixeles.tsx). */
+.pi__campo {
+  --pi-alto: clamp(280px, 45vh, 520px); --pi-celda: 10px; --pi-costura: 1px; --pi-grid-x: 0px; --pi-grid-y: 0px;
+  position: relative; container-type: inline-size; overflow: clip; width: 100%; height: var(--pi-alto);
+}
+.pi__campo::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  --pi-gris: color-mix(in srgb, var(--gris-claro) 22%, transparent); /* gris muy claro de la paleta */
+  background-image:
+    linear-gradient(to right, transparent calc(var(--pi-celda) - var(--pi-costura)), var(--pi-gris) 0),
+    linear-gradient(to bottom, transparent calc(var(--pi-celda) - var(--pi-costura)), var(--pi-gris) 0);
+  background-size: var(--pi-celda) var(--pi-celda); background-position: var(--pi-grid-x) var(--pi-grid-y);
+}
+.pi__lienzo { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+@media (max-width: 39.9375rem) { .pi__campo { --pi-alto: clamp(240px, 38vh, 380px); } }
+
+/* "mad" cursiva (Jane Austen, texto HTML) centrada sobre los píxeles, en la zona llena (bajo el borde irregular). Ancho de la tinta ≈ 2,5 em: el tamaño busca ~65 %
+   del ancho del contenedor de contenido y se limita por el alto del bloque (la tinta mide ~0,64 em). Negro puro; el halo del canvas le deja cuadritos muy claros detrás. */
+.pi__mad {
+  position: absolute; left: 50%; top: 70%; margin: 0; z-index: 1; pointer-events: none; user-select: none;
+  font-family: var(--f-script); font-weight: 400; line-height: 1; white-space: nowrap; color: #000000;
+  font-size: min(calc(0.26 * min(100cqi, 72rem)), calc(0.72 * var(--pi-alto)));
+  transform: translate(-50%, calc(-50% + 0.075em)); /* centra la tinta (queda ~0,075 em por encima del centro de la caja de línea) */
+}
+
+/* Parte media: mismo contenedor que las demás secciones */
+.pi__medio { display: grid; gap: var(--sp-7); max-width: calc(var(--ancho-max) + 2 * var(--margen-pagina)); margin-inline: auto; padding: var(--sp-8) var(--margen-pagina) var(--sp-7); }
+.pi__nombre { font-size: var(--fs-h3); font-weight: var(--peso-titulo); line-height: var(--lh-h3); letter-spacing: var(--ls-titulo); }
+.pi__lugar { margin-top: var(--sp-1); color: var(--gris-texto); font-size: var(--fs-base); }
+/* Un solo bloque de columnas, pegado al borde derecho del contenedor, con espacio equilibrado entre ellas */
+.pi__cols { display: flex; flex-direction: column; gap: var(--sp-6); }
+.pi__etiqueta { margin: 0 0 var(--sp-3); font-family: var(--f-etiqueta); font-weight: var(--peso-etiqueta); font-size: var(--fs-etiqueta); letter-spacing: var(--ls-etiqueta); text-transform: uppercase; color: var(--gris-texto); }
+.pi__col ul { display: grid; gap: var(--sp-2); }
+/* Enlaces grandes. Hover y foco: fondo cobalto con texto blanco y esquinas --radio; el relleno está reservado desde el inicio (padding con margen negativo), así el texto no se mueve */
+.pi__enlace { display: inline-block; padding: 0.2em 0.55em; margin: -0.2em -0.55em; border-radius: var(--radio); font-size: var(--fs-grande); line-height: var(--lh-lead); color: var(--negro); text-decoration: none; transition: background-color 150ms ease, color 150ms ease; }
+.pi__enlace:hover, .pi__enlace:focus-visible { background: var(--acento); color: var(--acento-texto); }
+.pi__enlace:focus-visible, .pi__link:focus-visible, .pi__tel:focus-visible { outline: 3px solid var(--negro); outline-offset: 3px; box-shadow: none; }
+.pi__enlace:focus-visible { outline-offset: 1px; }
+@media (min-width: 48rem) {
+  .pi__medio { grid-template-columns: 1fr auto; align-items: start; }
+  .pi__cols { flex-direction: row; gap: var(--sp-8); justify-self: end; }
+}
+
+/* Fila inferior */
+.pi__base { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-4) var(--sp-6); max-width: calc(var(--ancho-max) + 2 * var(--margen-pagina)); margin-inline: auto; padding: var(--sp-5) var(--margen-pagina) var(--sp-7); border-top: 1px solid var(--gris-linea); }
+.pi__tel { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); color: var(--negro); text-decoration: none; font-size: var(--fs-pequeno); }
+.pi__caja { display: inline-block; padding: 0.15rem 0.6rem; border: 1px solid var(--gris-linea); border-radius: var(--radio); font-size: var(--fs-pequeno); line-height: 1.4; letter-spacing: 0.02em; transition: border-color 150ms ease; }
+.pi__tel:hover .pi__caja, .pi__tel:focus-visible .pi__caja { border-color: var(--negro); }
+.pi__derechos { color: var(--gris-texto); font-size: var(--fs-pequeno); }
+.pi__legal { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2) var(--sp-5); }
+.pi__link { display: inline-flex; align-items: center; gap: var(--sp-2); min-height: var(--alto-tactil); font-size: var(--fs-pequeno); color: var(--negro); text-underline-offset: 0.25em; }
+.pi__link:hover { text-decoration: underline; }
+@media (max-width: 39.9375rem) { .pi__base { flex-direction: column; align-items: flex-start; } .pi__tel { max-width: 100%; } }
+@media (prefers-reduced-motion: reduce) { .pi__enlace, .pi__caja { transition: none; } }
