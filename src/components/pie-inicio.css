@@ -6,17 +6,21 @@
    que vacía el canvas (la celda y su posición las escribe CampoPixeles.tsx). */
 .pi__campo {
   --pi-alto: clamp(280px, 45vh, 520px); --pi-celda: 10px; --pi-costura: 1px; --pi-grid-x: 0px; --pi-grid-y: 0px;
-  position: relative; container-type: inline-size; overflow: clip; width: 100%; height: var(--pi-alto);
+  --pi-ext: 0px; --pi-alcance: 0px; /* lo que el canvas cruza hacia arriba sobre el CTA, y lo que ha subido el campo según el scroll (los escribe CampoPixeles.tsx) */
+  position: relative; container-type: inline-size; overflow-x: clip; overflow-y: visible; width: 100%; height: var(--pi-alto);
 }
 .pi__campo::before {
-  content: ''; position: absolute; inset: 0; pointer-events: none;
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; top: calc(-1 * var(--pi-ext)); pointer-events: none;
+  /* La cuadrícula también cubre la zona extendida y se desvanece hacia arriba hasta donde ha subido el campo */
+  -webkit-mask-image: linear-gradient(to top, #000 0, #000 var(--pi-alto), transparent calc(var(--pi-alto) + var(--pi-alcance)));
+  mask-image: linear-gradient(to top, #000 0, #000 var(--pi-alto), transparent calc(var(--pi-alto) + var(--pi-alcance)));
   --pi-gris: color-mix(in srgb, var(--gris-claro) 22%, transparent); /* gris muy claro de la paleta */
   background-image:
     linear-gradient(to right, transparent calc(var(--pi-celda) - var(--pi-costura)), var(--pi-gris) 0),
     linear-gradient(to bottom, transparent calc(var(--pi-celda) - var(--pi-costura)), var(--pi-gris) 0);
   background-size: var(--pi-celda) var(--pi-celda); background-position: var(--pi-grid-x) var(--pi-grid-y);
 }
-.pi__lienzo { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.pi__lienzo { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: calc(100% + var(--pi-ext)); pointer-events: none; } /* más alto que el bloque: cruza hacia arriba sobre el CTA, sin mover el layout */
 @media (max-width: 39.9375rem) { .pi__campo { --pi-alto: clamp(240px, 38vh, 380px); } }
 
 /* "mad" cursiva (Jane Austen, texto HTML) centrada sobre los píxeles, en la zona llena (bajo el borde irregular). Ancho de la tinta ≈ 2,5 em: el tamaño busca ~65 %
