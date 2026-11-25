@@ -5,15 +5,15 @@ import { useEffect } from 'react';
 // puntos, en orden de aparición. Cada punto es un elemento y la fracción de la altura de la pantalla (contada desde arriba) a la que su borde superior
 // dispara el cambio al bajar; al subir ocurre lo contrario:
 //   1. Soluciones   → OSCURO cuando el bloque del título llega al 70 %.
-//   2. Nosotros     → CLARO  cuando su bloque de texto llega al 70 %.
-// Desde Nosotros hasta el final (FAQ, CTA y el paso al pie) la página se queda en CLARO: ya no hay cambio a oscuro en el CTA ni vuelta a claro en el pie
+//   2. Preguntas frecuentes → CLARO cuando su bloque del título llega al 70 %. (Cómo trabajamos y Nosotros siguen en oscuro.)
+// Desde Preguntas frecuentes hasta el final (CTA y el paso al pie) la página se queda en CLARO: ya no hay cambio a oscuro en el CTA ni vuelta a claro en el pie
 // (antes: Contacto → oscuro al 70 % y Pie → claro al 40 %).
 // Se activa con <html data-tema="oscuro">. La transición (~300 ms) la hace el CSS; con movimiento reducido es instantánea. Se lee la posición en cada scroll
 // (un IntersectionObserver no avisa si se salta de golpe más allá de un bloque, por ejemplo con la tecla Fin o al recargar abajo); en cada cuadro solo se
 // leen unas pocas posiciones y se cambia un atributo cuando hace falta. No renderiza nada.
 const PUNTOS: Array<{ selector: string; umbral: number; tema: 'oscuro' | 'claro' }> = [
   { selector: '#soluciones .sol__cabeza', umbral: 0.7, tema: 'oscuro' },
-  { selector: '#nosotros .tt__texto', umbral: 0.7, tema: 'claro' },
+  { selector: '#faq .faq__izq', umbral: 0.7, tema: 'claro' },
 ];
 
 export default function TemaFondo() {
