@@ -7,14 +7,16 @@ import { es } from '../i18n/es';
 import './cabecera.css';
 
 const t = es.cabecera;
+const ZONA_HOVER = 100; // px desde el borde superior de la pantalla
 
-// Cabecera estática (no fija), tres zonas: emblema a la izquierda | "mad" cursivo al centro | enlaces a la derecha.
+// Cabecera con la fila FIJA arriba (flota sobre el contenido, sin caja) y una banda de difuminado progresivo detrás (ver cabecera.css), tres zonas: emblema a la izquierda | "mad" cursivo al centro | enlaces a la derecha.
 // Celular (< 768 px): emblema | mad | botón de menú; el panel tiene los mismos tres enlaces.
 export default function Cabecera() {
   const [abierto, setAbierto] = useState(false);
   const boton = useRef<HTMLButtonElement>(null);
   const primeraVez = useRef(true);
   const panel = useRef<HTMLDivElement>(null);
+  const raiz = useRef<HTMLElement>(null);
 
   const cerrar = useCallback((devolverFoco: boolean) => {
     setAbierto(false);
@@ -44,8 +46,24 @@ export default function Cabecera() {
     };
   }, [abierto, cerrar]);
 
+  // Hover de la banda: con puntero, al acercar el cursor a la zona superior (~100 px) o al entrar al header, la banda se intensifica (clase `cab--cerca`).
+  // Sin estado de React: solo se toca la clase cuando cambia. Sin puntero fino (celular) no se activa.
+  useEffect(() => {
+    const el = raiz.current;
+    if (!el || !window.matchMedia('(hover: hover)').matches) return;
+    let cerca = false;
+    const poner = (v: boolean) => { if (v !== cerca) { cerca = v; el.classList.toggle('cab--cerca', v); } };
+    const alMover = (e: PointerEvent) => poner(e.clientY < ZONA_HOVER);
+    const alSalir = () => poner(false);
+    document.addEventListener('pointermove', alMover, { passive: true });
+    document.documentElement.addEventListener('mouseleave', alSalir);
+    return () => { document.removeEventListener('pointermove', alMover); document.documentElement.removeEventListener('mouseleave', alSalir); };
+  }, []);
+
   return (
-    <header className="cab">
+    <header className="cab" ref={raiz}>
+      {/* Banda de difuminado progresivo (decorativa): cinco capas con backdrop-filter creciente y un velo del color de fondo del tema */}
+      <div className="cab__bruma" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
       <div className="cab__fila">
         <a className="cab__emblema" href="/" aria-label={t.logoEtiqueta}>
           <Image src={IMG.logoNegro.src} alt="" width={48} height={48} loading="eager" />

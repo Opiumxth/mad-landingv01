@@ -1,42 +1,35 @@
-/* Cabecera estática. Tres zonas: emblema a la izquierda | "mad" al centro | enlaces a la derecha.
+/* Cabecera. Tres zonas: emblema a la izquierda | "mad" al centro | enlaces a la derecha, FLOTANDO sobre el contenido (sin barra, sin fondo, sin borde, sin sombra).
    Márgenes laterales: --margen-pagina en celular; en escritorio, además 7,5vw hacia el centro. Los enlaces son Regular (llevarán efecto hover).
-   Fondo y texto siguen el tema de la página (--tema-fondo / --tema-texto: claro por defecto, igual que el hero; oscuro más abajo).
+   · .cab (en el flujo) solo reserva el alto de la cabecera (--alto-cabecera) y pinta el fondo del tema detrás de esa franja inicial de la página.
+   · .cab__fila es la fila con el contenido, FIJA arriba; deja pasar los clics (solo el emblema, los enlaces y el botón de menú los reciben).
+   · .cab__bruma es una banda fija de ~112 px con DIFUMINADO PROGRESIVO: el contenido que pasa por detrás se ve cada vez más borroso hacia el borde superior
+     y nítido hacia abajo, sin corte. Son cinco capas con backdrop-filter de 1, 2, 4, 8 y 16 px (por el factor --bk), cada una enmascarada con un degradado lineal
+     que se apaga a distinta altura (las más borrosas, solo arriba); como se apilan, arriba el desenfoque suma ~19 px. Encima, un velo del color de fondo del
+     tema (--tema-fondo, ~45 % arriba → 0 abajo) para que el borroso no ensucie; sigue la transición de ~300 ms del tema. Con puntero, al acercar el cursor a
+     los ~100 px de arriba o al entrar al header (clase .cab--cerca), o con foco de teclado, la banda se intensifica (×1,4 de desenfoque y velo más presente,
+     200 ms). Sin backdrop-filter: solo el velo, más fuerte. Sin transiciones con movimiento reducido. */
+.cab { position: relative; z-index: 40; height: var(--alto-cabecera); background: var(--tema-fondo); color: var(--tema-texto); --borde: var(--gris-linea); }
+.cab__fila { position: fixed; top: 0; left: 0; right: 0; z-index: 2; pointer-events: none; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; column-gap: var(--sp-4); min-height: var(--alto-cabecera); padding-top: var(--sp-3); padding-inline: var(--margen-pagina); }
+.cab__emblema, .cab__nav, .cab__menu { pointer-events: auto; }
 
-   SUPERFICIE DE VIDRIO (glassmorfismo): detrás de la fila (.cab__fila::before) hay una lámina muy translúcida con desenfoque del fondo (backdrop-filter),
-   borde fino translúcido, una luz sutil en el borde superior y una sombra muy suave, con las esquinas de la marca (--radio). Todos sus colores salen de las
-   variables del tema, así que se adaptan en la misma transición de ~300 ms. Hover o foco de teclado: gana un poco de opacidad (la capa ::after) y desenfoque
-   (transición de 200 ms). Sin soporte de backdrop-filter, el fondo es más opaco. Sin transiciones con movimiento reducido. */
-.cab {
-  position: relative; z-index: 40; background: var(--tema-fondo); color: var(--tema-texto); --borde: var(--gris-linea);
-  --vidrio-fondo: color-mix(in srgb, var(--tema-fondo) 38%, transparent);
-  --vidrio-borde: color-mix(in srgb, var(--tema-texto) 14%, transparent);
-  --vidrio-luz: color-mix(in srgb, var(--blanco) 70%, transparent);
-  --vidrio-sombra: color-mix(in srgb, var(--negro) 26%, transparent);
-  --vidrio-realce: color-mix(in srgb, var(--blanco) 22%, transparent);
-  --vidrio-blur: blur(16px) saturate(1.4);
-}
-:root[data-tema='oscuro'] .cab { --vidrio-luz: color-mix(in srgb, var(--blanco) 20%, transparent); --vidrio-realce: color-mix(in srgb, var(--blanco) 10%, transparent); }
-.cab__fila { position: relative; isolation: isolate; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; column-gap: var(--sp-4); min-height: var(--alto-cabecera); padding-top: var(--sp-3); padding-inline: var(--margen-pagina); }
-.cab__fila::before, .cab__fila::after { content: ''; position: absolute; z-index: -1; inset: var(--sp-1) calc(var(--margen-pagina) - var(--sp-2)); border-radius: var(--radio); pointer-events: none; }
-.cab__fila::before {
-  background: var(--vidrio-fondo); border: 1px solid var(--vidrio-borde);
-  box-shadow: inset 0 1px 0 var(--vidrio-luz), 0 8px 24px -12px var(--vidrio-sombra);
-  -webkit-backdrop-filter: var(--vidrio-blur); backdrop-filter: var(--vidrio-blur);
-}
-.cab__fila::after { background: var(--vidrio-realce); opacity: 0; }
+.cab__bruma { --bk: 1; --bv: 0.75; position: fixed; top: 0; left: 0; right: 0; z-index: 1; height: 7rem; pointer-events: none; }
+.cab__bruma span { position: absolute; inset: 0; -webkit-backdrop-filter: blur(calc(var(--bk) * var(--b))); backdrop-filter: blur(calc(var(--bk) * var(--b))); }
+.cab__bruma span:nth-child(1) { --b: 1px;  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 40%, transparent 100%); mask-image: linear-gradient(to bottom, #000 0%, #000 40%, transparent 100%); }
+.cab__bruma span:nth-child(2) { --b: 2px;  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 20%, transparent 80%); mask-image: linear-gradient(to bottom, #000 0%, #000 20%, transparent 80%); }
+.cab__bruma span:nth-child(3) { --b: 4px;  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 10%, transparent 60%); mask-image: linear-gradient(to bottom, #000 0%, #000 10%, transparent 60%); }
+.cab__bruma span:nth-child(4) { --b: 8px;  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 45%); mask-image: linear-gradient(to bottom, #000 0%, transparent 45%); }
+.cab__bruma span:nth-child(5) { --b: 16px; -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 30%); mask-image: linear-gradient(to bottom, #000 0%, transparent 30%); }
+/* Velo del color de fondo del tema, más presente arriba y desvanecido hacia abajo (sin color propio: usa la variable de tema) */
+.cab__bruma::after { content: ''; position: absolute; inset: 0; opacity: var(--bv); background: linear-gradient(to bottom, color-mix(in srgb, var(--tema-fondo) 60%, transparent) 0%, transparent 100%); }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .cab { --vidrio-fondo: color-mix(in srgb, var(--tema-fondo) 82%, transparent); }
+  .cab__bruma span { display: none; }
+  .cab__bruma { --bv: 1; }
+  .cab__bruma::after { background: linear-gradient(to bottom, color-mix(in srgb, var(--tema-fondo) 88%, transparent) 0%, transparent 100%); }
 }
+.cab--cerca .cab__bruma, .cab:has(:focus-visible) .cab__bruma { --bk: 1.4; --bv: 1; }
 @media (prefers-reduced-motion: no-preference) {
-  .cab__fila::before { transition: backdrop-filter 200ms ease, -webkit-backdrop-filter 200ms ease; }
-  .cab__fila::after { transition: opacity 200ms ease; }
-}
-/* Hover (solo con puntero) y foco de teclado: un poco más de opacidad y de desenfoque */
-.cab:has(:focus-visible) { --vidrio-blur: blur(20px) saturate(1.5); }
-.cab:has(:focus-visible) .cab__fila::after { opacity: 1; }
-@media (hover: hover) {
-  .cab:hover { --vidrio-blur: blur(20px) saturate(1.5); }
-  .cab:hover .cab__fila::after { opacity: 1; }
+  .cab__bruma span { transition: backdrop-filter 200ms ease, -webkit-backdrop-filter 200ms ease; }
+  .cab__bruma::after { transition: opacity 200ms ease; }
 }
 
 /* Emblema negro (sin fondo). El área táctil mide 44 px como mínimo. */
@@ -56,8 +49,7 @@
 .cab__menu[aria-expanded='true'] .m-medio { opacity: 0; }
 .cab__menu[aria-expanded='true'] .m-abajo { transform: translateY(-5px) rotate(-45deg); }
 
-.cab__panel { position: absolute; top: 100%; left: 0; right: 0; background: color-mix(in srgb, var(--tema-fondo) 72%, transparent); -webkit-backdrop-filter: blur(16px) saturate(1.4); backdrop-filter: blur(16px) saturate(1.4); border-bottom: 1px solid var(--vidrio-borde); padding-block: var(--sp-2) var(--sp-4); }
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .cab__panel { background: var(--tema-fondo); } }
+.cab__panel { position: fixed; top: var(--alto-cabecera); left: 0; right: 0; z-index: 3; background: var(--tema-fondo); border-bottom: 1px solid var(--borde); padding-block: var(--sp-2) var(--sp-4); }
 .cab__panel[hidden] { display: none; }
 .cab__lista { padding-inline: var(--margen-pagina); }
 .cab__panel li > a:hover { font-weight: 700; }
