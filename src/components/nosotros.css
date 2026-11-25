@@ -1,47 +1,61 @@
 /* Sección "Nosotros": sin fondo propio (la página vuelve al tema claro al llegar aquí: --tema-* en tokens.css, ver TemaFondo.tsx). Colores, tipografía, radio y espaciados salen de
-   tokens.css; el cobalto solo aparece como fondo (imagen provisional) y, un instante, en el frente del revelado del párrafo. El efecto de solapamiento está en texto-tapado.css. */
+   tokens.css; el cobalto solo aparece como fondo (imágenes provisionales) y, un instante, en el frente del revelado del párrafo. El efecto de solapamiento está en texto-tapado.css. */
 .nos { position: relative; color: var(--tema-texto); scroll-margin-top: var(--alto-cabecera); padding-block: var(--seccion-y); }
 .nos__caja { max-width: calc(var(--ancho-max) + 2 * var(--margen-pagina)); margin-inline: auto; padding-inline: var(--margen-pagina);
-  /* Efecto: una sola tapa (la imagen), que se pega a --tt-top. Su alto: ancha y baja, y nunca menor que el bloque de texto + su margen, para cubrirlo
-     por completo (la imagen se recorta con object-fit: cover, sin deformarse). --tt-h es una estimación (H2 + botón); TextoTapado.tsx pone el real. */
+  /* Efecto: una sola tapa (el bento), que se pega a --tt-top. Su alto: nunca menor que el bloque de texto + su margen, para cubrirlo por completo
+     (las imágenes se recortan con object-fit: cover, sin deformarse). --tt-h es una estimación (H2 + enlace); TextoTapado.tsx pone el real. */
   --tt-h: calc(clamp(3rem, 8vw, 7rem) * 1.04 + var(--sp-5) + 2.75rem + 2 * var(--sp-4)); /* estimación: H2 + enlace */
-  --tt-tapa-h: max(clamp(16rem, 42svh, 28rem), calc(var(--tt-h) + var(--tt-top) + var(--sp-4)));
+  --tt-tapa-h: max(clamp(22rem, 56svh, 34rem), calc(var(--tt-h) + var(--tt-top) + var(--sp-4)));
 }
 
-/* Bloque de texto: en celular una columna (título, párrafo, botón, imagen); en escritorio dos columnas */
+/* Bloque de texto: en celular una columna (título, párrafo, enlace, bento); en escritorio dos columnas */
 .nos__texto { display: grid; gap: var(--sp-5); padding-block: var(--sp-4); }
 .nos__izq { display: grid; justify-items: start; gap: var(--sp-5); }
 .nos__parrafo { max-width: 34rem; font-size: clamp(1.25rem, 2vw, 1.75rem); line-height: var(--lh-lead); text-wrap: pretty; text-align: left; }
-/* Celular: el orden es título, párrafo, botón (la imagen va después de todo) */
+/* Celular: el orden es título, párrafo, enlace (el bento va después de todo) */
 @media (max-width: 56.1875rem) {
   .nos__izq { display: contents; }
   .nos__parrafo { order: 1; }
   .nos__izq .enlace-texto { order: 2; justify-self: start; }
 }
 
-/* Imagen ancha y baja, con var(--radio). Clicable hacia el mismo destino que el botón; hover sutil. */
+/* Grid bento (5 imágenes: una grande, dos medianas y dos pequeñas), con gap de --sp-3 (12 px) y --radio. Todo el bento es un enlace hacia el mismo destino
+   que el enlace de texto. Los huecos entre imágenes llevan el fondo de la página (--tema-fondo) para que, al subir sobre el texto quieto, lo tapen por
+   completo. Escritorio, 6 columnas × 2 filas:      Celular (2 columnas, sin efecto):
+       g  g  g  m1 m1 s1                              g  g
+       g  g  g  m2 m2 s2                              m1 m2
+                                                      s1 s2 */
 .nos__caja .tt__tapas { padding-top: var(--sp-6); }
-.nos__imagen { display: block; aspect-ratio: 3 / 1; border-radius: var(--radio); overflow: hidden; cursor: pointer; background: var(--negro); }
-.nos__imagen img, .nos__ph { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-/* Marcador provisional: degradado solo de cobalto y negro, sin texto (el negro no llega a las esquinas para que se vea el borde redondeado) */
+.nos__bento { display: grid; gap: var(--sp-3); grid-template-columns: repeat(2, 1fr); background: var(--tema-fondo); cursor: pointer; }
+.nos__tile { position: relative; display: block; border-radius: var(--radio); overflow: hidden; aspect-ratio: 1 / 1; }
+.nos__tile--g { grid-column: 1 / -1; aspect-ratio: 16 / 10; }
+.nos__tile img, .nos__ph { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* Marcadores provisionales: degradados sobrios de los tokens (cobalto, negro y grafito; el negro no llega a las esquinas para que se vea el borde) */
 .nos__ph { background: linear-gradient(120deg, var(--acento) 0%, var(--acento-hover) 55%, var(--negro) 170%); }
+.nos__tile--2 .nos__ph { background: linear-gradient(200deg, var(--grafito) 0%, var(--acento-hover) 130%); }
+.nos__tile--3 .nos__ph { background: linear-gradient(160deg, var(--gris-oscuro) 0%, var(--grafito) 100%); }
+.nos__tile--4 .nos__ph { background: radial-gradient(circle at 30% 25%, var(--acento) 0%, var(--acento-hover) 55%, var(--negro) 150%); }
+.nos__tile--5 .nos__ph { background: linear-gradient(300deg, var(--acento) 0%, var(--acento-hover) 100%); }
 @media (hover: hover) {
-  .nos__imagen img, .nos__ph { transition: transform var(--t-medio) var(--easing); }
-  .nos__imagen:hover img, .nos__imagen:hover .nos__ph { transform: scale(1.02); }
+  .nos__tile img, .nos__ph { transition: transform var(--t-medio) var(--easing); }
+  .nos__tile:hover img, .nos__tile:hover .nos__ph { transform: scale(1.03); }
 }
 
 @media (min-width: 56.25rem) {
   .nos__texto { grid-template-columns: 1fr 1fr; column-gap: var(--sp-8); align-items: start; }
-  /* Izquierda: H2 y botón alineados a la derecha de su columna */
+  /* Izquierda: H2 y enlace alineados a la derecha de su columna */
   .nos__izq { justify-items: end; }
   /* Derecha: el párrafo, alineado a la izquierda */
   .nos__parrafo { padding-top: 0.5em; }
-}
-@media (min-width: 56.25rem) and (prefers-reduced-motion: no-preference) {
-  /* En el efecto, la imagen ocupa el alto de la tapa (la proporción 3:1 se sustituye por ese alto) */
-  .nos__imagen { aspect-ratio: auto; }
+  .nos__bento { grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(2, 1fr); }
+  .nos__tile { aspect-ratio: auto; }
+  .nos__tile--g { grid-column: 1 / 4; grid-row: 1 / 3; }
+  .nos__tile--2 { grid-column: 4 / 6; grid-row: 1; }
+  .nos__tile--3 { grid-column: 6; grid-row: 1; }
+  .nos__tile--4 { grid-column: 4 / 6; grid-row: 2; }
+  .nos__tile--5 { grid-column: 6; grid-row: 2; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .nos__imagen img, .nos__ph { transition: none !important; }
-  .nos__imagen:hover img, .nos__imagen:hover .nos__ph { transform: none; }
+  .nos__tile img, .nos__ph { transition: none !important; }
+  .nos__tile:hover img, .nos__tile:hover .nos__ph { transform: none; }
 }
