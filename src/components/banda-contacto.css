@@ -11,14 +11,12 @@
 .con__botones { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--sp-3); }
 /* Sin borde: se quita el de 2 px del botón base y se compensa con 2 px más de relleno, así la medida (alto, ancho) es la misma que con borde */
 .con .btn.con__prim, .con .btn.con__sec { border: 0; min-height: 2.75rem; padding: calc(var(--sp-2) + 2px) calc(var(--sp-3) + 2px); }
-/* Secundario: fondo blanco, sin borde ni color de marca; solo una sombra muy suave para separarlo del fondo hueso. Misma tipografía que el primario. */
-.btn.con__sec {
-  background: var(--blanco); color: var(--tema-texto); text-transform: uppercase; letter-spacing: 0.03em;
-  box-shadow: 0 1px 2px color-mix(in srgb, var(--negro) 6%, transparent), 0 6px 14px -8px color-mix(in srgb, var(--negro) 16%, transparent);
-  transition: box-shadow var(--t-medio) var(--easing);
-}
-@media (hover: hover) { .btn.con__sec:hover { background: var(--blanco); box-shadow: 0 1px 2px color-mix(in srgb, var(--negro) 8%, transparent), 0 10px 20px -8px color-mix(in srgb, var(--negro) 22%, transparent); } }
-.btn.con__sec:focus-visible { outline: 3px solid var(--negro); outline-offset: 3px; }
+/* Secundario: plano. Fondo blanco, sin borde, SIN sombra en ningún estado (reposo, hover, foco ni active; tampoco elevación ni translateY) y sin color de marca.
+   Misma tipografía que el primario. Hover y foco de teclado: fondo --negro con texto blanco (19,8:1), transición de color de 200 ms; el tamaño no cambia. */
+.btn.con__sec, .btn.con__sec:hover, .btn.con__sec:focus-visible, .btn.con__sec:active { box-shadow: none; transform: none; }
+.btn.con__sec { background: var(--blanco); color: var(--tema-texto); text-transform: uppercase; letter-spacing: 0.03em; transition: background-color 200ms ease, color 200ms ease; }
+.btn.con__sec:focus-visible { background: var(--negro); color: var(--blanco); outline: 3px solid var(--negro); outline-offset: 3px; }
+@media (hover: hover) { .btn.con__sec:hover { background: var(--negro); color: var(--blanco); } }
 @media (prefers-reduced-motion: reduce) { .btn.con__sec { transition: none; } }
 
 /* Celular: sigue a la derecha, el título baja de tamaño (el del encabezado, fluido) y los botones se apilan a todo el ancho */
