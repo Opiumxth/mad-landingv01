@@ -28,6 +28,8 @@ export default function Soluciones() {
           {soluciones.map((s, i) => (
             <li key={s.id} className="sol__item tt__tapa" style={{ '--i': i } as CSSProperties}>
               <article className="sol__card">
+                {/* Velo negro translúcido (decorativo): oscurece la tarjeta a medida que otras se apilan encima (ver soluciones.css) */}
+                <span className="sol__velo" aria-hidden="true"></span>
                 <div className="sol__texto">
                   {/* Número, título y descripción forman un solo bloque compacto */}
                   <div className="sol__grupo">

@@ -18,7 +18,7 @@
    fondo propio: en la fase 1 las tarjetas nunca lo tocan, así que no hay nada que se mezcle. */
 .sol__caja {
   --tt-h: calc(clamp(3rem, 8vw, 7rem) * 1.04 + var(--sp-3) + 2 * clamp(1.25rem, 2vw, 1.75rem) * 1.4 + 2 * var(--sp-4));
-  --tt-top: var(--tt-h); --tt-cubre: var(--sp-3); --tt-paso: var(--sp-5);
+  --tt-top: var(--tt-h); --tt-cubre: var(--sp-3); --tt-paso: var(--sp-3); /* franja visible de cada tarjeta que queda debajo: 12 px */
   --tt-tapa-h: clamp(18rem, calc(100svh - var(--tt-h) - 4 * var(--sp-5)), 28rem); /* las cuatro apiladas caben bajo el encabezado, también en pantallas bajas */
 }
 .sol__cabeza { padding-block: var(--sp-4); }
@@ -66,6 +66,30 @@
 }
 @media (min-width: 56.25rem) and (prefers-reduced-motion: no-preference) {
   .sol__lista { gap: var(--sp-6); }
-  /* Las tarjetas ya apiladas NO se reducen (antes bajaban a scale 0,95 con scroll-driven): ahora tienen que tapar por completo el encabezado
-     que queda quieto detrás, y una tarjeta más angosta dejaría asomar el borde izquierdo del título. */
+  /* PROFUNDIDAD: las tarjetas se sienten como capas puestas una encima de otra.
+     · Borde: de cada tarjeta que queda debajo asoma una franja de 12 px (--tt-paso) de su borde superior, detrás de la de arriba.
+     · Sombra: cada tarjeta proyecta hacia arriba una sombra suave (negro translúcido) sobre la que tiene debajo.
+     · Oscurecimiento progresivo: un velo negro translúcido (.sol__velo) sube de opacidad a medida que otras tarjetas se apilan encima. Cada tarjeta
+       nueva que llega añade una capa más de velo (+12 %, +10 %, +8 %), así que con 1, 2 y 3 tarjetas encima queda en ~12 %, ~22 % y ~30 %; la de arriba, 0 %.
+       Sigue el scroll (CSS scroll-driven, solo opacity; sin JS): cada velo se anima con la llegada de la tarjeta que lo causa y las animaciones se suman
+       (animation-composition: add). Sin soporte de scroll-driven (o con movimiento reducido, donde las tarjetas no se apilan) no hay oscurecimiento,
+       solo borde y sombra. Con el máximo (30 %) el texto blanco sigue sobre ~5,4:1.
+     Las tarjetas apiladas NO se reducen de tamaño (el scale 0,97–0,94 opcional se omitió): una tarjeta más angosta dejaría asomar el borde izquierdo del
+     título que queda quieto detrás cuando el conjunto lo cubre. */
+  .sol__card { box-shadow: 0 -8px 16px -6px color-mix(in srgb, var(--negro) 45%, transparent); }
+  .sol__velo { position: absolute; inset: 0; border-radius: inherit; background: var(--negro); opacity: 0; pointer-events: none; }
+  @supports (animation-timeline: view()) and (timeline-scope: --a) {
+    .sol__lista { timeline-scope: --sol-2, --sol-3, --sol-4; }
+    .sol__item:nth-child(2) { view-timeline: --sol-2 block; }
+    .sol__item:nth-child(3) { view-timeline: --sol-3 block; }
+    .sol__item:nth-child(4) { view-timeline: --sol-4 block; }
+    /* Cada velo arranca cuando la tarjeta que llega empieza a tocar a la de abajo (su borde superior al ~80 % de la pantalla) y termina cuando queda pegada (~28 %) */
+    .sol__velo { animation-timing-function: linear; animation-fill-mode: both; animation-range: cover 20svh cover 72svh; animation-composition: add; }
+    .sol__item:nth-child(1) .sol__velo { animation-name: sol-velo-1, sol-velo-2, sol-velo-3; animation-timeline: --sol-2, --sol-3, --sol-4; }
+    .sol__item:nth-child(2) .sol__velo { animation-name: sol-velo-1, sol-velo-2; animation-timeline: --sol-3, --sol-4; }
+    .sol__item:nth-child(3) .sol__velo { animation-name: sol-velo-1; animation-timeline: --sol-4; }
+    @keyframes sol-velo-1 { from { opacity: 0; } to { opacity: 0.12; } }
+    @keyframes sol-velo-2 { from { opacity: 0; } to { opacity: 0.1; } }
+    @keyframes sol-velo-3 { from { opacity: 0; } to { opacity: 0.08; } }
+  }
 }
