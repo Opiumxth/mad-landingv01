@@ -12,7 +12,7 @@
 .cab__fila { position: fixed; top: 0; left: 0; right: 0; z-index: 2; pointer-events: none; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; column-gap: var(--sp-4); min-height: var(--alto-cabecera); padding-top: var(--sp-3); padding-inline: var(--margen-pagina); }
 .cab__emblema, .cab__nav, .cab__menu { pointer-events: auto; }
 
-.cab__bruma { --bk: 1; --bv: 0.75; position: fixed; top: 0; left: 0; right: 0; z-index: 1; height: 7rem; pointer-events: none; }
+.cab__bruma { --bk: 1; --bv: 0.75; position: fixed; top: 0; left: 0; right: 0; z-index: 1; height: 4.9rem; pointer-events: none; } /* 78 px (antes 112: ~30 % más corta) */
 .cab__bruma span { position: absolute; inset: 0; -webkit-backdrop-filter: blur(calc(var(--bk) * var(--b))); backdrop-filter: blur(calc(var(--bk) * var(--b))); }
 .cab__bruma span:nth-child(1) { --b: 1px;  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 40%, transparent 100%); mask-image: linear-gradient(to bottom, #000 0%, #000 40%, transparent 100%); }
 .cab__bruma span:nth-child(2) { --b: 2px;  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 20%, transparent 80%); mask-image: linear-gradient(to bottom, #000 0%, #000 20%, transparent 80%); }
@@ -27,9 +27,30 @@
   .cab__bruma::after { background: linear-gradient(to bottom, color-mix(in srgb, var(--tema-fondo) 88%, transparent) 0%, transparent 100%); }
 }
 .cab--cerca .cab__bruma, .cab:has(:focus-visible) .cab__bruma { --bk: 1.4; --bv: 1; }
+
+/* APARECE SOLO CON EL MOUSE. Arriba del todo (scroll < ~50 px) el header y su banda se ven normal; al bajar se ocultan (opacity + leve desplazamiento hacia
+   arriba, ~250 ms; sin recibir clics, así no tapan nada; la banda, decorativa, además pasa a visibility: hidden. Los enlaces NO se ocultan con visibility, para que
+   sigan en el orden de tabulación y aparezcan al recibir foco de teclado). Reaparecen con el cursor a < 100 px del borde superior o dentro del header
+   (se vuelven a ocultar 300 ms después de alejarlo), con foco de teclado en el header (mientras lo tenga), con el menú móvil abierto, y en celular al subir el
+   scroll. La clase .cab--oculta la pone Cabecera.tsx (listener de scroll pasivo con rAF). La opacidad va en cada capa de la banda (no en su contenedor: una
+   opacidad en el contenedor aislaría el fondo y el desenfoque desaparecería durante la transición). Con movimiento reducido, los cambios son inmediatos. */
+.cab__fila { opacity: 1; transform: none; }
+.cab__bruma span { opacity: 1; }
 @media (prefers-reduced-motion: no-preference) {
-  .cab__bruma span { transition: backdrop-filter 200ms ease, -webkit-backdrop-filter 200ms ease; }
+  .cab__fila { transition: opacity 200ms ease, transform 200ms ease; }
+  .cab__bruma { transition: transform 200ms ease, visibility 0s; }
+  .cab__bruma span { transition: backdrop-filter 200ms ease, -webkit-backdrop-filter 200ms ease, opacity 200ms ease; }
   .cab__bruma::after { transition: opacity 200ms ease; }
+}
+.cab--oculta:not(:has(:focus-visible, .cab__menu[aria-expanded='true'])) .cab__fila { opacity: 0; transform: translateY(-0.75rem); }
+.cab--oculta:not(:has(:focus-visible, .cab__menu[aria-expanded='true'])) :is(.cab__emblema, .cab__nav, .cab__menu) { pointer-events: none; }
+.cab--oculta:not(:has(:focus-visible, .cab__menu[aria-expanded='true'])) .cab__bruma { transform: translateY(-0.5rem); visibility: hidden; }
+.cab--oculta:not(:has(:focus-visible, .cab__menu[aria-expanded='true'])) .cab__bruma span, .cab--oculta:not(:has(:focus-visible, .cab__menu[aria-expanded='true'])) .cab__bruma::after { opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .cab--oculta:not(:has(:focus-visible, .cab__menu[aria-expanded='true'])) .cab__fila { transition: opacity 250ms ease, transform 250ms ease; }
+  .cab--oculta:not(:has(:focus-visible, .cab__menu[aria-expanded='true'])) .cab__bruma { transition: transform 250ms ease, visibility 0s 250ms; }
+  .cab--oculta:not(:has(:focus-visible, .cab__menu[aria-expanded='true'])) .cab__bruma span { transition: opacity 250ms ease; }
+  .cab--oculta:not(:has(:focus-visible, .cab__menu[aria-expanded='true'])) .cab__bruma::after { transition: opacity 250ms ease; }
 }
 
 /* Emblema negro (sin fondo). El área táctil mide 44 px como mínimo. */

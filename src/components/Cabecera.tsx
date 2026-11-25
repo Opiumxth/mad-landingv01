@@ -7,9 +7,12 @@ import { es } from '../i18n/es';
 import './cabecera.css';
 
 const t = es.cabecera;
-const ZONA_HOVER = 100; // px desde el borde superior de la pantalla
+const ZONA_HOVER = 100; // px desde el borde superior de la pantalla en que reaparece con el cursor
+const UMBRAL_SCROLL = 50; // px de scroll a partir de los cuales el header se oculta
+const RETARDO_OCULTAR = 300; // ms que espera antes de ocultarse al alejar el cursor
 
-// Cabecera con la fila FIJA arriba (flota sobre el contenido, sin caja) y una banda de difuminado progresivo detrás (ver cabecera.css), tres zonas: emblema a la izquierda | "mad" cursivo al centro | enlaces a la derecha.
+// Cabecera con la fila FIJA arriba (flota sobre el contenido, sin caja), una banda de difuminado progresivo detrás y aparición solo con el mouse al bajar
+// (ver cabecera.css), tres zonas: emblema a la izquierda | "mad" cursivo al centro | enlaces a la derecha.
 // Celular (< 768 px): emblema | mad | botón de menú; el panel tiene los mismos tres enlaces.
 export default function Cabecera() {
   const [abierto, setAbierto] = useState(false);
@@ -46,18 +49,45 @@ export default function Cabecera() {
     };
   }, [abierto, cerrar]);
 
-  // Hover de la banda: con puntero, al acercar el cursor a la zona superior (~100 px) o al entrar al header, la banda se intensifica (clase `cab--cerca`).
-  // Sin estado de React: solo se toca la clase cuando cambia. Sin puntero fino (celular) no se activa.
+  // Visibilidad del header (clase `cab--oculta`) y hover de la banda (clase `cab--cerca`), sin estado de React: solo se tocan las clases cuando cambian.
+  //  · Con scroll < UMBRAL_SCROLL (arriba del todo) se ve siempre. Más abajo se oculta, salvo que:
+  //  · con puntero: el cursor esté a < ZONA_HOVER px del borde superior (o dentro del header); al alejarlo, se oculta tras RETARDO ms (evita parpadeos);
+  //  · en celular (sin puntero): se muestra al subir el scroll y se oculta al bajar.
+  //  El foco de teclado y el menú abierto lo mantienen visible por CSS. Listener de scroll pasivo limitado a un cuadro con requestAnimationFrame.
   useEffect(() => {
     const el = raiz.current;
-    if (!el || !window.matchMedia('(hover: hover)').matches) return;
-    let cerca = false;
-    const poner = (v: boolean) => { if (v !== cerca) { cerca = v; el.classList.toggle('cab--cerca', v); } };
-    const alMover = (e: PointerEvent) => poner(e.clientY < ZONA_HOVER);
-    const alSalir = () => poner(false);
-    document.addEventListener('pointermove', alMover, { passive: true });
-    document.documentElement.addEventListener('mouseleave', alSalir);
-    return () => { document.removeEventListener('pointermove', alMover); document.documentElement.removeEventListener('mouseleave', alSalir); };
+    if (!el) return;
+    const conPuntero = window.matchMedia('(hover: hover)').matches;
+    let cerca = false, oculta = false, ultimoY = window.scrollY, pendiente = 0, temporizador = 0;
+    const ocultar = (v: boolean) => { if (v !== oculta) { oculta = v; el.classList.toggle('cab--oculta', v); } };
+    const calcular = () => {
+      pendiente = 0;
+      const y = window.scrollY;
+      if (y < UMBRAL_SCROLL) ocultar(false);
+      else if (conPuntero) ocultar(!cerca);
+      else { const d = y - ultimoY; if (d > 4) ocultar(true); else if (d < -4) ocultar(false); }
+      ultimoY = y;
+    };
+    const pedir = () => { if (!pendiente) pendiente = window.requestAnimationFrame(calcular); };
+    const marcarCerca = (v: boolean) => {
+      if (v) { window.clearTimeout(temporizador); temporizador = 0; if (!cerca) { cerca = true; el.classList.add('cab--cerca'); pedir(); } }
+      else if (cerca && !temporizador) temporizador = window.setTimeout(() => { temporizador = 0; cerca = false; el.classList.remove('cab--cerca'); pedir(); }, RETARDO_OCULTAR);
+    };
+    const alMover = (e: PointerEvent) => marcarCerca(e.clientY < ZONA_HOVER);
+    const alSalir = () => marcarCerca(false);
+    calcular();
+    window.addEventListener('scroll', pedir, { passive: true });
+    if (conPuntero) {
+      document.addEventListener('pointermove', alMover, { passive: true });
+      document.documentElement.addEventListener('mouseleave', alSalir);
+    }
+    return () => {
+      window.removeEventListener('scroll', pedir);
+      document.removeEventListener('pointermove', alMover);
+      document.documentElement.removeEventListener('mouseleave', alSalir);
+      window.clearTimeout(temporizador);
+      if (pendiente) window.cancelAnimationFrame(pendiente);
+    };
   }, []);
 
   return (
