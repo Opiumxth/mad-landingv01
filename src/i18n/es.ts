@@ -49,7 +49,8 @@ export const es = {
     titulo: 'Nosotros',
     cta: { texto: 'Conócenos', href: '/nosotros' },
     // ⚠ provisional: sin cifras, clientes, plazos ni promesas
-    parrafo: 'Somos un equipo de ingeniería de sistemas y software en Lima. Diseñamos y desarrollamos páginas web, aplicaciones y automatizaciones para negocios de todo el Perú.',
+    marca: 'MAD Software Studio', // frase que va en Bold dentro del párrafo
+    parrafo: 'Somos MAD Software Studio, un equipo de ingeniería de sistemas y software en Lima. Diseñamos y desarrollamos páginas web, aplicaciones y automatizaciones para negocios de todo el Perú.',
   },
   // Sección "Preguntas frecuentes" de la home
   faq: {

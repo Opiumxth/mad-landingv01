@@ -22,9 +22,9 @@ export default function Nosotros() {
           <div className="tt__texto nos__texto">
             <div className="nos__izq">
               <EncabezadoSeccion id="nosotros-h2" titulo={t.titulo} alinear="derecha" />
-              <EnlaceTexto texto={t.cta.texto} href={t.cta.href} />
+              <EnlaceTexto texto={t.cta.texto} href={t.cta.href} flecha />
             </div>
-            <TextoRevelado texto={t.parrafo} className="nos__parrafo" />
+            <TextoRevelado texto={t.parrafo} negrita={t.marca} className="nos__parrafo" />
           </div>
         </div>
         <div className="tt__hueco" aria-hidden="true"></div>

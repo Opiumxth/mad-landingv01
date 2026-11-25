@@ -23,9 +23,9 @@
 .como--vivo .is-on .como__relleno { transform: scaleY(1); }
 
 /* ---- Escritorio (≥ 900 px) con movimiento: pista alta con el panel pegado (sticky). El progreso del scroll de la pista (--p, de 0 a 1,
-   escrito por ComoProgreso.tsx) se reparte entre los pasos: cada uno ocupa 1/5. Recorrido por paso: --recorrido (80 % de la altura de pantalla). ---- */
+   escrito por ComoProgreso.tsx) se reparte entre los pasos: cada uno ocupa 1/5. Recorrido por paso: --recorrido (35 % de la altura de pantalla; 5 pasos = 175svh de scroll). ---- */
 @media (min-width: 56.25rem) and (prefers-reduced-motion: no-preference) and (scripting: enabled) {
-  .como__pista { --recorrido: 80svh; --pad-v: var(--sp-6); height: calc(100svh + var(--n) * var(--recorrido)); }
+  .como__pista { --recorrido: 35svh; --pad-v: var(--sp-6); height: calc(100svh + var(--n) * var(--recorrido)); }
   .como__escena { position: sticky; top: 0; height: 100svh; display: flex; align-items: center; }
   .como__cuerpo { width: 100%; display: grid; grid-template-columns: 5fr 7fr; column-gap: var(--sp-8); align-items: center; }
   .como__lista { margin-top: var(--sp-5); gap: clamp(var(--sp-2), 2svh, var(--sp-5)); }

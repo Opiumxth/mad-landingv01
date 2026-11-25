@@ -12,6 +12,11 @@
   background-size: 100% 1.5px;
   text-shadow: 0.03em 0 0 currentColor, -0.03em 0 0 currentColor, 0 0.012em 0 currentColor, 0 -0.012em 0 currentColor;
 }
+/* Flecha opcional al final (→): del mismo color y tamaño que el texto; en hover y foco se desplaza ~3,5 px a la derecha (no cambia el ancho del enlace) */
+.enlace-texto__flecha { flex: none; margin-left: 0.4em; transition: transform var(--t-medio) var(--easing); }
+.enlace-texto:hover .enlace-texto__flecha, .enlace-texto:focus-visible .enlace-texto__flecha { transform: translateX(3.5px); }
 @media (prefers-reduced-motion: reduce) {
   .enlace-texto { transition: none; }
+  .enlace-texto__flecha { transition: none; }
+  .enlace-texto:hover .enlace-texto__flecha, .enlace-texto:focus-visible .enlace-texto__flecha { transform: none; }
 }

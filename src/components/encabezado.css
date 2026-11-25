@@ -4,6 +4,7 @@
 .enc__titulo { font-size: clamp(3rem, 8vw, 7rem); line-height: var(--lh-h1); letter-spacing: var(--ls-h1); text-align: left; }
 /* Ancho de lectura cómodo; en escritorio el subtítulo ocupa como máximo dos líneas cuando el espacio lo permite */
 .enc__sub { max-width: min(100%, 64rem); margin-top: var(--sp-3); font-size: clamp(1.25rem, 2vw, 1.75rem); line-height: var(--lh-lead); text-align: left; text-wrap: pretty; }
+.enc__p--b { font-weight: var(--peso-texto-fuerte); } /* palabras en Bold dentro de un texto revelado (p. ej. el nombre de la marca) */
 .enc--centro .enc__titulo, .enc--centro .enc__sub { text-align: center; }
 .enc--centro .enc__sub { margin-inline: auto; }
 /* A la derecha solo en escritorio (en celular una sola columna, alineada a la izquierda) */
