@@ -19,7 +19,7 @@ import { useEffect, useRef, type ReactNode } from 'react';
  *  · LIGADO AL SCROLL: un progreso p (0–1) según la posición del pie en la pantalla, suavizado cuadro a cuadro, mueve dos cosas con el mismo easing: la NUBE AZUL
  *    (los cuadritos con color) crece desde la base hasta su tope, y la GRILLA TENUE (las líneas finas casi sin color) sube sobre la mitad inferior del CTA (35 % en celular).
  *    El canvas es más alto que el bloque (position absolute, sin mover el layout) para poder pintar esa grilla; al subir el scroll todo se recoge por el mismo camino.
- *  · TOPE DE LA NUBE AZUL: la tinta de la "mad" (medida con su silueta rasterizada, así sigue su tamaño real) más 25 % de su altura, desde la base del bloque; nunca sube
+ *  · TOPE DE LA NUBE AZUL: la tinta de la "mad" (medida con su silueta rasterizada, así sigue su tamaño real) más 80 % de su altura, desde la base del bloque; nunca sube
  *    al CTA. Las gotas del borde superior suben hasta ese tope y no más, y cerca de él los cuadritos se vuelven más escasos y más claros.
  *  · Con movimiento reducido se dibuja UN solo cuadro fijo (con p = 1), sin animación. Sin estado de React por cuadro ni por scroll.
  */
@@ -49,7 +49,7 @@ const PROGRESO = { inicio: 0.95, margenFinal: 0.15 };
 const BORDE = { gota: 160, gotaMovil: 100, anchoGota: 4, velocidad: 1 }; // alto de la zona irregular (px) y ancho de cada "edificio" (en cuadritos)
 const FOCOS = { cuantos: 2, tamano: 160, fuerza: 0.36, velocidad: 1 };
 const CURSOR = { tamano: 96, fuerza: 0.45, fantasma: 0.24, enfria: 0.972, ondaAlcance: 340, ondaTiempo: 1.1, quietoDespues: 2.5 };
-const TOPE = { extra: 0.25 }; // ⚠ 25 % de la altura de la "mad" por encima de su borde superior (rango pedido: 20–30 %)
+const TOPE = { extra: 0.8 }; // ⚠ 80 % de la altura de la "mad" por encima de su borde superior (rango a ajustar: 70–100 %; antes 25 %)
 // Halo de la "mad", en cuadritos desde la tinta: calor muy recortado hasta `solido`, transición gradual hasta `alcance` (antes: un óvalo de ~1,5 em)
 const HALO = { fuerza: 0.65, solido: 2, alcance: 6 };
 
