@@ -11,7 +11,7 @@ import './nosotros.css';
 const t = es.nosotros;
 
 // Sección "Nosotros" (#nosotros): sin fondo propio; la página vuelve al tema claro al llegar aquí (ver TemaFondo.tsx). Arriba, dos columnas: a la izquierda el
-// H2 y el enlace de texto "Conócenos" (no es un CTA), alineados a la derecha de su columna; a la derecha, el párrafo, con revelado palabra por palabra. Abajo, un grid bento de 5 imágenes. Con el efecto "texto quieto + tapas que lo
+// H2 y el enlace de texto "Conócenos" (no es un CTA), alineados a la derecha de su columna; a la derecha, el párrafo, con revelado palabra por palabra. Abajo, un grid bento de 4 imágenes. Con el efecto "texto quieto + tapas que lo
 // cubren" (texto-tapado.css): el bloque de texto se queda quieto, el bento sube y lo cubre por completo, y al final todo sale junto.
 // El enlace de texto es el principal; el bento también es clicable hacia el mismo destino, pero es redundante (tabindex -1, aria-hidden).
 export default function Nosotros() {
@@ -29,10 +29,10 @@ export default function Nosotros() {
         </div>
         <div className="tt__hueco" aria-hidden="true"></div>
         <div className="tt__tapas">
-          {/* Grid bento: todo el bento es UN solo enlace (más simple que cinco enlaces iguales), redundante con el enlace de texto: tabindex -1 y aria-hidden */}
+          {/* Grid bento: todo el bento es UN solo enlace (más simple que cuatro enlaces iguales), redundante con el enlace de texto: tabindex -1 y aria-hidden */}
           <a className="tt__tapa nos__bento" href={t.cta.href} tabIndex={-1} aria-hidden="true" style={{ '--i': 0 } as CSSProperties}>
             {imagenesNosotros.map((im, i) => (
-              <span key={i} className={`nos__tile nos__tile--${im.tam} nos__tile--${i + 1}`}>
+              <span key={i} className={`nos__tile nos__tile--${i + 1}`}>
                 {im.imagen ? /* eslint-disable-next-line @next/next/no-img-element */ <img src={im.imagen} alt={im.alt} decoding="async" /> : <span className="nos__ph"></span>}
               </span>
             ))}
