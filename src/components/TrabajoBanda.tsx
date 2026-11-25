@@ -26,13 +26,18 @@ const FADE = 200; // ms del fundido del texto (100 sale + 100 entra), termina cu
 
 // ---- Parámetros de la banda (valores del componente original salvo los marcados) ----
 const SLICES = 16; // franjas por tarjeta
-const CAMERA = 1.6; // distancia de la cámara, en radios del cilindro
+// CURVA INVERTIDA: el espectador queda FUERA del cilindro y la fila se curva hacia él por el medio (el centro es lo más cercano y grande; los lados se alejan y
+// se achican). Con CAMERA = 1,3 y CURVE = 62° el alto visual en el borde del marco es 1,3 / (1,3 + 1 − cos 62°) ≈ 0,71 del del centro (1,0).
+const CAMERA = 1.3; // distancia de la cámara, en radios del cilindro
 const MAX_WIDTH = 55; // una tarjeta nunca supera este % del ancho de la banda
-const TILE = 34; // alto de la tarjeta, % del alto de la banda (propio: el original usa 26)
+// Tamaño de la tarjeta (propio). El alto sigue el ANCHO de la banda para que el arco que abarca cada tarjeta (~14°) no dependa de la pantalla: así bastan
+// 8 tarjetas (una por proyecto) y la que da la vuelta siempre queda oculta. Alto = min(55 % de ancho / proporción, max(ANCHO_K % del ancho, ALTO_MIN % del alto)).
+const ANCHO_K = 20; // alto de la tarjeta, % del ancho de la banda
+const ALTO_MIN = 34; // mínimo, % del alto de la banda (en celular el ancho es pequeño y este valor manda)
 const ASPECT = 16 / 9; // ancho / alto de la tarjeta
 const GAP = 6; // separación entre tarjetas, % del alto de una tarjeta
 const AXIS = 50; // centro vertical de la fila, % del alto (propio: sin contenido encima, el original usa 56)
-const CURVE = 80; // grados que se curva la fila hasta el borde
+const CURVE = 62; // grados que se curva la fila hasta el borde del marco (antes 80; menos curvatura también sirve para celular)
 const FADE_EDGE = 12; // ancho del desvanecido de cada extremo, % del ancho
 const MAX_PRECARGA = 8; // con más imágenes que esto, solo se montan las de las tarjetas cercanas
 const UMBRAL = 50; // px que hay que arrastrar para pasar a la tarjeta anterior o siguiente
@@ -40,15 +45,16 @@ const RUEDA = 40; // desplazamiento horizontal acumulado de la rueda/trackpad qu
 
 const BEND = (Math.min(85, Math.max(5, CURVE)) * Math.PI) / 180;
 
-/** Radio del cilindro (como parte del ancho) que lleva el borde del marco `bend` radianes por el arco, visto con la cámara. */
+/** Radio del cilindro (como parte del ancho) que lleva el borde del marco `bend` radianes por el arco, visto con la cámara. Con la curva invertida, la
+ *  profundidad del borde es r(1 − cos θ) HACIA ATRÁS, así que la proyección es r·sinθ · CAMERA / (CAMERA + 1 − cosθ) = ancho / 2, resuelta para r. */
 function arc(bend: number) {
-  return (CAMERA - 1 + Math.cos(bend)) / (2 * CAMERA * Math.sin(bend));
+  return (CAMERA + 1 - Math.cos(bend)) / (2 * CAMERA * Math.sin(bend));
 }
 
 /** Coloca el bucle en el cilindro. Devuelve grados: `unit` = arco que abarca el alto de una tarjeta, `pitch` = distancia
  *  entre centros de tarjetas vecinas y `limit` = hasta dónde puede ir el centro de una tarjeta antes de salir por completo. */
 function measure(width: number, height: number) {
-  const h = Math.min((TILE / 100) * height, ((MAX_WIDTH / 100) * width) / ASPECT);
+  const h = Math.min(((MAX_WIDTH / 100) * width) / ASPECT, Math.max((ANCHO_K / 100) * width, (ALTO_MIN / 100) * height));
   const radius = width * arc(BEND);
   if (!(h > 0) || !(radius > 0)) return { unit: 0, pitch: 1, limit: 0 };
   const deg = (rad: number) => (rad * 180) / Math.PI;
@@ -209,10 +215,11 @@ export default function TrabajoBanda({ proyectos, avisoDemos }: { proyectos: Pro
   const N = L <= MAX_PRECARGA ? (L >= minimo ? L : L * Math.ceil(minimo / L)) : minimo;
   const atras = Math.floor(N / 2); // puestos a la izquierda del centro (el último es el de la envoltura)
 
-  const u = (n: number) => `calc(${+n.toFixed(4)} * min(${TILE}cqh, ${+(MAX_WIDTH / ASPECT).toFixed(4)}cqw))`;
+  const u = (n: number) => `calc(${+n.toFixed(4)} * min(${+(MAX_WIDTH / ASPECT).toFixed(4)}cqw, max(${ANCHO_K}cqw, ${ALTO_MIN}cqh)))`;
   const r = 100 * arc(BEND);
   const radio = `${+r.toFixed(3)}cqw`;
-  const girar = (deg: number) => `translateZ(${radio}) rotateY(${+deg.toFixed(4)}deg) translateZ(-${radio})`;
+  // Eje del cilindro DETRÁS del plano de la pantalla: sale, gira y vuelve. Con ángulo positivo el punto va a la derecha y hacia atrás.
+  const girar = (deg: number) => `translateZ(-${radio}) rotateY(${+deg.toFixed(4)}deg) translateZ(${radio})`;
   const share = ASPECT / SLICES;
   const mascara = `linear-gradient(90deg,transparent,#000 ${FADE_EDGE}%,#000 ${100 - FADE_EDGE}%,transparent)`;
   const esVisible = (puesto: number) => Math.abs(puesto) * pitch <= limit;
@@ -261,7 +268,7 @@ export default function TrabajoBanda({ proyectos, avisoDemos }: { proyectos: Pro
                   top: `calc(${AXIS}% - ${u(0.5)})`,
                   width: u(ASPECT),
                   height: u(1),
-                  transform: girar(-puesto * pitch), // puesto positivo = a la derecha; el ángulo positivo gira a la izquierda
+                  transform: girar(puesto * pitch), // puesto positivo = a la derecha (ángulo positivo)
                   visibility: visible ? 'visible' : 'hidden',
                   transition: salto ? 'none' : `transform ${MOVE}ms ${EASE_CSS}, visibility 0s linear ${espera}ms`,
                 }}
@@ -275,7 +282,7 @@ export default function TrabajoBanda({ proyectos, avisoDemos }: { proyectos: Pro
                       // dos píxeles más ancha que su parte para que no se abra una línea entre franjas; la última no tiene vecina
                       width: k === SLICES - 1 ? u(share) : `calc(${u(share)} + 2px)`,
                       height: u(1),
-                      transform: girar((ASPECT / 2 - (k + 0.5) * share) * unit),
+                      transform: girar(-(ASPECT / 2 - (k + 0.5) * share) * unit), // la franja 0 es la de la izquierda (ángulo negativo)
                     }}
                   >
                     {cerca ? (
