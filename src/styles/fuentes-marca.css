@@ -29,6 +29,6 @@
   font-family: 'Jane Austen';
   font-style: normal;
   font-weight: 400;
-  font-display: block;
+  font-display: swap;
   src: url('/fonts/JaneAusten.woff2') format('woff2'), url('/fonts/JaneAust.ttf') format('truetype');
 }
