@@ -1,0 +1,5 @@
+/* Banda de contacto: sin fondo propio (tema oscuro de la página: --tema-* en tokens.css). Bloque grande, centrado y con aire (alto mínimo ~70 % de la
+   pantalla). Colores, tipografía y espaciados salen de tokens.css; el cobalto solo es el fondo del botón. */
+.con { display: grid; align-items: center; min-height: 70svh; color: var(--tema-texto); scroll-margin-top: var(--alto-cabecera); padding-block: var(--seccion-y); }
+.con__caja { display: grid; justify-items: center; gap: var(--sp-6); max-width: calc(var(--ancho-max) + 2 * var(--margen-pagina)); margin-inline: auto; padding-inline: var(--margen-pagina); text-align: center; }
+.con__boton { justify-self: center; }

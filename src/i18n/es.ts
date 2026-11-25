@@ -57,6 +57,12 @@ export const es = {
     subtitulo: 'Lo que suelen preguntarnos antes de empezar.', // ⚠ provisional
     enlace: { texto: '¿No encuentras tu respuesta? Escríbenos', href: '/book' },
   },
+  // Banda de contacto de la home
+  contacto: {
+    titulo: '¿Hablamos de tu proyecto?', // ⚠ provisional
+    subtitulo: 'Cuéntanos qué necesitas y te enviamos una propuesta.', // ⚠ provisional
+    cta: { texto: 'Hablemos', href: '/book' },
+  },
 } as const;
 
 export type Diccionario = typeof es;
