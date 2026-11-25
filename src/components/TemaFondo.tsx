@@ -6,17 +6,14 @@ import { useEffect } from 'react';
 // dispara el cambio al bajar; al subir ocurre lo contrario:
 //   1. Soluciones   → OSCURO cuando el bloque del título llega al 70 %.
 //   2. Nosotros     → CLARO  cuando su bloque de texto llega al 70 %.
-//   3. Contacto     → OSCURO cuando el bloque del título de la banda llega al 70 %.
-//   4. Pie          → CLARO  cuando el pie llega al 40 %: la banda es de ~70 % de la pantalla y, con 70 %, el cambio ocurriría justo cuando la banda está
-//                     completa en pantalla; al 40 % su contenido ya se está yendo por arriba y el cambio casi no se ve.
+// Desde Nosotros hasta el final (FAQ, CTA y el paso al pie) la página se queda en CLARO: ya no hay cambio a oscuro en el CTA ni vuelta a claro en el pie
+// (antes: Contacto → oscuro al 70 % y Pie → claro al 40 %).
 // Se activa con <html data-tema="oscuro">. La transición (~300 ms) la hace el CSS; con movimiento reducido es instantánea. Se lee la posición en cada scroll
 // (un IntersectionObserver no avisa si se salta de golpe más allá de un bloque, por ejemplo con la tecla Fin o al recargar abajo); en cada cuadro solo se
 // leen unas pocas posiciones y se cambia un atributo cuando hace falta. No renderiza nada.
 const PUNTOS: Array<{ selector: string; umbral: number; tema: 'oscuro' | 'claro' }> = [
   { selector: '#soluciones .sol__cabeza', umbral: 0.7, tema: 'oscuro' },
   { selector: '#nosotros .tt__texto', umbral: 0.7, tema: 'claro' },
-  { selector: '#contacto .enc', umbral: 0.7, tema: 'oscuro' },
-  { selector: 'footer', umbral: 0.4, tema: 'claro' },
 ];
 
 export default function TemaFondo() {
