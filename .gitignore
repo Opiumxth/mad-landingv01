@@ -1,0 +1,15 @@
+node_modules/
+.next/
+.open-next/
+.wrangler/
+next-env.d.ts
+*.tsbuildinfo
+public/img/
+.dev.vars
+.env
+.env.*
+!.env.example
+referencias/
+REPORTE_BORRADOR.md
+reporte.md
+manual-marca.md

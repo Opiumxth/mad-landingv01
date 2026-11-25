@@ -1,0 +1,41 @@
+/* EFECTO "TEXTO QUIETO + TAPAS QUE LO CUBREN" (reutilizable: Soluciones y Nosotros).
+   El texto se queda quieto, fijo en su sitio, mientras el usuario baja; las "tapas" (tarjetas o imagen) suben con el scroll y se
+   sobreponen al texto, por encima de él (z-index), tapándolo. Al final todo sale junto, también el texto.
+   Solo position, z-index y transform; el único JS (TextoTapado.tsx) mide el alto del texto y dispara el pop, sin estado en cada scroll.
+
+   Estructura (el contenedor es `.tt`, con padding lateral --margen-pagina):
+     .tt
+       .tt__guia > .tt__texto      el texto quieto (sticky dentro de la guía)
+       .tt__hueco                  reserva el sitio del texto en el flujo (la guía es absoluta)
+       .tt__tapas > .tt__tapa …    las tapas, por encima del texto
+   Cada sección define en su contenedor: --tt-n (cuántas tapas), --tt-top (dónde se pega la primera), --tt-paso (desfase de cada una respecto
+   a la anterior), --tt-tapa-h (alto de la tapa), --tt-cubre (opcional: posición del borde superior de la pila en la que ya cubre el texto; por
+   defecto = --tt-top, o sea que las tapas se pegan ya cubriendo el texto; en Soluciones las tarjetas se pegan DEBAJO del texto y lo cubren después,
+   cuando la pila entera sube) y una estimación de --tt-h (alto del texto; TextoTapado.tsx la reemplaza con el real).
+
+   TÉCNICA DE LA SALIDA: el texto es sticky dentro de .tt__guia, un bloque que ocupa todo el contenedor MENOS --tt-tramo. Ese tramo es lo que mide la
+   pila cuando ya cubre el texto (cubre + alto de la tapa − alto del texto), así que la guía termina justo cuando la pila, que sigue subiendo, termina
+   de cubrirlo. En ese instante el texto se suelta y sube
+   con el scroll a la misma velocidad que la pila, manteniendo siempre la misma posición relativa a ella que tenía cuando estaba cubierto: nunca
+   asoma por encima ni por debajo, no corta ninguna tapa ni reaparece detrás. */
+.tt { position: relative; --tt-top: var(--sp-3); --tt-cubre: var(--tt-top); --tt-paso: 0px; --tt-n: 1; }
+.tt__hueco { display: none; }
+.tt__tapa { position: relative; } /* base (sin sticky): es el ancla de lo que va dentro */
+
+/* Escritorio (≥ 900 px) con movimiento. En celular o con movimiento reducido: todo en su sitio, sin sticky, solapamiento ni pop. */
+@media (min-width: 56.25rem) and (prefers-reduced-motion: no-preference) {
+  .tt { --tt-tramo: max(0px, calc(var(--tt-cubre) + var(--tt-tapa-h) - var(--tt-h))); }
+  .tt__guia { position: absolute; z-index: 1; top: 0; left: var(--margen-pagina); right: var(--margen-pagina); bottom: var(--tt-tramo); pointer-events: none; }
+  .tt__texto { position: sticky; top: 0; pointer-events: auto; }
+  .tt__hueco { display: block; height: var(--tt-h); }
+  .tt__tapas { position: relative; z-index: 2; }
+  /* Relleno al final: dentro del bloque donde las tapas se pegan, así la pila completa se mantiene un trecho antes de salir */
+  .tt__tapas::after { content: ''; display: block; height: var(--sp-8); }
+  .tt__tapa { position: sticky; top: calc(var(--tt-top) + var(--i, 0) * var(--tt-paso)); height: var(--tt-tapa-h); }
+  /* Pop al encajar: 1 → 1,02 → 1 en 250 ms con ease-out (TextoTapado.tsx pone `is-pop` cuando la tapa llega a su posición pegada) */
+  /* Crece desde el borde superior (hacia abajo y a los lados): ese borde no sube, así que en Soluciones ninguna tarjeta toca el encabezado ni al encajar */
+  .tt__tapa.is-pop { animation: tt-pop 250ms ease-out; transform-origin: 50% 0; }
+  @keyframes tt-pop { 50% { transform: scale(1.02); } }
+  /* Si algo del texto recibe foco de teclado (p. ej. el botón de Nosotros) mientras está tapado, el texto pasa por encima para que se vea */
+  .tt:has(.tt__texto :focus-visible) .tt__guia { z-index: 3; }
+}

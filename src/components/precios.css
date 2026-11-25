@@ -1,0 +1,20 @@
+/* ---- Banda de la home ---- */
+.banda { border-block: 1px solid var(--gris-linea); background: var(--gris-fila); }
+.banda__fila { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--sp-2) var(--sp-6); padding-block: var(--sp-5); }
+.banda__etq { color: var(--suave); margin: 0; }
+.banda__monto { font-size: var(--fs-grande); }
+.banda__monto strong { font-weight: var(--peso-h1); letter-spacing: var(--ls-cifra); font-size: 1.35em; }
+.banda__enlace { margin-left: auto; display: inline-flex; align-items: center; min-height: var(--alto-tactil); font-weight: var(--peso-texto-fuerte); text-underline-offset: 0.25em; }
+@media (max-width: 47.99rem) { .banda__enlace { margin-left: 0; width: 100%; } }
+
+/* ---- Planes (/salones) ---- */
+.planes { display: grid; gap: var(--sp-5); }
+.plan { display: grid; gap: var(--sp-3); align-content: start; padding: var(--sp-6); border: 1px solid var(--borde); border-radius: var(--radio-lg); background: var(--blanco); }
+.plan:last-child { border: 2px solid var(--negro); } /* plan completo (Web + sistema): borde más marcado, sin color */
+.plan__nombre { color: var(--suave); margin: 0; }
+.plan__precio { font-family: var(--f-titulo); font-weight: var(--peso-h1); letter-spacing: var(--ls-cifra); font-size: var(--fs-h2); line-height: 1; }
+.plan__desc { color: var(--suave); }
+.plan__lista { display: grid; gap: var(--sp-2); padding-top: var(--sp-4); border-top: 1px solid var(--borde); }
+.plan__lista li { padding-left: var(--sp-4); position: relative; }
+.plan__lista li::before { content: ''; position: absolute; left: 0; top: 0.65em; width: 6px; height: 6px; background: currentColor; }
+@media (min-width: 48rem) { .planes { grid-template-columns: 1fr 1fr; } }

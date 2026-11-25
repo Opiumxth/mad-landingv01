@@ -1,0 +1,40 @@
+/* Botón con efecto hover de relleno (BotonHover.tsx): misma mecánica y mismos valores que `.ih__btn` del hero (hero-inicio.css), con las variables
+   --bh-* para poder usarlo también sobre fondo oscuro. Reposo: --acento con texto blanco. Hover o foco de teclado: un punto de --negro crece desde la
+   esquina hasta llenar el botón, el texto sale hacia la derecha y entra, desde la derecha, una capa con el mismo texto (aria-hidden), sin icono.
+   Blanco sobre --negro contrasta 19,8:1. El hover solo se aplica en dispositivos con puntero. */
+.btn.bh {
+  --bh-borde: var(--acento); --bh-borde-hover: var(--negro); --bh-foco: var(--negro);
+  position: relative; overflow: hidden; isolation: isolate; min-height: 2.75rem; padding: var(--sp-2) var(--sp-3);
+  border-color: var(--bh-borde); transition: border-color var(--t-medio) var(--easing);
+}
+/* Sobre fondo oscuro: el cobalto contra negro solo llega a 2,7:1, así que lleva borde blanco (--acento-borde-osc, ver tokens.css), también en hover */
+.btn.bh--oscuro { --bh-borde: var(--acento-borde-osc); --bh-borde-hover: var(--acento-borde-osc); --bh-foco: var(--blanco); }
+.bh__txt { display: inline-block; transition: transform var(--t-medio) var(--easing), opacity var(--t-medio) var(--easing); }
+.bh__hover {
+  position: absolute; inset: 0; z-index: 2; display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: translateX(3rem); transition: transform var(--t-medio) var(--easing), opacity var(--t-medio) var(--easing);
+}
+.bh__fondo {
+  position: absolute; z-index: 1; left: 20%; top: 40%; width: 0.5rem; height: 0.5rem; border-radius: var(--radio); background: var(--negro);
+  opacity: 0; transform: scale(1); transition: left var(--t-medio) var(--easing), top var(--t-medio) var(--easing), width var(--t-medio) var(--easing), height var(--t-medio) var(--easing), transform var(--t-medio) var(--easing), opacity var(--t-medio) var(--easing);
+}
+.btn.bh:focus-visible { outline: 3px solid var(--bh-foco); outline-offset: 3px; box-shadow: none; background-color: var(--acento); border-color: var(--bh-borde-hover); }
+.bh:focus-visible .bh__txt { transform: translateX(3rem); opacity: 0; }
+.bh:focus-visible .bh__hover { transform: translateX(0); opacity: 1; }
+.bh:focus-visible .bh__fondo { left: 0; top: 0; width: 100%; height: 100%; transform: scale(1.8); opacity: 1; }
+@media (hover: hover) {
+  .btn.bh:hover { background-color: var(--acento); border-color: var(--bh-borde-hover); }
+  .bh:hover .bh__txt { transform: translateX(3rem); opacity: 0; }
+  .bh:hover .bh__hover { transform: translateX(0); opacity: 1; }
+  .bh:hover .bh__fondo { left: 0; top: 0; width: 100%; height: 100%; transform: scale(1.8); opacity: 1; }
+}
+/* Movimiento reducido: sin desplazamientos, solo cambia el color del botón */
+@media (prefers-reduced-motion: reduce) {
+  .bh__hover, .bh__fondo { display: none; }
+  .bh__txt, .bh:hover .bh__txt, .bh:focus-visible .bh__txt { transform: none; opacity: 1; }
+  .btn.bh { transition: background-color var(--t-medio) var(--easing), border-color var(--t-medio) var(--easing); }
+  .btn.bh:focus-visible { background: var(--negro); }
+}
+@media (prefers-reduced-motion: reduce) and (hover: hover) {
+  .btn.bh:hover { background: var(--negro); }
+}

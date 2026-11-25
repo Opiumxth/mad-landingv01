@@ -1,0 +1,28 @@
+{
+  // Rama `next`: Next.js en Cloudflare Workers con el adaptador OpenNext.
+  // El Worker generado (.open-next/worker.js) sirve las páginas y POST /api/lead; los archivos estáticos salen de ASSETS.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "mad-landing",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "observability": { "enabled": true },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "mad-leads",
+      // TODO: reemplazar con el id real que imprime `wrangler d1 create mad-leads` (ver REPORTE_BORRADOR.md)
+      "database_id": "00000000-0000-0000-0000-000000000000"
+    }
+  ],
+  "vars": {
+    // Orígenes permitidos para POST /api/lead
+    "ALLOWED_ORIGINS": "https://somosmad.com"
+  }
+  // Secreto (NO va aquí): TURNSTILE_SECRET_KEY -> `wrangler secret put TURNSTILE_SECRET_KEY`
+  // En local se usa .dev.vars (ver .dev.vars.example)
+}

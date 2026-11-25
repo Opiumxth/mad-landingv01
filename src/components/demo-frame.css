@@ -1,0 +1,60 @@
+/* Frame del hero, como en la referencia. Pequeño bajo la cabecera y sobre el título; al bajar se queda pegado (sticky) y crece hasta casi
+   todo el viewport mientras el H1, el H2 y el botón se desvanecen (solo opacity). En cuanto llega a su tamaño máximo se suelta y sube con la
+   página (sin transformaciones ligadas al scroll), mientras entra la sección siguiente (#trabajo); no hay tramo pegado sin cambios. Mismo redondeo (8 px en pantalla) pequeño y grande. Reversible (scrub).
+   El CSS ya trae el estado inicial y la geometría, sin saltos de layout: JS solo escribe transform, clip-path y la opacidad de los textos.
+   Sin JS o con movimiento reducido: frame estático al ancho completo debajo del texto, textos visibles, sin pin (ver el final del archivo). */
+.ih {
+  /* Variables en el hero entero (la pista y el escenario las leen). --w: ancho final del frame = todo el ancho (o, si la pantalla es baja y ancha, lo que permita la altura menos 2 × --aire-v) */
+  --w: min(100cqi, calc((100svh - 2 * var(--aire-v)) * 1.7778));
+  --aire-v: 1.5rem; /* margen mínimo arriba y abajo con el frame ya grande: en ventanas bajas el borde de arriba siempre se ve */
+  --hf: calc(var(--w) * 0.5625); /* alto final, 16:9 */
+  --a: 0.7; /* escala inicial: el frame pequeño mide ~70% del ancho en celular */
+  --r: 8px; /* esquinas al inicio, en pantalla */
+  --hs: calc(var(--hf) * var(--a)); /* alto del frame pequeño */
+  --hueco: var(--sp-5); /* aire entre el frame pequeño y el H1 */
+  /* Si la pantalla es alta (celular), el frame final centrado queda más abajo que el pequeño: el escenario crece ese tramo */
+  --extra: max(0px, calc((100svh - var(--hf)) / 2 - var(--tope)));
+  --recorrido: 60svh; /* scroll mientras el frame está pegado y crece (celular); antes 90svh, con 30svh extra "pegado y grande" que se eliminó */
+  --texto: calc(6.7rem + 0.304 * 100cqi); /* alto estimado del texto del hero (H1 + título en 2 líneas + botón), para centrar el conjunto. Medido a 390 y 600 px */
+}
+@media (min-width: 48rem) {
+  .ih { --a: 0.34; --texto: calc(6.1rem + 0.0773 * 100cqi); /* título en una línea; medido de 820 a 1920 px (error < 30 px) */ }
+}
+
+@media (min-width: 56.25rem) {
+  .ih { --recorrido: 100svh; } /* escritorio (≥ 900 px): 100svh de crecimiento; antes 140svh, con 40svh extra "pegado y grande" que se eliminó */
+}
+
+/* Escenario sticky: mide lo que el frame final (+ --extra) pero solo ocupa en el flujo el alto del frame pequeño,
+   por eso el margen inferior negativo; así el H1 empieza justo debajo del frame pequeño. */
+.marco__escena {
+  position: sticky; top: min(calc((100svh - var(--hf)) / 2), var(--tope)); z-index: 2; pointer-events: none;
+  height: calc(var(--hf) + var(--extra));
+  margin-bottom: calc(var(--hs) - var(--hf) - var(--extra) + var(--hueco));
+  display: flex; justify-content: center; align-items: flex-start;
+}
+.marco__caja {
+  position: relative; flex: none; width: var(--w); height: var(--hf); overflow: hidden; background: var(--acento);
+  transform-origin: 50% 0; transform: scale(var(--a)); clip-path: inset(0 round calc(var(--r) / var(--a))); will-change: transform;
+}
+.marco__caja video, .marco__caja img { width: 100%; height: 100%; object-fit: cover; }
+/* Espera: el scroll con el frame pegado mientras crece. Con el alto del texto (que sube por debajo) suma ~--recorrido (--texto es una estimación). */
+.marco__espera { order: 2; height: max(0px, calc(var(--recorrido) - var(--texto))); }
+
+/* Cola: va FUERA de la pista. El sticky se rige por la caja con margen del escenario (corta, por el margen negativo) y se suelta cuando esa
+   caja llega al final de la pista; en ese momento el frame grande todavía sobresale por abajo --sobra, y esta cola le da ese espacio
+   (más el aire hasta el borde de la pantalla, para que la sección siguiente no asome mientras el frame aún está en su sitio). */
+.marco__cola {
+  --sobra: calc(var(--hf) + var(--extra) - var(--hs) - var(--hueco));
+  height: calc(var(--sobra) + max(0px, calc(100svh - min((100svh - var(--hf)) / 2, var(--tope)) - var(--hf) - var(--extra))));
+}
+
+/* Textos del hero en el tramo en que ya son invisibles: el botón no recibe clics ni foco (lo pone JS según la opacidad) */
+.ih__in--oculto .ih__cta { pointer-events: none; }
+
+/* Final sin animación: sin JavaScript, con prefers-reduced-motion. El texto queda arriba (lo importante) y el frame debajo, completo. */
+@media (prefers-reduced-motion: reduce), (scripting: none) {
+  .marco__escena { order: 3; position: static; height: auto; margin: var(--sp-6) 0 0; }
+  .marco__caja { transform: none; clip-path: none; will-change: auto; }
+  .marco__espera, .marco__cola { display: none; }
+}

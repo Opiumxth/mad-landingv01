@@ -1,0 +1,9 @@
+.etapas { display: grid; border-top: 2px solid var(--texto-claro); }
+.etapa { display: grid; gap: var(--sp-2); padding-block: var(--sp-5); border-bottom: 1px solid var(--borde); }
+.etapa__n { color: var(--suave); }
+.etapa p { color: var(--suave); max-width: 32rem; }
+.nota { margin-top: var(--sp-5); color: var(--suave); font-size: var(--fs-pequeno); max-width: var(--ancho-texto); }
+@media (min-width: 62rem) {
+  .etapas { grid-template-columns: repeat(3, 1fr); gap: var(--sp-6); border-top: 0; }
+  .etapa { align-content: start; padding: var(--sp-5) 0 0; border: 0; border-top: 2px solid var(--texto-claro); }
+}

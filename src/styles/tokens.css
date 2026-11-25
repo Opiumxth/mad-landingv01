@@ -1,0 +1,158 @@
+/* ==========================================================================
+   TOKENS DE DISEÑO — todo lo "cambiable" del sitio vive aquí.
+   Cambia un valor y se actualiza en todas las páginas.
+   Contrastes verificados (WCAG): texto >= 4.5:1, elementos de interfaz >= 3:1.
+   ========================================================================== */
+:root {
+  /* ---- Color de acento: SOLO el botón principal (cobalto) ---- */
+  --acento: #0b4db5; /* blanco sobre acento = 7.7:1 */
+  --acento-texto: #ffffff;
+  --acento-hover: #093f96; /* blanco sobre hover = 9.7:1 */
+  /* En fondos oscuros el cobalto (2.7:1 contra negro) lleva un borde blanco para cumplir 3:1 */
+  --acento-borde-osc: #ffffff;
+
+  /* ---- Paleta de marca (valores del encargo; [Confirmar contra el manual de marca: no estaba en el equipo]) ---- */
+  --negro: #0a0a0a;
+  --grafito: #1a1a1a; /* superficies sobre negro */
+  --hueso: #f4f2ee; /* fondo claro cálido */
+  --blanco: #ffffff;
+  --gris-oscuro: #3a3a3a; /* bordes y fondos sobre negro */
+  --gris-texto: #595959; /* texto de apoyo sobre claro */
+  --gris-medio: #8a8a8a; /* bordes de campos */
+  --gris-claro: #a3a3a3; /* texto de apoyo sobre negro y líneas finas */
+
+  --gris-suave: var(--hueso); /* fondo claro alterno, banda de precios */
+  --gris-fila: var(--hueso);
+  --gris-linea: var(--gris-claro); /* líneas y bordes finos (decorativos) */
+  --gris-borde-osc: var(--gris-oscuro); /* bordes finos sobre negro (decorativos) */
+
+  /* Fondo de la cabecera y del hero de la home: color sólido por ahora (hueso).
+     Mathias pondrá aquí el degradado. */
+  --fondo-hero: #f4f2ee;
+
+  /* Degradados oscuros: cierre (120°) y pie (vertical) */
+  --degradado-oscuro: linear-gradient(120deg, var(--negro) 0%, var(--grafito) 55%, var(--gris-oscuro) 100%);
+  --degradado-pie: linear-gradient(180deg, var(--negro) 0%, var(--grafito) 100%);
+
+  /* Texto. Sobre blanco: #0a0a0a 19.8:1 · #595959 7.0:1 (6.3:1 sobre hueso).
+     Sobre negro: #fff 19.8:1 · #a3a3a3 7.9:1 (6.9:1 sobre grafito, 4.5:1 sobre #3a3a3a). */
+  --texto-claro: var(--negro);
+  --texto-claro-suave: var(--gris-texto);
+  --texto-osc: var(--blanco);
+  --texto-osc-suave: var(--gris-claro);
+
+  /* Borde de campos de formulario (elemento de interfaz, >= 3:1) */
+  --campo-borde-cla: var(--gris-medio); /* 3.5:1 sobre blanco */
+  --campo-borde-osc: var(--gris-medio); /* 5.7:1 sobre negro */
+
+  --error-cla: #c62828; /* funcional, fuera de la paleta: 5.6:1 sobre blanco · 5.0:1 sobre hueso */
+  --error-osc: #eb5757;
+  --whatsapp: #25d366; /* verde propio de WhatsApp (botón flotante) · icono negro 10:1 */
+
+  /* ---- Tipografías ----
+     Marca: Alte Haas Grotesk (Regular y Bold) para títulos, texto y etiquetas. [Confirmar licencia] (ver src/styles/fuentes-marca.css).
+     Jane Austen: sin cargar ("for private use only" en el archivo); el token queda para cuando haya licencia.
+     Si Alte Haas no está disponible, se usa la fuente del sistema de respaldo. */
+  --f-sistema: 'Helvetica Neue', Helvetica, Arial, 'Liberation Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --f-alte: 'Alte Haas Grotesk', var(--f-sistema);
+  --f-marca: var(--f-alte); /* nombre MAD SOFTWARE STUDIO (Bold, mayúsculas) */
+  --f-titulo: var(--f-alte);
+  --f-etiqueta: var(--f-alte); /* etiquetas en mayúsculas con espaciado */
+  --f-texto: var(--f-alte);
+  --f-script: 'Jane Austen', 'Snell Roundhand', 'Apple Chancery', cursive;
+
+  --peso-marca: 700;
+  --ls-marca: 0.05em;
+  --marca-mayusculas: uppercase;
+  --peso-h1: 700; /* solo hay Regular y Bold */
+  --peso-titulo: 700; /* H2, H3 */
+  --ls-h1: -0.02em;
+  --ls-titulo: -0.015em; /* H2 y H3 */
+  --ls-cifra: -0.02em; /* precios grandes */
+  --titulo-mayusculas: none;
+  --peso-etiqueta: 700;
+  --ls-etiqueta: 0.08em;
+  --peso-texto: 400;
+  --peso-texto-fuerte: 700;
+
+  /* ---- Escala de tamaños (fluida: mínimo → máximo según ancho de pantalla) ---- */
+  --fs-etiqueta: 0.8125rem; /* 13px · Alte Haas Bold, mayúsculas. Mínimo permitido en el sitio: 12px */
+  --fs-etiqueta-min: 0.75rem; /* 12px · chips y pies de foto */
+  --fs-pequeno: clamp(0.9375rem, 0.9rem + 0.1vw, 1rem); /* 15→16px: texto de apoyo */
+  --fs-base: clamp(1rem, 0.95rem + 0.2vw, 1.125rem); /* 16px en celular → 18px en escritorio */
+  --fs-medio: clamp(1.0625rem, 1rem + 0.2vw, 1.1875rem); /* 17→19px */
+  --fs-grande: clamp(1.1875rem, 1.1rem + 0.4vw, 1.375rem); /* 19→22px */
+  --fs-h3: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem); /* 20→26px */
+  --fs-h2: clamp(2rem, 1.4rem + 2.6vw, 3.5rem); /* 32→56px */
+  --fs-h1: clamp(2.25rem, 7vw, 4rem); /* 36→64px (cierre y hero 2) */
+  --fs-h1-hero: clamp(2.5rem, 1.5rem + 2.6vw, 3.5rem); /* 40→56px: H1 del hero (2 columnas) */
+  --fs-marca: 1rem; /* 16px · nombre en cabecera y pie (Bold en mayúsculas es más ancho que la fuente condensada anterior) */
+
+  /* ---- Interlineado (compacto pero cómodo: texto 1.5, apoyo 1.4, H1 1.04, H2 1.12, H3 1.22) ---- */
+  --lh-texto: 1.5;
+  --lh-lead: 1.4;
+  --lh-h1: 1.04;
+  --lh-titulo: 1.12; /* H2 */
+  --lh-h3: 1.22;
+
+  /* ---- Espaciados ---- */
+  --sp-1: 0.25rem; /* 4 */
+  --sp-2: 0.5rem; /* 8 */
+  --sp-3: 0.75rem; /* 12 */
+  --sp-4: 1rem; /* 16 */
+  --sp-5: 1.5rem; /* 24 */
+  --sp-6: 2rem; /* 32 */
+  --sp-7: 3rem; /* 48 */
+  --sp-8: 4.5rem; /* 72 */
+  --seccion-y: clamp(3.5rem, 2rem + 5vw, 6rem); /* aire vertical igual en todas las secciones (56→96px) */
+  --gutter: 1rem; /* margen lateral en celular (16px) */
+  --margen-pagina: clamp(1rem, 3vw, 3.5rem); /* margen lateral de la cabecera y del título gigante del hero: van alineados */
+  --ancho-max: 72rem; /* 1152px */
+  --ancho-texto: 40rem; /* 640px */
+  --alto-cabecera: 5rem; /* 80px */
+
+  /* ---- Radio de esquinas: un solo criterio para botones, campos, tarjetas y marcos.
+     8px: suave pero serio. Pon --radio: 0px para volver a esquinas rectas. ---- */
+  --radio: 8px;
+  --radio-sm: var(--radio);
+  --radio-boton: var(--radio);
+  --radio-lg: var(--radio);
+  --radio-celular: 2.25rem; /* solo el marco del celular (forma física del aparato) */
+  --sombra-marco: 0 1px 2px rgba(10, 10, 10, 0.08), 0 12px 24px -8px rgba(10, 10, 10, 0.18), 0 32px 64px -16px rgba(10, 10, 10, 0.22);
+
+  /* ---- Movimiento ---- */
+  --t-rapido: 150ms;
+  --t-medio: 250ms;
+  --easing: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* ---- Alturas mínimas táctiles ---- */
+  --alto-tactil: 3rem; /* 48px */
+  --alto-boton: 3.5rem; /* 56px: botón principal */
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --gutter: 2rem;
+  }
+}
+
+/* ---- Tema de la página (home): fondo, texto principal y texto suave cambian juntos de claro a oscuro al bajar a "Soluciones".
+   Se activan con <html data-tema="oscuro"> (ver TemaFondo.tsx). Registradas como <color> para que la transición (~300 ms) las interpole.
+   Valores iniciales = --fondo-hero, --texto-claro, --texto-claro-suave. El pie no usa estas variables (se ve igual en ambos temas). ---- */
+@property --tema-fondo { syntax: '<color>'; inherits: true; initial-value: #f4f2ee; }
+@property --tema-texto { syntax: '<color>'; inherits: true; initial-value: #0a0a0a; }
+@property --tema-suave { syntax: '<color>'; inherits: true; initial-value: #595959; }
+:root {
+  --tema-fondo: var(--fondo-hero);
+  --tema-texto: var(--texto-claro);
+  --tema-suave: var(--texto-claro-suave);
+  transition: --tema-fondo 300ms ease, --tema-texto 300ms ease, --tema-suave 300ms ease;
+}
+:root[data-tema='oscuro'] {
+  --tema-fondo: var(--negro);
+  --tema-texto: var(--texto-osc);
+  --tema-suave: var(--texto-osc-suave);
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { transition: none; }
+}

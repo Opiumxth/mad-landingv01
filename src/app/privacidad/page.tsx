@@ -1,0 +1,68 @@
+import Cabecera from '../../components/Cabecera';
+import JsonLd from '../../components/JsonLd';
+import { SITIO } from '../../data/sitio';
+import { metaPagina } from '../../lib/seo';
+import '../../components/paginas.css';
+
+export const metadata = metaPagina({
+  title: 'Política de privacidad | MAD Software Studio',
+  description: 'Qué datos personales recoge MAD Software Studio, para qué los usa, dónde se guardan y cómo ejercer tus derechos (Ley 29733).',
+  ruta: '/privacidad',
+});
+
+export default function Privacidad() {
+  return (
+    <>
+      <JsonLd />
+      <Cabecera />
+      <main id="contenido" className="tono-claro seccion">
+        <article className="cont legal">
+      <p className="etiqueta">Documento provisional · [TODO: revisión legal]</p>
+      <h1>Política de privacidad</h1>
+      <p className="lead">Última actualización: [TODO: fecha]. Esta política explica cómo tratamos tus datos personales según la Ley N.º 29733, Ley de Protección de Datos Personales del Perú, y su Reglamento.</p>
+
+      <h2>1. Quién es el titular</h2>
+      <p>El titular del banco de datos y responsable del tratamiento es [TODO: razón social o nombre completo], con RUC [TODO: RUC] y domicilio en [TODO: domicilio], que opera el sitio {SITIO.dominio.replace('https://', '')} bajo la marca {SITIO.nombre}.</p>
+
+      <h2>2. Qué datos recogemos</h2>
+      <p>Cuando completas el formulario de este sitio recogemos:</p>
+      <ul>
+        <li>Tu rubro y lo que necesitas (las opciones que eliges).</li>
+        <li>El nombre de tu negocio.</li>
+        <li>Tu número de WhatsApp.</li>
+        <li>La página del sitio desde la que enviaste el formulario.</li>
+        <li>La fecha y hora del envío.</li>
+        <li>Tu consentimiento, que se registra al marcar la casilla del formulario.</li>
+      </ul>
+      <p>El sitio no usa cookies de seguimiento ni herramientas de analítica. [TODO: actualizar si se agregan].</p>
+
+      <h2>3. Para qué los usamos</h2>
+      <p>Usamos tus datos solo para contactarte por WhatsApp y preparar la demo que pediste con tu logo, y para responder tus consultas sobre nuestros servicios. No vendemos tus datos ni los usamos para otras finalidades sin pedirte antes tu consentimiento.</p>
+
+      <h2>4. Base legal</h2>
+      <p>Tratamos tus datos con tu consentimiento libre, previo, expreso, informado e inequívoco, que das al marcar la casilla del formulario. Puedes retirarlo en cualquier momento.</p>
+
+      <h2>5. Dónde se guardan y con quién se comparten</h2>
+      <p>Los datos del formulario se guardan en una base de datos de Cloudflare, Inc. (servicio Cloudflare D1), proveedor de infraestructura que actúa por encargo nuestro. Para evitar mensajes automáticos usamos Cloudflare Turnstile, que analiza datos técnicos de tu navegador al enviar el formulario. Esos servidores pueden estar fuera del Perú, por lo que tus datos pueden tener un flujo transfronterizo hacia países con la protección que exige la normativa o con las garantías correspondientes. [TODO: confirmar ubicación de la base de datos y garantías]. No entregamos tus datos a otros terceros, salvo obligación legal.</p>
+
+      <h2>6. Por cuánto tiempo</h2>
+      <p>Conservamos tus datos por [TODO: plazo, por ejemplo hasta X meses desde el último contacto] o hasta que pidas su cancelación.</p>
+
+      <h2>7. Tus derechos</h2>
+      <p>Puedes ejercer tus derechos de información, acceso, rectificación, cancelación y oposición, y retirar tu consentimiento, escribiendo a [TODO: correo electrónico para derechos ARCO] o por WhatsApp al {SITIO.whatsappVisible}. Indica tu nombre, el número de WhatsApp que dejaste y qué derecho quieres ejercer. Si consideras que no atendimos tu solicitud, puedes presentar un reclamo ante la Autoridad Nacional de Protección de Datos Personales (ANPD) del Ministerio de Justicia y Derechos Humanos.</p>
+
+      <h2>8. Seguridad</h2>
+      <p>Aplicamos medidas técnicas y organizativas razonables para proteger tus datos, como el envío cifrado (HTTPS) y el acceso restringido a la base de datos. [TODO: detallar medidas reales].</p>
+
+      <h2>9. Cambios en esta política</h2>
+      <p>Si cambiamos esta política, publicaremos la nueva versión en esta página con su fecha de actualización.</p>
+
+      <h2>10. Contacto</h2>
+      <p>[TODO: nombre del responsable o área] · [TODO: correo electrónico] · WhatsApp {SITIO.whatsappVisible}</p>
+
+      <p><a className="btn btn--borde" href="/">Volver al inicio</a></p>
+    </article>
+      </main>
+    </>
+  );
+}

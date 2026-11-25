@@ -1,0 +1,74 @@
+/* Pie de la home. Aspecto claro propio (no cambia con el tema de la página): fondo --fondo-hero, texto --negro y --gris-texto. Colores, tipografía y espaciados
+   salen de tokens.css; el cobalto solo aparece en el campo de cuadritos (tintes de azul). */
+/* El pie mide como mínimo una pantalla (la última): el campo de píxeles arriba y el bloque de información pegado al fondo; el espacio sobrante queda en medio. min-height, no alto
+   fijo: en ventanas bajas crece y nunca se corta ni se solapa.
+   TRAMO ENTRE LOS BOTONES DEL CTA Y LA "MAD": se acorta a la mitad (de ~334 a ~166 px a 1440 px) quitando el padding inferior del CTA y recortando --pi-recorte del aire vacío
+   que el campo tenía por encima de la "mad". La "mad" conserva su tamaño y su distancia a la base (se miden con --pi-ref, el alto de antes), así que la nube y el halo no
+   cambian; el espacio recortado lo absorbe el hueco flexible entre el campo y la información (el pie mide al menos una pantalla). */
+.pi {
+  --pi-ref: clamp(280px, 45vh, 520px); --pi-recorte: calc(var(--pi-ref) * 0.06); /* alto de referencia del campo; aire que se le quita por arriba */
+  --pi-alto: calc(var(--pi-ref) - var(--pi-recorte)); /* alto real del bloque del campo */
+  display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh;
+  background: var(--fondo-hero); color: var(--negro);
+}
+@media (max-width: 39.9375rem) { .pi { --pi-ref: clamp(240px, 38vh, 380px); --pi-recorte: calc(var(--pi-ref) * 0.18); } }
+.pi__info { flex: 1; display: flex; flex-direction: column; } /* ocupa el resto del pie: la información arriba (junto a la "mad") y la fila inferior abajo */
+
+/* Campo de cuadritos + "mad": todo el ancho del pie; alto ≈ clamp(280px, 45vh, 520px) (menor en celular). La cuadrícula tenue de fondo coincide con las costuras
+   que vacía el canvas (la celda y su posición las escribe CampoPixeles.tsx). */
+.pi__campo {
+  --pi-celda: 10px; --pi-costura: 1px; --pi-grid-x: 0px; --pi-grid-y: 0px;
+  --pi-ext: 0px; --pi-alcance: 0px; /* lo que el canvas cruza hacia arriba sobre el CTA, y lo que ha subido el campo según el scroll (los escribe CampoPixeles.tsx) */
+  position: relative; container-type: inline-size; overflow-x: clip; overflow-y: visible; width: 100%; height: var(--pi-alto);
+}
+.pi__campo::before {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; top: calc(-1 * var(--pi-ext)); pointer-events: none;
+  /* La cuadrícula tenue también cubre la zona extendida (sobre el CTA) y se desvanece hacia arriba hasta donde ha subido con el scroll */
+  -webkit-mask-image: linear-gradient(to top, #000 0, #000 var(--pi-alto), transparent calc(var(--pi-alto) + var(--pi-alcance)));
+  mask-image: linear-gradient(to top, #000 0, #000 var(--pi-alto), transparent calc(var(--pi-alto) + var(--pi-alcance)));
+  --pi-gris: color-mix(in srgb, var(--gris-claro) 22%, transparent); /* gris muy claro de la paleta */
+  background-image:
+    linear-gradient(to right, transparent calc(var(--pi-celda) - var(--pi-costura)), var(--pi-gris) 0),
+    linear-gradient(to bottom, transparent calc(var(--pi-celda) - var(--pi-costura)), var(--pi-gris) 0);
+  background-size: var(--pi-celda) var(--pi-celda); background-position: var(--pi-grid-x) var(--pi-grid-y);
+}
+.pi__lienzo { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: calc(100% + var(--pi-ext)); pointer-events: none; } /* más alto que el bloque: cruza hacia arriba sobre el CTA, sin mover el layout */
+
+/* "mad" cursiva (Jane Austen, texto HTML) centrada sobre los píxeles, en la zona llena (bajo el borde irregular). Ancho de la tinta ≈ 2,5 em: el tamaño busca ~65 %
+   del ancho del contenedor de contenido y se limita por el alto del bloque (la tinta mide ~0,64 em). Negro puro; el halo del canvas le deja cuadritos muy claros detrás. */
+.pi__mad {
+  position: absolute; left: 50%; top: calc(var(--pi-alto) - 0.3 * var(--pi-ref)); margin: 0; z-index: 1; pointer-events: none; user-select: none; /* 0,3 del alto de referencia desde la base, como antes */
+  font-family: var(--f-script); font-weight: 400; line-height: 1; white-space: nowrap; color: #000000;
+  font-size: min(calc(0.26 * min(100cqi, 72rem)), calc(0.72 * var(--pi-ref)));
+  transform: translate(-50%, calc(-50% + 0.075em)); /* centra la tinta (queda ~0,075 em por encima del centro de la caja de línea) */
+}
+
+/* Parte media: mismo contenedor que las demás secciones */
+/* Separación moderada entre la "mad" y el bloque de información: clamp(32px, 6vh, 72px). El espacio que sobra va debajo, entre este bloque y la fila inferior. */
+.pi__medio { display: grid; gap: var(--sp-7); width: 100%; max-width: calc(var(--ancho-max) + 2 * var(--margen-pagina)); margin-inline: auto; padding: clamp(32px, 6vh, 72px) var(--margen-pagina) var(--sp-7); }
+/* "ESTUDIO DE SOFTWARE": el mismo estilo tipográfico del título del hero (--f-marca, Bold, mayúsculas, tracking −0,02 em, interlineado 0,92) a un tamaño propio del pie (--fs-h3) */
+.pi__nombre { font-family: var(--f-marca); font-weight: 700; text-transform: uppercase; font-size: var(--fs-h3); line-height: 0.92; letter-spacing: -0.02em; }
+.pi__lugar { margin-top: var(--sp-2); color: var(--gris-texto); font-size: var(--fs-pequeno); text-transform: none; }
+/* Un solo bloque de columnas, pegado al borde derecho del contenedor, con espacio equilibrado entre ellas */
+.pi__cols { display: flex; flex-direction: column; gap: var(--sp-6); }
+/* Títulos de columna (NAVEGAR, CONECTAR): Alte Haas Bold, mayúsculas, tracking leve y color principal */
+.pi__etiqueta { margin: 0 0 var(--sp-1); font-family: var(--f-alte); font-weight: 700; font-size: 0.8125rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--negro); }
+/* Enlaces: Alte Haas Regular en gris (el texto suave del pie, contraste ≥ 6:1); en hover y foco pasan al color principal con un poco de negrita y subrayado, sin cambiar el
+   ancho (la técnica de EnlaceTexto: sombras de texto sin desenfoque, no un cambio real de font-weight). Con movimiento reducido el cambio es instantáneo. */
+.pi__col .enlace-texto { font-family: var(--f-alte); font-weight: 400; color: var(--gris-texto); transition: color var(--t-medio) var(--easing), background-size var(--t-medio) var(--easing), text-shadow var(--t-medio) var(--easing); }
+.pi__col .enlace-texto:hover, .pi__col .enlace-texto:focus-visible { color: var(--negro); }
+@media (prefers-reduced-motion: reduce) { .pi__col .enlace-texto { transition: none; } }
+.pi__col ul { display: grid; gap: 0; }
+@media (min-width: 48rem) {
+  .pi__medio { grid-template-columns: 1fr auto; align-items: start; }
+  .pi__cols { flex-direction: row; gap: var(--sp-8); justify-self: end; }
+}
+
+/* Fila inferior, anclada al fondo del pie (margin-top: auto): a la izquierda los derechos y a la derecha "Volver arriba"; sin cajas, bordes ni líneas */
+.pi__base { margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-2) var(--sp-6); width: 100%; max-width: calc(var(--ancho-max) + 2 * var(--margen-pagina)); margin-inline: auto; padding: var(--sp-5) var(--margen-pagina) var(--sp-6); }
+.pi__derechos { color: var(--gris-texto); font-size: var(--fs-pequeno); }
+.pi__link { display: inline-flex; align-items: center; gap: var(--sp-2); min-height: var(--alto-tactil); font-size: var(--fs-pequeno); color: var(--negro); text-underline-offset: 0.25em; }
+.pi__link:hover { text-decoration: underline; }
+.pi__link:focus-visible { outline: 3px solid var(--negro); outline-offset: 3px; box-shadow: none; }
+/* Celular: apilados, los derechos arriba y "Volver arriba" debajo */
+@media (max-width: 39.9375rem) { .pi__base { flex-direction: column; align-items: flex-start; } }

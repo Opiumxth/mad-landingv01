@@ -1,0 +1,75 @@
+/* La home entera (hero + frame) va sobre --fondo-hero. */
+.inicio { background: var(--tema-fondo); } /* = --fondo-hero en tema claro; en tema oscuro (al bajar a Soluciones) = --negro */
+/* Hero de la home. Fondo: --fondo-hero (color sólido; el degradado lo pone Mathias en tokens.css). */
+.ih {
+  --tope: calc(var(--alto-cabecera) + 1.5rem); /* donde se pega el frame (mínimo): justo bajo la cabecera + 24 px */
+  container-type: inline-size; overflow-x: clip; background: var(--fondo-hero); color: var(--negro); --suave: var(--texto-claro-suave);
+}
+/* Pista del hero (padre del escenario sticky del frame; ver demo-frame.css). Orden vertical, como en la referencia:
+   frame pequeño · H1 · ESTUDIO DE SOFTWARE · botón · precio. El frame crece y el texto sube por debajo. */
+.ih__pista {
+  display: flex; flex-direction: column;
+  /* Centra el conjunto (frame pequeño + texto) en la primera pantalla, como en la referencia. --texto es una estimación del alto del texto. */
+  padding-top: max(calc(var(--tope) - var(--alto-cabecera)), calc((100svh - var(--alto-cabecera) - var(--hs) - var(--hueco) - var(--texto)) / 2));
+}
+.ih__in { order: 1; display: grid; justify-items: center; gap: var(--sp-3); width: 100%; padding-inline: var(--margen-pagina); text-align: center; }
+
+/* H1 (el único de la página): minúsculas, tamaño normal, centrado. En escritorio (≥ 900 px) cabe en una sola línea; en celular, hasta dos o tres. */
+.ih__h1 { max-width: 34rem; font-size: calc(clamp(1rem, 0.9rem + 0.5vw, 1.375rem) + 0.16rem); /* +2,5 px frente al tamaño base */ margin-bottom: calc(-1 * var(--sp-3)); /* pegado al H2: las cajas se tocan (el aire que queda es el interno del H2) */ font-weight: 400; line-height: 1.3; letter-spacing: -0.01em; text-wrap: balance; }
+@media (min-width: 56.25rem) {
+  .ih__h1 { max-width: none; text-wrap: nowrap; font-size: calc(clamp(1rem, 0.9rem + 0.5vw, 1.375rem) + 0.41rem); /* escritorio: +6,5 px frente al tamaño base */ }
+}
+
+/* H2 gigante: el tamaño sale del ancho de su caja (unidades cqi), así llena el ancho sin desbordar.
+   k = ancho del texto en em (medido con Alte Haas Bold: 5,94 em la línea más larga en dos líneas, 11,65 em en una) más ~1,5% de margen para la fuente de respaldo (el título ocupa casi todo el ancho entre los márgenes de página).
+   Celular: dos líneas ("ESTUDIO DE" / "SOFTWARE"). Desde 48rem: una sola línea. */
+.ih__h2caja { container-type: inline-size; width: 100%; overflow-x: clip; }
+.ih__h2 {
+  font-family: var(--f-marca); font-weight: 700; text-transform: uppercase; text-wrap: balance;
+  font-size: calc(100cqi / var(--ih-k, 6.05)); line-height: 0.92; letter-spacing: -0.02em;
+}
+@media (min-width: 48rem) {
+  .ih__h2 { --ih-k: 11.9; white-space: nowrap; }
+}
+
+.ih__btn { min-height: 2.75rem; padding: var(--sp-2) var(--sp-3); } /* menos aire dentro del botón; conserva 44 px de alto mínimo para el dedo */
+
+/* ---- Efecto hover del botón "Hablemos" ----
+   Inspirado en "Interactive Hover Button" (Magic UI, MIT, crédito @AayushBharti), reescrito en CSS plano con los tokens del proyecto.
+   Reposo: igual que siempre (--acento con texto blanco). Hover o foco de teclado: un punto de --negro crece desde la esquina hasta llenar el
+   botón, el texto sale hacia la derecha y entra, desde la derecha, una capa con el mismo texto (aria-hidden), sin icono. Blanco sobre
+   --negro contrasta 19,8:1. El hover solo se aplica en dispositivos con puntero (en táctil el botón se ve completo, sin estados pegados). */
+.ih__btn { position: relative; overflow: hidden; isolation: isolate; transition: border-color var(--t-medio) var(--easing); }
+.ih__btn-txt { display: inline-block; transition: transform var(--t-medio) var(--easing), opacity var(--t-medio) var(--easing); }
+.ih__btn-hover {
+  position: absolute; inset: 0; z-index: 2; display: flex; align-items: center; justify-content: center; /* solo el texto, centrado igual que en reposo: el botón no cambia de ancho */
+  opacity: 0; transform: translateX(3rem); transition: transform var(--t-medio) var(--easing), opacity var(--t-medio) var(--easing);
+}
+.ih__btn-fondo {
+  position: absolute; z-index: 1; left: 20%; top: 40%; width: 0.5rem; height: 0.5rem; border-radius: var(--radio); background: var(--negro);
+  opacity: 0; transform: scale(1); transition: left var(--t-medio) var(--easing), top var(--t-medio) var(--easing), width var(--t-medio) var(--easing), height var(--t-medio) var(--easing), transform var(--t-medio) var(--easing), opacity var(--t-medio) var(--easing);
+}
+/* Anillo de foco visible sobre el fondo claro del hero (el global es para fondos oscuros) */
+.ih__btn:focus-visible { outline: 3px solid var(--negro); outline-offset: 3px; box-shadow: none; }
+
+.ih__btn:focus-visible { background-color: var(--acento); border-color: var(--negro); }
+.ih__btn:focus-visible .ih__btn-txt { transform: translateX(3rem); opacity: 0; }
+.ih__btn:focus-visible .ih__btn-hover { transform: translateX(0); opacity: 1; }
+.ih__btn:focus-visible .ih__btn-fondo { left: 0; top: 0; width: 100%; height: 100%; transform: scale(1.8); opacity: 1; }
+@media (hover: hover) {
+  .ih__btn:hover { background-color: var(--acento); border-color: var(--negro); } /* el relleno negro lo pone el punto que crece */
+  .ih__btn:hover .ih__btn-txt { transform: translateX(3rem); opacity: 0; }
+  .ih__btn:hover .ih__btn-hover { transform: translateX(0); opacity: 1; }
+  .ih__btn:hover .ih__btn-fondo { left: 0; top: 0; width: 100%; height: 100%; transform: scale(1.8); opacity: 1; }
+}
+/* Movimiento reducido: sin desplazamientos, solo cambia el color del botón */
+@media (prefers-reduced-motion: reduce) {
+  .ih__btn-hover, .ih__btn-fondo { display: none; }
+  .ih__btn-txt, .ih__btn:hover .ih__btn-txt, .ih__btn:focus-visible .ih__btn-txt { transform: none; opacity: 1; }
+  .ih__btn { transition: background-color var(--t-medio) var(--easing), border-color var(--t-medio) var(--easing); }
+  .ih__btn:focus-visible { background: var(--negro); }
+}
+@media (prefers-reduced-motion: reduce) and (hover: hover) {
+  .ih__btn:hover { background: var(--negro); }
+}
+.ih__cta { display: grid; justify-items: center; gap: var(--sp-3); margin-top: var(--sp-2); }

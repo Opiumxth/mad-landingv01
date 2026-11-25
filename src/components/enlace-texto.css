@@ -1,0 +1,23 @@
+/* Enlace de texto (EnlaceTexto.tsx): mismos valores que `.cab__nav a` de la cabecera (cabecera.css). Hover o foco de teclado: la palabra se engrosa de
+   forma progresiva y un subrayado se dibuja de izquierda a derecha. La fuente solo tiene Regular y Bold y no se puede interpolar el peso, así que el
+   engrosado son cuatro sombras sin desenfoque (text-shadow, que sí se interpola) sobre la misma palabra: el ancho NO cambia (no hay que reservar el
+   de la versión en negrita; un cambio real de font-weight sí lo movería). Color: el del texto de la sección (currentColor). */
+.enlace-texto {
+  display: inline-flex; align-items: center; min-height: 2.75rem; text-decoration: none; font-size: var(--fs-base); font-weight: 400;
+  text-shadow: 0 0 0 currentColor, 0 0 0 currentColor, 0 0 0 currentColor, 0 0 0 currentColor;
+  background: linear-gradient(currentColor, currentColor) 0 calc(50% + 0.7em) / 0 1.5px no-repeat;
+  transition: background-size var(--t-medio) var(--easing), text-shadow var(--t-medio) var(--easing);
+}
+.enlace-texto:hover, .enlace-texto:focus-visible {
+  background-size: 100% 1.5px;
+  text-shadow: 0.03em 0 0 currentColor, -0.03em 0 0 currentColor, 0 0.012em 0 currentColor, 0 -0.012em 0 currentColor;
+}
+/* Flecha opcional al final (↗): del mismo color y tamaño que el texto, a ~4 px de él (2 px de margen + el aire interno del dibujo); en hover y foco se
+   desplaza ~3 px en diagonal, hacia arriba a la derecha (no cambia el ancho del enlace) */
+.enlace-texto__flecha { flex: none; margin-left: 2px; transition: transform var(--t-medio) var(--easing); }
+.enlace-texto:hover .enlace-texto__flecha, .enlace-texto:focus-visible .enlace-texto__flecha { transform: translate(3px, -3px); }
+@media (prefers-reduced-motion: reduce) {
+  .enlace-texto { transition: none; }
+  .enlace-texto__flecha { transition: none; }
+  .enlace-texto:hover .enlace-texto__flecha, .enlace-texto:focus-visible .enlace-texto__flecha { transform: none; }
+}

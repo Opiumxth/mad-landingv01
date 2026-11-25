@@ -1,0 +1,7 @@
+.cond { display: grid; gap: var(--sp-4); }
+.tarjeta { display: grid; gap: var(--sp-2); align-content: start; padding: var(--sp-5); border: 1px solid var(--gris-linea); border-radius: var(--radio-lg); }
+.tarjeta--fuerte { border: 2px solid var(--negro); }
+.tarjeta .etiqueta { margin: 0 0 var(--sp-1); font-size: var(--fs-etiqueta); }
+.tarjeta p, .tarjeta li { color: var(--suave); }
+.tarjeta ul { display: grid; gap: var(--sp-2); list-style: disc; padding-left: var(--sp-5); }
+@media (min-width: 48rem) { .cond { grid-template-columns: 1fr 1fr; } .tarjeta--ancha { grid-column: 1 / -1; } }

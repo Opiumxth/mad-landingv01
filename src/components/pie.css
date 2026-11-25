@@ -1,0 +1,21 @@
+/* Pie claro, sin fondo propio: usa --fondo-hero hasta que Mathias ponga el suyo. "mad" gigante en Jane Austen, negro puro y opaco */
+.pie.tono-claro { overflow: clip; /* el "mad" de Jane Austen trae un área de línea enorme y ensanchaba el scroll con una franja negra */ background: var(--fondo-hero); border-top: 1px solid var(--borde); padding-top: var(--sp-8); }
+.pie__sup { display: grid; gap: var(--sp-6); }
+.pie__nombre { font-size: var(--fs-medio); }
+.pie__linea { margin-top: var(--sp-2); color: var(--suave); max-width: 24rem; text-wrap: pretty; }
+.pie__tit { color: var(--suave); margin: 0 0 var(--sp-2); }
+.pie__col ul { display: grid; gap: var(--sp-1); }
+.pie__col a { display: inline-block; padding-block: var(--sp-2); text-underline-offset: 0.25em; }
+.pie__col a:hover { text-decoration: underline; }
+
+.pie__mad-caja { margin-top: var(--sp-7); }
+.pie__mad { margin: 0; font-family: var(--f-script); font-weight: 400; font-size: min(26.5rem, 36vw); line-height: 0.95; text-align: center; white-space: nowrap; color: #000000; opacity: 1; pointer-events: none; user-select: none; }
+
+.pie__inf { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-2) var(--sp-5); margin-top: var(--sp-6); padding-block: var(--sp-5) var(--sp-6); border-top: 1px solid var(--borde); }
+.pie__inf p { color: var(--suave); font-size: var(--fs-pequeno); }
+.pie__subir { display: inline-flex; align-items: center; gap: var(--sp-2); min-height: var(--alto-tactil); font-weight: var(--peso-texto-fuerte); text-underline-offset: 0.25em; }
+.pie__subir:hover { text-decoration: underline; }
+
+@media (min-width: 62rem) {
+  .pie__sup { grid-template-columns: 1.6fr 1fr 1fr; gap: var(--sp-7); align-items: start; }
+}

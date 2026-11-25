@@ -1,0 +1,34 @@
+/* ==========================================================================
+   FUENTES DE MARCA.   [Confirmar licencia]
+   - Alte Haas Grotesk (Regular y Bold): títulos, texto y etiquetas. Los metadatos del archivo dicen
+     "Copyright (c) 2007 by Yann Le Coroller. All rights reserved." y no traen texto de licencia.
+   - Jane Austen: solo el logo "mad". Los metadatos del archivo dicen "for private use only" (Pia Frauss): uso local, no se publica el archivo.
+   Los .woff2 son una conversión de los .ttf que subió Mathias (misma fuente, sin subconjunto) y viven en public/fonts,
+   fuera de git hasta confirmar la licencia (ver REPORTE_BORRADOR.md).
+   Cobertura (ñ á é í ó ú ¿ ¡ y mayúsculas): completa. No traen las flechas ↑ →: el navegador usa la del sistema.
+   ========================================================================== */
+@font-face {
+  font-family: 'Alte Haas Grotesk';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/AlteHaasGrotesk-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Alte Haas Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/AlteHaasGrotesk-Bold.woff2') format('woff2');
+}
+/* Jane Austen: ACTIVA para el logo "mad" (cabecera y pie), solo en la máquina de Mathias.
+   El archivo dice "for private use only": public/fonts/ está fuera de git (.git/info/exclude), así que el .woff2 no se sube
+   y el código solo lo referencia. Si esta rama se publica sin el archivo, el logo cae a una cursiva del sistema.
+   [Confirmar licencia] antes de publicar el archivo. font-display: block porque es un logo (mejor invisible un instante que parpadear). */
+@font-face {
+  font-family: 'Jane Austen';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url('/fonts/JaneAusten.woff2') format('woff2'), url('/fonts/JaneAust.ttf') format('truetype');
+}
