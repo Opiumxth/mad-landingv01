@@ -1,6 +1,6 @@
 /* Frame del hero, como en la referencia. Pequeño bajo la cabecera y sobre el título; al bajar se queda pegado (sticky) y crece hasta casi
-   todo el viewport mientras el H1, el H2 y el botón se desvanecen (solo opacity). Se queda grande y pegado un momento, y luego se suelta y
-   sube con la página mientras entra la sección siguiente (#trabajo). Mismo redondeo (8 px en pantalla) pequeño y grande. Reversible (scrub).
+   todo el viewport mientras el H1, el H2 y el botón se desvanecen (solo opacity). En cuanto llega a su tamaño máximo se suelta y sube con la
+   página (sin transformaciones ligadas al scroll), mientras entra la sección siguiente (#trabajo); no hay tramo pegado sin cambios. Mismo redondeo (8 px en pantalla) pequeño y grande. Reversible (scrub).
    El CSS ya trae el estado inicial y la geometría, sin saltos de layout: JS solo escribe transform, clip-path y la opacidad de los textos.
    Sin JS o con movimiento reducido: frame estático al ancho completo debajo del texto, textos visibles, sin pin (ver el final del archivo). */
 .ih {
@@ -14,7 +14,7 @@
   --hueco: var(--sp-5); /* aire entre el frame pequeño y el H1 */
   /* Si la pantalla es alta (celular), el frame final centrado queda más abajo que el pequeño: el escenario crece ese tramo */
   --extra: max(0px, calc((100svh - var(--hf)) / 2 - var(--tope)));
-  --recorrido: 90svh; /* scroll mientras el frame está pegado (crece + se queda grande): 60svh + 30svh en celular */
+  --recorrido: 60svh; /* scroll mientras el frame está pegado y crece (celular); antes 90svh, con 30svh extra "pegado y grande" que se eliminó */
   --texto: calc(6.7rem + 0.304 * 100cqi); /* alto estimado del texto del hero (H1 + título en 2 líneas + botón), para centrar el conjunto. Medido a 390 y 600 px */
 }
 @media (min-width: 48rem) {
@@ -22,7 +22,7 @@
 }
 
 @media (min-width: 56.25rem) {
-  .ih { --recorrido: 140svh; } /* escritorio (≥ 900 px): 100svh crece + 40svh grande y pegado */
+  .ih { --recorrido: 100svh; } /* escritorio (≥ 900 px): 100svh de crecimiento; antes 140svh, con 40svh extra "pegado y grande" que se eliminó */
 }
 
 /* Escenario sticky: mide lo que el frame final (+ --extra) pero solo ocupa en el flujo el alto del frame pequeño,
@@ -38,12 +38,12 @@
   transform-origin: 50% 0; transform: scale(var(--a)); clip-path: inset(0 round calc(var(--r) / var(--a))); will-change: transform;
 }
 .marco__caja video, .marco__caja img { width: 100%; height: 100%; object-fit: cover; }
-/* Espera: el scroll con el frame pegado. Con el alto del texto (que sube por debajo) suma ~--recorrido (--texto es una estimación). */
+/* Espera: el scroll con el frame pegado mientras crece. Con el alto del texto (que sube por debajo) suma ~--recorrido (--texto es una estimación). */
 .marco__espera { order: 2; height: max(0px, calc(var(--recorrido) - var(--texto))); }
 
 /* Cola: va FUERA de la pista. El sticky se rige por la caja con margen del escenario (corta, por el margen negativo) y se suelta cuando esa
    caja llega al final de la pista; en ese momento el frame grande todavía sobresale por abajo --sobra, y esta cola le da ese espacio
-   (más el aire hasta el borde de la pantalla, para que la sección siguiente no asome mientras el frame aún crece). */
+   (más el aire hasta el borde de la pantalla, para que la sección siguiente no asome mientras el frame aún está en su sitio). */
 .marco__cola {
   --sobra: calc(var(--hf) + var(--extra) - var(--hs) - var(--hueco));
   height: calc(var(--sobra) + max(0px, calc(100svh - min((100svh - var(--hf)) / 2, var(--tope)) - var(--hf) - var(--extra))));
