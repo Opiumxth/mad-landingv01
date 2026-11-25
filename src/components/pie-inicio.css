@@ -11,7 +11,7 @@
 }
 .pi__campo::before {
   content: ''; position: absolute; left: 0; right: 0; bottom: 0; top: calc(-1 * var(--pi-ext)); pointer-events: none;
-  /* La cuadrícula también cubre la zona extendida y se desvanece hacia arriba hasta donde ha subido el campo */
+  /* La cuadrícula tenue también cubre la zona extendida (sobre el CTA) y se desvanece hacia arriba hasta donde ha subido con el scroll */
   -webkit-mask-image: linear-gradient(to top, #000 0, #000 var(--pi-alto), transparent calc(var(--pi-alto) + var(--pi-alcance)));
   mask-image: linear-gradient(to top, #000 0, #000 var(--pi-alto), transparent calc(var(--pi-alto) + var(--pi-alcance)));
   --pi-gris: color-mix(in srgb, var(--gris-claro) 22%, transparent); /* gris muy claro de la paleta */

@@ -16,10 +16,11 @@ import { useEffect, useRef, type ReactNode } from 'react';
  *  · HALO: alrededor de la "mad" (texto HTML que va encima) el calor baja, para que sus letras negras se lean sobre cuadritos muy claros o vacíos. Es un halo
  *    CEÑIDO a la forma de las letras: se rasteriza la "mad" a resolución de cuadrito y se mide la distancia de cada celda a la tinta (≈2 cuadritos vacíos pegados
  *    a los trazos y una transición gradual hasta la zona llena a los ≈6).
- *  · EXTENSIÓN HACIA ARRIBA LIGADA AL SCROLL: el canvas es más alto que el bloque (position absolute, sin mover el layout) y cruza hacia arriba la mitad inferior
- *    del CTA (35 % en celular). Un progreso p (0–1) según la posición del pie en la pantalla, suavizado cuadro a cuadro, decide hasta dónde sube el campo: con p = 0
- *    no pasa del bloque; con p = 1 llega a la mitad del CTA; al subir el scroll se recoge por el mismo camino. Sustituye a la aparición por tiempo. Por encima del
- *    bloque, el calor baja con la altura (curva suave) hasta disolverse en el fondo, y el borde irregular crece con p.
+ *  · LIGADO AL SCROLL: un progreso p (0–1) según la posición del pie en la pantalla, suavizado cuadro a cuadro, mueve dos cosas con el mismo easing: la NUBE AZUL
+ *    (los cuadritos con color) crece desde la base hasta su tope, y la GRILLA TENUE (las líneas finas casi sin color) sube sobre la mitad inferior del CTA (35 % en celular).
+ *    El canvas es más alto que el bloque (position absolute, sin mover el layout) para poder pintar esa grilla; al subir el scroll todo se recoge por el mismo camino.
+ *  · TOPE DE LA NUBE AZUL: la tinta de la "mad" (medida con su silueta rasterizada, así sigue su tamaño real) más 25 % de su altura, desde la base del bloque; nunca sube
+ *    al CTA. Las gotas del borde superior suben hasta ese tope y no más, y cerca de él los cuadritos se vuelven más escasos y más claros.
  *  · Con movimiento reducido se dibuja UN solo cuadro fijo (con p = 1), sin animación. Sin estado de React por cuadro ni por scroll.
  */
 
@@ -39,14 +40,16 @@ const CAMPO = {
   grano: 0.05,
   parpadeo: 1.2, // veces por segundo que se reordena el grano y el borde deshilachado
 };
-// Extensión hacia arriba: fracción del alto del CTA que alcanza el campo con p = 1, y desvanecido (calor que se resta a la altura máxima, curva suave)
-const EXTENSION = { escritorio: 0.5, movil: 0.35, desvanece: 0.62, sigue: 0.1 }; // sigue: parte del camino que recorre p hacia su objetivo en cada cuadro (a 30 fps)
+// Extensión hacia arriba de la GRILLA TENUE: fracción del alto del CTA que alcanza con p = 1
+// Tope de la NUBE AZUL (los cuadritos con color): la tinta de la "mad" más este porcentaje de su altura, medido desde la base del bloque; nunca sube al CTA
+const EXTENSION = { escritorio: 0.5, movil: 0.35, sigue: 0.1 }; // sigue: parte del camino que recorre p hacia su objetivo en cada cuadro (a 30 fps)
 // Puntos del progreso p, según el borde superior del pie en la pantalla: p = 0 cuando asoma (a esta fracción del alto de la ventana) y p = 1 cuando el pie está casi
 // completo (cuando su borde superior ya subió hasta la posición final menos este margen, en parte del alto del pie)
 const PROGRESO = { inicio: 0.95, margenFinal: 0.15 };
 const BORDE = { gota: 160, gotaMovil: 100, anchoGota: 4, velocidad: 1 }; // alto de la zona irregular (px) y ancho de cada "edificio" (en cuadritos)
 const FOCOS = { cuantos: 2, tamano: 160, fuerza: 0.36, velocidad: 1 };
 const CURSOR = { tamano: 96, fuerza: 0.45, fantasma: 0.24, enfria: 0.972, ondaAlcance: 340, ondaTiempo: 1.1, quietoDespues: 2.5 };
+const TOPE = { extra: 0.25 }; // ⚠ 25 % de la altura de la "mad" por encima de su borde superior (rango pedido: 20–30 %)
 // Halo de la "mad", en cuadritos desde la tinta: calor muy recortado hasta `solido`, transición gradual hasta `alcance` (antes: un óvalo de ~1,5 em)
 const HALO = { fuerza: 0.65, solido: 2, alcance: 6 };
 
@@ -107,6 +110,7 @@ export default function CampoPixeles({ children }: { children?: ReactNode }) {
     let imagen: ImageData | null = null;
     let pixeles = new Uint32Array(0);
     let gotaPx: number = BORDE.gota;
+    let topeAzul = 0; // altura máxima (px desde la base del bloque) a la que llegan los cuadritos con color
     let halo = new Float32Array(0); // 0–1 por celda (indexado como calor): cuánto se recorta el calor junto a las letras de la "mad"
 
     const nivel = { calor: 0, tacto: 1, vel: 1 };
@@ -119,6 +123,7 @@ export default function CampoPixeles({ children }: { children?: ReactNode }) {
 
     const construyeHalo = () => {
       halo = new Float32Array(cols * filas);
+      topeAzul = alto * 0.6; // por si la "mad" no está disponible
       const mad = panel.querySelector<HTMLElement>('.pi__mad');
       if (!mad || !stencilCtx || cols < 1 || filas < 1) return;
       const cr = canvas.getBoundingClientRect(), r = mad.getBoundingClientRect();
@@ -133,6 +138,10 @@ export default function CampoPixeles({ children }: { children?: ReactNode }) {
       stencilCtx.fillText('mad', r.left - cr.left - gridX, base - gridY);
       const alfa = stencilCtx.getImageData(0, 0, cols, filas).data;
       const R = HALO.alcance;
+      // Altura visible de la "mad" (de su primera a su última fila con tinta) → tope de la nube azul
+      let rfMax = -1, rfMin = filas;
+      for (let fila = 0; fila < filas; fila++) for (let c = 0; c < cols; c++) if (alfa[(fila * cols + c) * 4 + 3] >= 24) { const rf = filas - 1 - fila; if (rf > rfMax) rfMax = rf; if (rf < rfMin) rfMin = rf; }
+      if (rfMax >= 0) topeAzul = Math.min(alto, (rfMax + 1) * celda + TOPE.extra * (rfMax - rfMin + 1) * celda);
       for (let fila = 0; fila < filas; fila++) {
         for (let c = 0; c < cols; c++) {
           if (alfa[(fila * cols + c) * 4 + 3] < 24) continue; // no es tinta
@@ -222,9 +231,11 @@ export default function CampoPixeles({ children }: { children?: ReactNode }) {
 
     const dibuja = () => {
       if (!imagen) return;
-      const alcance = ext * suave(p); // cuánto ha subido el campo sobre el bloque (curva suave del progreso)
-      const piso = alto + alcance; // altura (desde abajo) hasta la que llega el campo
-      const zonaTop = piso - gotaPx;
+      const e = suave(p); // mismo progreso suavizado para la nube azul y para la grilla tenue
+      const alcance = ext * e; // cuánto sube la GRILLA tenue sobre el bloque (hasta la mitad del CTA con p = 1)
+      const piso = topeAzul * e; // altura (desde abajo) hasta la que llega la nube azul: crece desde abajo hasta su tope
+      const gota = Math.min(gotaPx, topeAzul * 0.4, Math.max(celda * 2, piso * 0.45)); // zona irregular (40 % del tope como máximo): crece con la nube
+      const zonaTop = piso - gota;
       panel.style.setProperty('--pi-alcance', `${alcance.toFixed(1)}px`); // la cuadrícula tenue de fondo sube hasta aquí
       const unidad = CAMPO.nube / celda;
       const latido = Math.floor(tiempo * CAMPO.parpadeo);
@@ -251,10 +262,8 @@ export default function CampoPixeles({ children }: { children?: ReactNode }) {
         const base = fila * cols;
         if (y > piso) { pixeles.fill(0, base, base + cols); continue; }
         const enZona = y > zonaTop;
-        const profundidad = enZona ? (y - zonaTop) / gotaPx : 0; // 0 abajo de la zona, 1 en el borde de arriba
+        const profundidad = enZona ? (y - zonaTop) / gota : 0; // 0 abajo de la zona, 1 en el tope
         const cuerpo = CAMPO.cuerpo * Math.max(0, 1 - y / Math.max(alto, 1));
-        // Desvanecido hacia arriba: sobre el bloque, el calor baja con la altura (curva suave) hasta disolverse en el fondo, sin máscara dura
-        const sube = y > alto && ext > 0 ? EXTENSION.desvanece * suave(Math.min(1, (y - alto) / ext)) : 0;
         for (let c = 0; c < cols; c++) {
           const i = rf * cols + c;
           let h = Math.min(CAMPO.techoNubes, (nubesDeCalor(c / unidad, rf / unidad, tiempo, semilla) - centro) * CAMPO.contraste + CAMPO.calidez);
@@ -263,7 +272,7 @@ export default function CampoPixeles({ children }: { children?: ReactNode }) {
             h += FOCOS.fuerza * nivel.tacto * Math.exp(-(dx * dx + dy * dy) * focoInv);
           }
           h += cuerpo + calor[i] + nivel.calor + (hash2(c, rf, semilla + latido) - 0.5) * CAMPO.grano * 2;
-          h -= sube + HALO.fuerza * halo[i]; // desvanecido hacia arriba + halo ceñido a las letras de la "mad"
+          h -= HALO.fuerza * halo[i]; // halo ceñido a las letras de la "mad"
           if (enZona) {
             // Borde irregular que sube hacia arriba: "edificios" de ancho BORDE.anchoGota
             const grupo = Math.floor(c / BORDE.anchoGota);
@@ -271,7 +280,7 @@ export default function CampoPixeles({ children }: { children?: ReactNode }) {
             const alcance = 0.1 + 0.95 * ooze * ooze + calor[i] * 0.6;
             const deshilache = hash2(c, rf, semilla + 41 + latidoBorde) * 0.2;
             if (profundidad > alcance - deshilache) { pixeles[base + c] = 0; continue; }
-            h -= profundidad * 0.12;
+            h -= profundidad * 0.3; // hacia el tope los cuadritos de color se vuelven más escasos (arriba) y más claros: transición gradual a solo-grilla
           }
           if (h < UMBRALES[0]) { pixeles[base + c] = 0; continue; }
           let banda = UMBRALES.length - 1;
